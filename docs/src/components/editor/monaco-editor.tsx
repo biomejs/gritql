@@ -40,9 +40,11 @@ export const MonacoEditor = ({
   const [didMount, setDidMount] = useState(false);
   const [isClient, setIsClient] = useState(false);
 
+  const mergedOptions = merge(editorOptions, readOnly && { ...readOnlyOptions }, options)
+  const verticalPadding = mergedOptions.padding.top + mergedOptions.padding.bottom;
   const height = useMemo(() => {
-    return getHeight(value ?? '', maxLines, minLines);
-  }, [value, maxLines, minLines]);
+    return getHeight(value ?? '', maxLines, minLines) + verticalPadding;
+  }, [value, maxLines, minLines, verticalPadding]);
 
   const handleEditorDidMount: OnMount = async (editor, monaco) => {
     editorRef.current = editor;
@@ -68,7 +70,7 @@ export const MonacoEditor = ({
       theme='grit'
       loading={<Loading value={value ?? 'Loading...'} />}
       height={noCliff ? '100%' : `${height}px`}
-      options={merge(editorOptions, readOnly && { ...readOnlyOptions }, options)}
+      options={mergedOptions}
       onChange={(value, editor) => {
         const hasFocus = editorRef.current?.hasTextFocus();
         if (hasFocus) onChange(value, editor);
