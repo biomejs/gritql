@@ -1,11 +1,14 @@
-import { useRef, useMemo, useState, useEffect } from 'react';
-import merge from 'lodash/merge';
-import { DiffEditor, DiffEditorProps, useMonaco } from '@monaco-editor/react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { MatchIndex } from './highlights';
+import { DiffEditor, DiffEditorProps, useMonaco } from '@monaco-editor/react';
+import merge from 'lodash/merge';
+
 import { Match, Position } from '@/universal/matching/types';
 
-const noop = () => {};
+import { diffEditorOptions, readOnlyOptions } from './config';
+import { MatchIndex } from './highlights';
+
+const noop = () => { };
 
 export const SSRStyle = {
   height: '100%',
@@ -45,7 +48,7 @@ export const MonacoDiffEditor = ({
   ...rest
 }: MonacoDiffProps) => {
   const monaco = useMonaco();
-  const readOnly = options?.readOnly ?? true;
+  const readOnly = options?.readOnly ?? false;
   const editorRef = useRef<any>(null);
   const [didMount, setDidMount] = useState(false);
   const [isClient, setIsClient] = useState(false);
@@ -79,7 +82,7 @@ export const MonacoDiffEditor = ({
       theme='grit'
       loading={<Loading original={original ?? ''} modified={modified ?? ''} />}
       height={noCliff ? '100%' : `${height}px`}
-      options={merge(editorOptions, readOnly && { ...readOnlyOptions }, options)}
+      options={merge(diffEditorOptions, readOnly && { ...readOnlyOptions }, options)}
       onMount={handleEditorDidMount}
       language={language}
       {...rest}
@@ -95,49 +98,3 @@ const Loading = ({ original, modified }: { original: string; modified: string })
     <pre style={SSRStyle}>{modified}</pre>
   </div>
 );
-
-const editorOptions = {
-  minimap: { enabled: false },
-  scrollBeyondLastLine: false,
-  scrollbar: {
-    vertical: 'hidden',
-    horizontal: 'hidden',
-  },
-  lineNumbers: 'off',
-  glyphMargin: false,
-  folding: false,
-  lineDecorationsWidth: 0,
-  lineNumbersMinChars: 0,
-  renderLineHighlight: 'none',
-  overviewRulerBorder: false,
-  hideCursorInOverviewRuler: true,
-  overviewRulerLanes: 0,
-  contextmenu: false,
-  wordWrap: 'on',
-  padding: { top: 8, bottom: 8 },
-  renderSideBySide: true,
-};
-
-const readOnlyOptions = {
-  readOnly: true,
-  domReadOnly: true,
-  contextmenu: false,
-  quickSuggestions: false,
-  suggestOnTriggerCharacters: false,
-  acceptSuggestionOnEnter: 'off',
-  tabCompletion: 'off',
-  wordBasedSuggestions: 'off',
-  parameterHints: { enabled: false },
-  hover: { enabled: false },
-  links: false,
-  find: { addExtraSpaceOnTop: false },
-  folding: false,
-  lineNumbers: 'off',
-  glyphMargin: false,
-  lineDecorationsWidth: 0,
-  lineNumbersMinChars: 0,
-  renderLineHighlight: 'none',
-  overviewRulerBorder: false,
-  hideCursorInOverviewRuler: true,
-  overviewRulerLanes: 0,
-}; 
