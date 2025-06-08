@@ -10,7 +10,6 @@ export default async function Playground() {
   return (
     <>
       <h1 className='mb-4'>Grit Playground</h1>
-      TEST!
       <div className='h-[80vh]'>
         <PlaygroundEditor />
       </div>

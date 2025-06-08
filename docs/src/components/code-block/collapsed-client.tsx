@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { FaPlay } from 'react-icons/fa';
 
 import { useSidebarContext } from '@/hooks/sidebar';
-import { useStandaloneEditor } from '@/components/editor/standalone-editor';
+import { useStandaloneEditor } from '@/components/editor/context';
 
 import { TryButton } from './buttons';
 

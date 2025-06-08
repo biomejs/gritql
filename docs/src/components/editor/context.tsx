@@ -19,8 +19,8 @@ export const StandaloneEditorContext = createContext<EditorState>({
 });
 
 export const StandaloneEditorProvider = ({ children }: PropsWithChildren<{}>) => {
-	const [pattern, setPattern] = useState('');
-	const [input, setInput] = useState('');
+	const [pattern, setPattern] = useState('// Enter your Grit pattern here\n// Example: `console.log($msg)` => `console.info($msg)`\n\n');
+	const [input, setInput] = useState('// Enter your code to transform here\nconsole.log("Hello, world!");\nconsole.log("This is a test");');
 	const [path, setPath] = useState<string | undefined>(undefined);
 
 	const value = {

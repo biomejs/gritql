@@ -7,7 +7,7 @@ import { FaPencilRuler, FaPlay } from 'react-icons/fa';
 import { WithChildren } from '@/custom-types/shared';
 import { useSidebarContext } from '@/hooks/sidebar';
 import { MonacoEditor } from '@/components/editor/monaco-editor';
-import { useStandaloneEditor } from '@/components/editor/standalone-editor';
+import { useStandaloneEditor } from '@/components/editor/context';
 
 import { CopyButton, TryButton } from './buttons';
 import { extractCodeString } from './extract';

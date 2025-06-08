@@ -2,6 +2,7 @@ import { useRef, useMemo, useState, useEffect } from 'react';
 import merge from 'lodash/merge';
 import Editor, { OnMount, EditorProps, useMonaco } from '@monaco-editor/react';
 import { editor } from 'monaco-editor';
+import { gritDarkTheme } from './theme/grit-dark';
 
 const noop = () => { };
 
@@ -37,21 +38,31 @@ export const MonacoEditor = ({
   const readOnly = options?.readOnly ?? true;
   const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
   const [isClient, setIsClient] = useState(false);
+  const monaco = useMonaco();
 
   const height = useMemo(() => {
     return getHeight(value ?? '', maxLines, minLines);
   }, [value, maxLines, minLines]);
 
-  const handleEditorDidMount: OnMount = async (editor, monaco) => {
+  const handleEditorDidMount: OnMount = async (editor, _monaco) => {
     editorRef.current = editor;
     editor.onDidChangeCursorPosition(onCursorPositionChange);
     editor.onDidBlurEditorWidget((data: any) => {
       onCursorPositionChange(data);
     });
 
-    editor.setValue(value ?? '');
+    if (value) {
+      editor.setValue(value);
+    }
   };
 
+  // Initialize Monaco theme
+  useEffect(() => {
+    if (monaco) {
+      monaco.editor.defineTheme('grit', gritDarkTheme);
+      monaco.editor.setTheme('grit');
+    }
+  }, [monaco]);
 
   // NOTE: return plain text side by side if SSR, Monaco doesn't handle this internally.
   useEffect(() => setIsClient(true), []);
@@ -87,21 +98,24 @@ const editorOptions = {
   minimap: { enabled: false },
   scrollBeyondLastLine: false,
   scrollbar: {
-    vertical: 'hidden',
-    horizontal: 'hidden',
+    vertical: 'auto',
+    horizontal: 'auto',
   },
-  lineNumbers: 'off',
-  glyphMargin: false,
-  folding: false,
-  lineDecorationsWidth: 0,
-  lineNumbersMinChars: 0,
-  renderLineHighlight: 'none',
+  lineNumbers: 'on',
+  glyphMargin: true,
+  folding: true,
+  lineDecorationsWidth: 5,
+  lineNumbersMinChars: 3,
+  renderLineHighlight: 'line',
   overviewRulerBorder: false,
-  hideCursorInOverviewRuler: true,
-  overviewRulerLanes: 0,
-  contextmenu: false,
+  hideCursorInOverviewRuler: false,
+  overviewRulerLanes: 3,
+  contextmenu: true,
   wordWrap: 'on',
   padding: { top: 8, bottom: 8 },
+  fontSize: 14,
+  lineHeight: 20,
+  automaticLayout: true,
 };
 
 const readOnlyOptions = {
