@@ -3,7 +3,7 @@ import merge from 'lodash/merge';
 import Editor, { OnMount, EditorProps, useMonaco } from '@monaco-editor/react';
 import { editor } from 'monaco-editor';
 
-const noop = () => {};
+const noop = () => { };
 
 export const SSRStyle = {
   height: '100%',
@@ -34,10 +34,8 @@ export const MonacoEditor = ({
   placeholderColor,
   ...rest
 }: MonacoProps) => {
-  const monaco = useMonaco();
   const readOnly = options?.readOnly ?? true;
   const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
-  const [didMount, setDidMount] = useState(false);
   const [isClient, setIsClient] = useState(false);
 
   const height = useMemo(() => {
@@ -46,7 +44,6 @@ export const MonacoEditor = ({
 
   const handleEditorDidMount: OnMount = async (editor, monaco) => {
     editorRef.current = editor;
-    setDidMount(true);
     editor.onDidChangeCursorPosition(onCursorPositionChange);
     editor.onDidBlurEditorWidget((data: any) => {
       onCursorPositionChange(data);
@@ -55,10 +52,6 @@ export const MonacoEditor = ({
     editor.setValue(value ?? '');
   };
 
-  useEffect(() => {
-    if (!didMount || !editorRef.current) return;
-    editorRef.current.setValue(value ?? '');
-  }, [value, didMount]);
 
   // NOTE: return plain text side by side if SSR, Monaco doesn't handle this internally.
   useEffect(() => setIsClient(true), []);
