@@ -1,20 +1,22 @@
 'use client';
 
 import { useMemo } from 'react';
+
 import cx from 'classnames';
 import { editor } from 'monaco-editor';
 
 import { CloseButton } from '@/components/code-block/buttons';
 import { SnippetHeading } from '@/components/code-block/heading';
-import { MonacoEditor } from './monaco-editor';
-import { MonacoDiffEditor } from './monaco-diff-editor';
+import { useDelayedLoader } from '@/hooks/use-delayed-loader';
 import { useDiffEditor } from '@/hooks/use-diff-editor';
 import { useEditorCursor } from '@/hooks/use-editor-cursor';
-import { useDelayedLoader } from '@/hooks/use-delayed-loader';
-import { extractMetavariables } from '../../utils/extract-metavariables';
-import { extractLanguageFromPatternBody, getEditorLangIdFromLanguage } from '@/universal/patterns/utils';
 import { isMatch } from '@/universal/matching/types';
+import { extractLanguageFromPatternBody, getEditorLangIdFromLanguage } from '@/universal/patterns/utils';
+
+import { extractMetavariables } from '../../utils/extract-metavariables';
 import { useStandaloneEditor } from './context';
+import { MonacoDiffEditor } from './monaco-diff-editor';
+import { MonacoEditor } from './monaco-editor';
 
 const EDITOR_OPTIONS: editor.IStandaloneEditorConstructionOptions = {
   scrollbar: {
@@ -89,17 +91,6 @@ export const StandaloneEditor: React.FC<{
           onCursorPositionChange={onCursorPositionChange}
           placeholderColor='#9ca3af'
         />
-        {usesAi && (
-          <div className='absolute bottom-0 left-0 right-0 flex justify-between items-center px-3 py-2 bg-neutral-700'>
-            <button
-              className='bg-blue-500 text-white px-4 py-2 rounded disabled:opacity-50'
-              disabled={!usesAi}
-              onClick={analyze}
-            >
-              Run Pattern
-            </button>
-          </div>
-        )}
       </div>
       <div className='h-1/2 rounded-md overflow-hidden'>
         <div className='flex m-0 justify-between px-3 py-2 bg-black'>

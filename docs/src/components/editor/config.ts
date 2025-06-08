@@ -1,26 +1,26 @@
 
 export const editorOptions = {
   minimap: { enabled: false },
-  scrollBeyondLastLine: false,
-  scrollbar: {
-    vertical: 'auto',
-    horizontal: 'auto',
-  },
-  lineNumbers: 'on',
-  glyphMargin: true,
-  folding: true,
-  lineDecorationsWidth: 5,
-  lineNumbersMinChars: 3,
-  renderLineHighlight: 'line',
-  overviewRulerBorder: false,
-  hideCursorInOverviewRuler: false,
-  overviewRulerLanes: 3,
-  contextmenu: true,
-  wordWrap: 'on',
-  padding: { top: 8, bottom: 8 },
-  fontSize: 14,
-  lineHeight: 20,
-  automaticLayout: true,
+  // scrollBeyondLastLine: false,
+  // scrollbar: {
+  //   vertical: 'auto',
+  //   horizontal: 'auto',
+  // },
+  // lineNumbers: 'on',
+  // glyphMargin: true,
+  // folding: true,
+  // lineDecorationsWidth: 5,
+  // lineNumbersMinChars: 3,
+  // renderLineHighlight: 'line',
+  // overviewRulerBorder: false,
+  // hideCursorInOverviewRuler: false,
+  // overviewRulerLanes: 3,
+  // contextmenu: true,
+  // wordWrap: 'on',
+  // padding: { top: 8, bottom: 8 },
+  // fontSize: 14,
+  // lineHeight: 20,
+  // automaticLayout: true,
 };
 
 export const readOnlyOptions = {
@@ -51,4 +51,7 @@ export const diffEditorOptions = {
   ...editorOptions,
   renderOverviewRuler: false,
   glyphMargin: true,
+  automaticLayout: true,
+  originalEditable: true,
+  renderSideBySide: true
 };

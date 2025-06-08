@@ -48,7 +48,7 @@ export const MonacoDiffEditor = ({
   ...rest
 }: MonacoDiffProps) => {
   const monaco = useMonaco();
-  const readOnly = options?.readOnly ?? false;
+  const readOnly = options?.readOnly ?? true;
   const editorRef = useRef<any>(null);
   const [didMount, setDidMount] = useState(false);
   const [isClient, setIsClient] = useState(false);
@@ -85,7 +85,7 @@ export const MonacoDiffEditor = ({
       options={merge(diffEditorOptions, readOnly && { ...readOnlyOptions }, options)}
       onMount={handleEditorDidMount}
       language={language}
-      {...rest}
+    // {...rest}
     />
   ) : (
     <Loading original={original ?? ''} modified={modified ?? ''} />
