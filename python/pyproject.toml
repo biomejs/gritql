@@ -27,5 +27,8 @@ classifiers = [
 [project.optional-dependencies]
 dev = ["pytest>=7.0"]
 
+[tool.poetry]
+include = [{ path = "tests", format = "sdist" }]
+
 [tool.pytest.ini_options]
 addopts = ["--color=yes", "-Werror", "--tb=long", "-vv"]
