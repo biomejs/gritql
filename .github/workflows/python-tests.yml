@@ -12,7 +12,8 @@ on:
 
 jobs:
   test:
-    runs-on: "nscloud-ubuntu-22.04-amd64-4x16"
+    # runs-on: "nscloud-ubuntu-22.04-amd64-4x16"
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version: ["3.9", "3.13"]
