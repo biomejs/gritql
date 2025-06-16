@@ -28,6 +28,4 @@ classifiers = [
 dev = ["pytest>=7.0"]
 
 [tool.pytest.ini_options]
-pythonpath = "."
-testpaths = ["tests"]
 addopts = ["--color=yes", "-Werror", "--tb=long", "-vv"]
