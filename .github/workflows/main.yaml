@@ -26,6 +26,12 @@ jobs:
           submodules: recursive
       - name: Install Protoc
         run: sudo apt-get install -y protobuf-compiler
+      - name: Breakpoint if tests failed
+        if: failure()
+        uses: namespacelabs/breakpoint-action@v0
+        with:
+          duration: 30m
+          authorized-users: morgante
       - name: install Rust
         uses: actions-rs/toolchain@v1
         with:
