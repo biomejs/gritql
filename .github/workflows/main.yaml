@@ -10,7 +10,7 @@ jobs:
   test-rust:
     name: Rust tests (marzano)
     timeout-minutes: 20
-    runs-on: namespace-profile-standard-ubuntu22-amd64
+    runs-on: nscloud-ubuntu-22.04-amd64-8x32
     permissions:
       contents: "read"
       id-token: "write"
@@ -66,7 +66,7 @@ jobs:
   test-rust-wasm:
     name: Rust wasm
     timeout-minutes: 15
-    runs-on: namespace-profile-standard-ubuntu22-amd64
+    runs-on: nscloud-ubuntu-22.04-amd64-8x32
     permissions:
       contents: "read"
       id-token: "write"
@@ -94,7 +94,7 @@ jobs:
     permissions:
       contents: "read"
       id-token: "write"
-    runs-on: namespace-profile-standard-ubuntu22-amd64
+    runs-on: nscloud-ubuntu-22.04-amd64-8x32
     steps:
       - name: clone code
         uses: namespacelabs/nscloud-checkout-action@v5
