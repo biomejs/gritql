@@ -9,7 +9,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   clippy_check:
-    runs-on: nscloud-ubuntu-22.04-amd64-8x32
+    runs-on: namespace-profile-cached-arm64-grit
     steps:
       - name: clone code
         uses: namespacelabs/nscloud-checkout-action@v5
