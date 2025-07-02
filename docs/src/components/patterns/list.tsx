@@ -2,7 +2,7 @@ import React from 'react';
 
 import Link from 'next/link';
 
-import { PatternGitHubButton, PatternStudioButton } from '@/components/patterns/buttons';
+import { PatternGitHubButton } from '@/components/patterns/buttons';
 import Markdoc from '@markdoc/markdoc';
 
 import type { DocPattern } from '../../app/(doclike)/(default)/patterns/page';
@@ -45,7 +45,6 @@ const PatternItem = ({ pattern }: { pattern: DocPattern }) => {
         </h4>
         <div className='flex gap-2 items-center absolute right-2 top-2'>
           <PatternLanguageButton size='sm' pattern={pattern} />
-          <PatternStudioButton size='sm' pattern={pattern} />
           <PatternGitHubButton size='sm' pattern={pattern} />
         </div>
       </div>
