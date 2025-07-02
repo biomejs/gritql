@@ -15,14 +15,6 @@ const config = {
           { path: '/patterns', title: 'Pattern Library' },
           { path: '/guides/config', title: 'Config' },
           { path: '/security', title: 'Data Security' },
-          {
-            path: '/workflows/healing',
-            title: 'Auto Healing',
-          },
-          {
-            path: '/guides/agent',
-            title: 'Grit Agent',
-          },
         ],
       },
       {
@@ -62,33 +54,11 @@ const config = {
       },
       {
         pages: [
-          {
-            path: '/guides/autoreview',
-            title: 'Autoreview',
-          },
-          {
-            path: '/workflows/sequence',
-            title: 'Autopilot Sequences',
-          },
-          {
-            path: '/workflows/drift-detection',
-            title: 'Drift Detection',
-          },
-        ],
-        title: 'Workflows',
-      },
-      {
-        pages: [
-          { path: '/guides/feedback', title: 'Pull Requests' },
           { path: '/guides/ci', title: 'Continuous Integration' },
           { path: '/guides/authoring', title: 'Authoring GritQL' },
           { path: '/guides/imports', title: 'Imports' },
-          { path: '/guides/gitlab', title: 'GitLab' },
           { path: '/guides/vscode', title: 'VS Code' },
           { path: '/guides/sharing', title: 'Sharing Patterns' },
-          { path: '/guides/secrets', title: 'Configuring Secrets' },
-          { path: '/guides/settings', title: 'Migration Settings' },
-          { path: '/architecture', title: 'System Architecture' },
         ],
         title: 'Guides',
       },
@@ -101,7 +71,7 @@ const config = {
       { title: 'Discord', href: 'https://docs.grit.io/discord' },
       { title: 'Blog', href: '/blog' },
       { title: 'Tutorial', href: '/tutorials/gritql' },
-      { title: 'Studio', href: `${docsConfig.WEB_URL}/studio` },
+      { title: 'Playground', href: `/playground` },
       { title: 'Security', href: '/security' },
     ],
   },
