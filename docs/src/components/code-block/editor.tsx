@@ -40,10 +40,7 @@ export const SnippetEditor = ({ title, code, language }: EditorProps) => {
         <SnippetHeading title={title || language} />
         <CopyButton data={formattedCode} />
       </div>
-      <MonacoEditor
-        {...{ value: formattedCode.trim(), language }}
-        options={{ readOnly: true, lineNumbers: 'off' }}
-      />
+      <pre>{formattedCode}</pre>
     </div>
   );
 };

@@ -27,14 +27,14 @@ export const DiffEditor = ({ children }: DiffEditorProps) => {
         <div className='flex m-0 justify-between px-3 py-2 bg-black'>
           <SnippetHeading title='diff' />
         </div>
-        <MonacoDiffEditor
+        {/* <MonacoDiffEditor
           options={{ readOnly: true, lineNumbers: 'off' }}
           language={input.props.language}
           original={cleanHlTags(input.props.children).trim()}
           modified={cleanHlTags(output.props.children).trim()}
           placeholderColor='#9ca3af'
           highlights={[]}
-        />
+        /> */}
       </div>
     </div>
   );
