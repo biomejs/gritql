@@ -14,7 +14,6 @@ const config = {
           { path: '/cli/reference', title: 'CLI Reference' },
           { path: '/patterns', title: 'Pattern Library' },
           { path: '/guides/config', title: 'Config' },
-          { path: '/security', title: 'Data Security' },
         ],
       },
       {
@@ -72,7 +71,7 @@ const config = {
       { title: 'Blog', href: '/blog' },
       { title: 'Tutorial', href: '/tutorials/gritql' },
       { title: 'Playground', href: `/playground` },
-      { title: 'Security', href: '/security' },
+      { title: 'Docs', href: '/language/overview' },
     ],
   },
 };
