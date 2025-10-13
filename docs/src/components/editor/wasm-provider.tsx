@@ -27,11 +27,6 @@ export const WasmProvider: React.FC<PropsWithChildren<AnalyzerInput>> = ({ child
   const [patternInfo, setPatternInfo] = useState<any>();
   const [dispatched, setDispatched] = useState<{ pattern: string; file: RichFile }[]>([]);
 
-  console.log('fileResults', fileResults);
-  console.log('patternInfo', patternInfo);
-  console.log('dispatched', dispatched);
-
-
   const rawAnalyzeFiles = useCallback(
     async (files: RichFile[], pattern: string, justParse: boolean) => {
 
