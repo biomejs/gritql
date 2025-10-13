@@ -1,13 +1,10 @@
-import { PropsWithChildren, useCallback, useMemo, useState } from 'react';
+import { PropsWithChildren, useCallback, useState } from 'react';
 
 import {
   FileResultMessage,
-  MatchResult, RichFile,
-  extractLanguageFromPatternBody,
-  extractPath,
+  MatchResult, RichFile, extractPath,
   isAllDone,
-  isPatternInfo,
-  makeAnalysisLog
+  isPatternInfo
 } from '../../universal';
 import { AnalyzerContext } from './analyzer-context';
 
@@ -75,7 +72,6 @@ export const WasmProvider: React.FC<PropsWithChildren<AnalyzerInput>> = ({ child
       results: MatchResult[],
       pattern: string,
     ) => {
-      console.log('updateFileResults', results);
       const ourResults: FileResultMessage[] = [];
       for (const result of results) {
         const filePath = extractPath(result);
@@ -95,7 +91,6 @@ export const WasmProvider: React.FC<PropsWithChildren<AnalyzerInput>> = ({ child
           });
         }
       }
-      console.log('ourResults', ourResults);
       setFileResults(ourResults);
     },
     [],
