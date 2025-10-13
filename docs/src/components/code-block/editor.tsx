@@ -39,7 +39,7 @@ export const SnippetEditor = ({ title, code, language }: EditorProps) => {
         <SnippetHeading title={title || language} />
         <CopyButton data={formattedCode} />
       </div>
-      <pre>{formattedCode}</pre>
+      <pre className='my-0'>{formattedCode}</pre>
     </div>
   );
 };

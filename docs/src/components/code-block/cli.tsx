@@ -19,7 +19,7 @@ export function TerminalCommandBlock({
           <CopyButton data={command} />
         </div>
       </div>
-      <pre>{command}</pre>
+      <pre className='my-0'>{command}</pre>
     </div>
   );
 }
