@@ -1,6 +1,7 @@
 import { PropsWithChildren, useCallback, useMemo, useState } from 'react';
 
 import {
+  FileResultMessage,
   MatchResult, RichFile,
   extractLanguageFromPatternBody,
   extractPath,
@@ -25,25 +26,18 @@ interface AnalyzerInput {
 
 
 export const WasmProvider: React.FC<PropsWithChildren<AnalyzerInput>> = ({ children, analyze }) => {
-  const [parseResults, setParseResults] = useState<any[]>([]);
-  const [analyzeResults, setAnalyzeResults] = useState<any[]>([]);
+  const [fileResults, setFileResults] = useState<FileResultMessage[]>([]);
   const [patternInfo, setPatternInfo] = useState<any>();
   const [dispatched, setDispatched] = useState<{ pattern: string; file: RichFile }[]>([]);
 
-  console.log('parseResults', parseResults);
-  console.log('analyzeResults', analyzeResults);
+  console.log('fileResults', fileResults);
   console.log('patternInfo', patternInfo);
   console.log('dispatched', dispatched);
 
 
   const rawAnalyzeFiles = useCallback(
     async (files: RichFile[], pattern: string, justParse: boolean) => {
-      const wrapResult = (result: MatchResult): any => {
-        return {
-          result,
-          pattern,
-        };
-      };
+
       const inputs = {
         pattern,
         file_paths: files.map((f) => f.path),
@@ -56,29 +50,20 @@ export const WasmProvider: React.FC<PropsWithChildren<AnalyzerInput>> = ({ child
           analyze({
             command: 'parse',
             ...inputs,
-          }).then((r) => updateFileResults(r, pattern, wrapResult, 'parse')),
+          }).then((r) => updateFileResults(r, pattern, 'parse')),
         ];
         if (!justParse) {
           promises.push(
             analyze({
               command: 'match',
               ...inputs,
-            }).then((r) => updateFileResults(r, pattern, wrapResult, 'match')),
+            }).then((r) => updateFileResults(r, pattern, 'match')),
           );
           setDispatched(files.map((f) => ({ pattern, file: f })));
         }
         await Promise.all(promises);
       } catch (e: any) {
         console.error(e);
-        setAnalyzeResults([
-          wrapResult(
-            makeAnalysisLog({
-              message: e.message ?? 'Unknown error',
-              file: 'playground-pattern',
-              level: 'error',
-            } as any),
-          ),
-        ]);
         return;
       }
     },
@@ -89,10 +74,10 @@ export const WasmProvider: React.FC<PropsWithChildren<AnalyzerInput>> = ({ child
     (
       results: MatchResult[],
       pattern: string,
-      wrapResult: (result: MatchResult) => any,
       command: AnalyzerData['command'],
     ) => {
-      const ourResults = [];
+      console.log('updateFileResults', results);
+      const ourResults: FileResultMessage[] = [];
       for (const result of results) {
         const filePath = extractPath(result);
         if (isAllDone(result) || !filePath) {
@@ -105,22 +90,16 @@ export const WasmProvider: React.FC<PropsWithChildren<AnalyzerInput>> = ({ child
           });
           continue;
         } else {
-          const wrapped = wrapResult(result);
-          ourResults.push(wrapped);
+          ourResults.push({
+            result,
+            pattern,
+          });
         }
       }
-      if (command === 'match') {
-        setAnalyzeResults(ourResults);
-      } else {
-        setParseResults(ourResults);
-      }
+      setFileResults(ourResults);
     },
     [],
   );
-
-  const fileResults = useMemo(() => {
-    return [...parseResults, ...analyzeResults];
-  }, [parseResults, analyzeResults]);
 
   const analyzer = {
     analyzeFiles: rawAnalyzeFiles,
