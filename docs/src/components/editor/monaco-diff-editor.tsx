@@ -47,7 +47,7 @@ export const MonacoDiffEditor = ({
   const readOnly = options?.readOnly ?? true;
   const editorRef = useRef<any>(null);
   const [didMount, setDidMount] = useState(false);
-  const decorationsRef = useRef<string[]>([]);
+  const decorationsRef = useRef<any[]>([]);
 
   const height = useMemo(() => {
     const lines = Math.max(
@@ -86,7 +86,7 @@ export const MonacoDiffEditor = ({
       },
       options: {
         className: 'highlight-decoration',
-        inlineClassName: 'highlight-inline',
+        inlineClassName: 'match-highlight',
         isWholeLine: false,
       },
     }));
