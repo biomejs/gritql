@@ -62,6 +62,7 @@ export const useDiffEditor = ({
 			}
 			return false;
 		});
+		console.log("info", patternInfo);
 		if (!foundResult) {
 			return {
 				state: "loading",
@@ -71,7 +72,7 @@ export const useDiffEditor = ({
 			state: "loaded",
 			result: foundResult,
 		};
-	}, [pattern, fileResults]);
+	}, [pattern, fileResults, patternInfo]);
 
 	const output = useMemo(() => {
 		if (editorState.result && isRewrite(editorState.result.result)) {
