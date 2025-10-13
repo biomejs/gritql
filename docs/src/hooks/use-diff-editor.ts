@@ -1,59 +1,60 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback } from "react";
 
 interface UseDiffEditorProps {
-  pattern: string;
-  setPattern: (pattern: string) => void;
-  input: string;
-  setInput: (input: string) => void;
-  path?: string;
+	pattern: string;
+	setPattern: (pattern: string) => void;
+	input: string;
+	setInput: (input: string) => void;
+	path?: string;
 }
 
 interface EditorState {
-  state: 'loading' | 'loaded' | 'error';
-  result?: any;
-  log?: {
-    message: string;
-  };
+	state: "loading" | "loaded" | "error";
+	result?: any;
+	log?: {
+		message: string;
+	};
 }
 
 export const useDiffEditor = ({
-  pattern,
-  setPattern,
-  input,
-  setInput,
-  path,
+	pattern,
+	setPattern,
+	input,
+	setInput,
+	path,
 }: UseDiffEditorProps) => {
-  const [output, setOutput] = useState('');
-  const [state, setState] = useState<EditorState>({ state: 'loading' });
-  const [editorState, setEditorState] = useState('');
-  const [usesAi, setUsesAi] = useState(false);
+	const [output, setOutput] = useState("");
+	const [state, setState] = useState<EditorState>({ state: "loading" });
+	const [editorState, setEditorState] = useState("");
 
-  const onPatternChange = useCallback(
-    (value: string | undefined) => {
-      setPattern(value ?? '');
-    },
-    [setPattern],
-  );
+	const usesAi = false;
 
-  const onDiffChange = useCallback(
-    (value: string | undefined) => {
-      setInput(value ?? '');
-    },
-    [setInput],
-  );
+	const onPatternChange = useCallback(
+		(value: string | undefined) => {
+			setPattern(value ?? "");
+		},
+		[setPattern],
+	);
 
-  const analyze = useCallback(() => {
-    // TODO: Implement pattern analysis
-    setState({ state: 'loaded', result: { type: 'match' } });
-  }, []);
+	const onDiffChange = useCallback(
+		(value: string | undefined) => {
+			setInput(value ?? "");
+		},
+		[setInput],
+	);
 
-  return {
-    output,
-    onPatternChange,
-    onDiffChange,
-    state,
-    editorState,
-    usesAi,
-    analyze,
-  };
-}; 
+	const analyze = useCallback(() => {
+		// TODO: Implement pattern analysis
+		setState({ state: "loaded", result: { type: "match" } });
+	}, []);
+
+	return {
+		output,
+		onPatternChange,
+		onDiffChange,
+		state,
+		editorState,
+		usesAi,
+		analyze,
+	};
+};

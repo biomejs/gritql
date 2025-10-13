@@ -32,8 +32,6 @@ export const StandaloneEditor: React.FC<{
   patternTitle?: string;
   resultTitle?: string;
 }> = ({ }) => {
-  // return "bob";
-
   const { pattern, setPattern, input, setInput } = useStandaloneEditor();
 
   const language = useMemo(() => extractLanguageFromPatternBody(pattern), [pattern]);

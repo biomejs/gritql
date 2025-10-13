@@ -8,12 +8,12 @@ import { Template } from '@/templates/plain';
 
 import '@/styles/main.css';
 
-export default function DocLayout({ children }: { children: React.ReactNode }) {
+export default function FullWidthLayout({ children }: { children: React.ReactNode }) {
   useMonacoEditorInit({ theme: 'dark' });
   const pathname = usePathname() ?? '';
 
   return (
-    <Template path={pathname} layout='docs'>
+    <Template path={pathname} layout='full'>
       <Head>
         <link rel='icon' href='/favicon.svg' />
       </Head>
@@ -21,3 +21,4 @@ export default function DocLayout({ children }: { children: React.ReactNode }) {
     </Template>
   );
 }
+
