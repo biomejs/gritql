@@ -1,16 +1,12 @@
-import { PropsWithChildren, useCallback, useMemo, useState, createContext } from 'react';
+import { PropsWithChildren, useCallback, useMemo, useState } from 'react';
 
 import {
-  FileResultMessage,
-  ImplicitFile,
-  MatchResult,
-  PatternResultMessage,
-  RichFile,
+  MatchResult, RichFile,
   extractLanguageFromPatternBody,
   extractPath,
   isAllDone,
   isPatternInfo,
-  makeAnalysisLog,
+  makeAnalysisLog
 } from '../../universal';
 import { AnalyzerContext } from './analyzer-context';
 
@@ -47,17 +43,12 @@ export const WasmProvider: React.FC<PropsWithChildren<AnalyzerInput>> = ({ child
 
   const rawAnalyzeFiles = useCallback(
     async (files: RichFile[], pattern: string, justParse: boolean) => {
-      const originalContentsByPath = new Map(files.map((f) => [f.path, f.content]));
       const wrapResult = (result: MatchResult): any => {
-        const filePath = extractPath(result);
         return {
-          filePath: filePath ?? 'playground-pattern',
-          originalContent: filePath ? originalContentsByPath.get(filePath) : undefined,
           result,
           pattern,
         };
       };
-      const language = extractLanguageFromPatternBody(pattern, 'JS');
       const inputs = {
         pattern,
         file_paths: files.map((f) => f.path),

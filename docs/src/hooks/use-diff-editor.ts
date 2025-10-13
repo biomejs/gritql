@@ -1,5 +1,5 @@
 import { useAnalyzerContext } from "@/components/editor/analyzer-context";
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect } from "react";
 
 interface UseDiffEditorProps {
 	pattern: string;
@@ -22,7 +22,8 @@ export const useDiffEditor = ({
 	input,
 	setInput,
 }: UseDiffEditorProps) => {
-	const analysis = useAnalyzerContext();
+	const { analyzeFiles, fileResults } = useAnalyzerContext();
+	const fileName = "test.js";
 
 	const [editorState, setEditorState] = useState<EditorState>({
 		state: "loading",
@@ -30,8 +31,8 @@ export const useDiffEditor = ({
 
 	const onPatternChange = useCallback(
 		(value: string | undefined) => {
-			setPattern(value ?? "");
-			console.log("onPatternChange", value);
+			const patternContent = value ?? "";
+			setPattern(patternContent);
 		},
 		[setPattern],
 	);
@@ -43,13 +44,17 @@ export const useDiffEditor = ({
 		[setInput],
 	);
 
+	useEffect(() => {
+		analyzeFiles([{ path: fileName, content: input }], pattern, false);
+	}, [analyzeFiles, input, pattern]);
+
 	const result = useMemo(() => {
-		console.log("result", input, pattern, analysis);
-		return {
-			type: "match",
-			output: `${input} => ${pattern}`,
-		};
-	}, [input, pattern, analysis]);
+		console.log("fileResults", fileResults);
+		// const foundResult = fileResults.find(
+		// 	(result) => result.file.path === fileName,
+		// );
+		return {};
+	}, [input, pattern, fileResults]);
 
 	const output = useMemo(() => {
 		return result.output;
