@@ -1,5 +1,10 @@
 import { useAnalyzerContext } from "@/components/editor/analyzer-context";
-import { isMatch, isResult, isRewrite } from "@/universal/matching/types";
+import {
+	FileResultMessage,
+	isMatch,
+	isResult,
+	isRewrite,
+} from "@/universal/matching/types";
 import { extractPath } from "@/universal/patterns/types";
 import { useState, useCallback, useMemo, useEffect } from "react";
 
@@ -12,7 +17,7 @@ interface UseDiffEditorProps {
 
 interface EditorState {
 	state: "loading" | "loaded" | "error";
-	result?: any;
+	result?: FileResultMessage;
 	log?: {
 		message: string;
 	};
@@ -24,12 +29,8 @@ export const useDiffEditor = ({
 	input,
 	setInput,
 }: UseDiffEditorProps) => {
-	const { analyzeFiles, fileResults } = useAnalyzerContext();
+	const { analyzeFiles, fileResults, patternInfo } = useAnalyzerContext();
 	const fileName = "test.js";
-
-	const [editorState, setEditorState] = useState<EditorState>({
-		state: "loading",
-	});
 
 	const onPatternChange = useCallback(
 		(value: string | undefined) => {
@@ -50,8 +51,7 @@ export const useDiffEditor = ({
 		analyzeFiles([{ path: fileName, content: input }], pattern, false);
 	}, [analyzeFiles, input, pattern]);
 
-	const result = useMemo(() => {
-		console.log("fileResults", fileResults);
+	const editorState = useMemo<EditorState>(() => {
 		const foundResult = fileResults.find((result) => {
 			if (result.pattern !== pattern) {
 				return false;
@@ -62,15 +62,23 @@ export const useDiffEditor = ({
 			}
 			return false;
 		});
-		return foundResult;
-	}, [input, pattern, fileResults]);
+		if (!foundResult) {
+			return {
+				state: "loading",
+			};
+		}
+		return {
+			state: "loaded",
+			result: foundResult,
+		};
+	}, [pattern, fileResults]);
 
 	const output = useMemo(() => {
-		if (result && isRewrite(result.result)) {
-			return result.result.rewritten.content;
+		if (editorState.result && isRewrite(editorState.result.result)) {
+			return editorState.result.result.rewritten.content;
 		}
 		return input;
-	}, [result, input]);
+	}, [editorState.result, input]);
 
 	return {
 		output,
