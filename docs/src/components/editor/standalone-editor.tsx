@@ -9,11 +9,8 @@ import { CloseButton } from '@/components/code-block/buttons';
 import { SnippetHeading } from '@/components/code-block/heading';
 import { useDelayedLoader } from '@/hooks/use-delayed-loader';
 import { useDiffEditor } from '@/hooks/use-diff-editor';
-import { useEditorCursor } from '@/hooks/use-editor-cursor';
-import { isMatch } from '@/universal/matching/types';
 import { extractLanguageFromPatternBody, getEditorLangIdFromLanguage } from '@/universal/patterns/utils';
 
-import { extractMetavariables } from '../../utils/extract-metavariables';
 import { useStandaloneEditor } from './context';
 import { MonacoDiffEditor } from './monaco-diff-editor';
 import { MonacoEditor } from './monaco-editor';
@@ -35,31 +32,15 @@ export const StandaloneEditor: React.FC<{
   const { pattern, setPattern, input, setInput } = useStandaloneEditor();
 
   const language = useMemo(() => extractLanguageFromPatternBody(pattern), [pattern]);
-  const { output, onPatternChange, state } =
+  const { output, onPatternChange, state, match } =
     useDiffEditor({
       pattern,
       setPattern,
       input,
       setInput,
-      path: language ? `test.${getEditorLangIdFromLanguage(language)}` : undefined,
     });
 
-  const { metaVariables, oldVariables, newVariables } = useMemo(
-    () => extractMetavariables(state),
-    [state],
-  );
-
-  const match = useMemo(() => {
-    return state.state === 'loaded' && isMatch(state.result) ? state.result : undefined;
-  }, [state.state, state.result]);
-
-  const { onCursorPositionChange } = useEditorCursor({
-    variables: metaVariables,
-  });
-
   const errorMessage = useMemo(() => ('log' in state ? state.log?.message : undefined), [state]);
-
-  console.log('state', state, errorMessage);
 
   const showDirty = useDelayedLoader(state.state === 'loading');
 

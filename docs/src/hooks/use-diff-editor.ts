@@ -96,10 +96,18 @@ export const useDiffEditor = ({
 		return input;
 	}, [editorState.result, input]);
 
+	const match = useMemo(() => {
+		if (editorState.result && isMatch(editorState.result.result)) {
+			return editorState.result.result;
+		}
+		return undefined;
+	}, [editorState.result]);
+
 	return {
 		output,
 		onPatternChange,
 		onDiffChange,
 		state: editorState,
+		match,
 	};
 };
