@@ -3,11 +3,9 @@ import { PropsWithChildren, useEffect, useRef } from 'react';
 import { WasmProvider } from '@/components/editor/wasm-provider';
 import { MatchResult } from '../universal';
 
-type TokenFetcher = any;
-
 export const WorkerAnalysisProvider: React.FC<
-  PropsWithChildren<{ api_endpoint?: string; getToken?: TokenFetcher }>
-> = ({ children, api_endpoint, getToken }) => {
+  PropsWithChildren<{}>
+> = ({ children }) => {
   const workerRef = useRef<Worker>();
   const messageIds = useRef(new Map());
 
@@ -34,12 +32,12 @@ export const WorkerAnalysisProvider: React.FC<
             return;
           }
           messageIds.current.set(id, { resolve, reject });
-          const api_key = getToken ? ((await getToken()) ?? '') : '';
+          const api_key = '';
           workerRef.current.postMessage({
             id,
             request: data,
             api_key,
-            api_endpoint,
+            api_endpoint: 'https://api2.grit.io',
           });
         });
       }}

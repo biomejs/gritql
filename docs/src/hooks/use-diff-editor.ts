@@ -1,4 +1,5 @@
 import { useAnalyzerContext } from "@/components/editor/analyzer-context";
+import { isMatch, isRewrite } from "@/universal/matching/types";
 import { useState, useCallback, useMemo, useEffect } from "react";
 
 interface UseDiffEditorProps {
@@ -49,16 +50,25 @@ export const useDiffEditor = ({
 	}, [analyzeFiles, input, pattern]);
 
 	const result = useMemo(() => {
-		console.log("fileResults", fileResults);
-		// const foundResult = fileResults.find(
-		// 	(result) => result.file.path === fileName,
-		// );
-		return {};
+		const foundResult = fileResults.find((result) => {
+			if (result.pattern !== pattern) {
+				return false;
+			}
+			if (isMatch(result.result)) {
+				return result.result.sourceFile === fileName;
+			}
+			return false;
+		});
+		return foundResult;
 	}, [input, pattern, fileResults]);
 
 	const output = useMemo(() => {
-		return result.output;
-	}, [result]);
+		if (result && isRewrite(result.result)) {
+			console.log("result", result);
+			return result.result.rewritten.sourceFile;
+		}
+		return input;
+	}, [result, input]);
 
 	return {
 		output,

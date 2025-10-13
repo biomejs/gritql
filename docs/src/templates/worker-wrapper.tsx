@@ -14,20 +14,8 @@ export const WorkerWrapper = ({ children }: { children: React.ReactNode }) => {
     return <>{children}</>;
   }
 
-  const getToken = async () => {
-    try {
-      const req = await fetch('/api/info/token');
-      const data = await req.json();
-      const token = data.accessToken;
-      return token;
-    } catch (e) {
-      console.error('Token fetch failed', e);
-      return '';
-    }
-  };
-
   return (
-    <WorkerAnalysisProvider api_endpoint={'https://api2.grit.io'} getToken={getToken}>
+    <WorkerAnalysisProvider>
       <StandaloneEditorProvider>{children}</StandaloneEditorProvider>
     </WorkerAnalysisProvider>
   );
