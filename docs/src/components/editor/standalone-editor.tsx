@@ -35,7 +35,7 @@ export const StandaloneEditor: React.FC<{
   const { pattern, setPattern, input, setInput } = useStandaloneEditor();
 
   const language = useMemo(() => extractLanguageFromPatternBody(pattern), [pattern]);
-  const { output, onPatternChange, state, editorState } =
+  const { output, onPatternChange, state } =
     useDiffEditor({
       pattern,
       setPattern,
@@ -57,9 +57,11 @@ export const StandaloneEditor: React.FC<{
     variables: metaVariables,
   });
 
-  const errorMessage = useMemo(() => ('log' in state ? (state.log as any)?.message : undefined), [state]);
+  const errorMessage = useMemo(() => ('log' in state ? state.log?.message : undefined), [state]);
 
-  const showDirty = useDelayedLoader(!!editorState);
+  console.log('state', state, errorMessage);
+
+  const showDirty = useDelayedLoader(state.state === 'loading');
 
   return (
     <div className='flex relative flex-col gap-4 h-full w-full p-2 overflow-hidden rounded-lg bg-neutral-800 transition ease-in-out'>
@@ -98,7 +100,7 @@ export const StandaloneEditor: React.FC<{
           className={cx(
             'monaco-diff-editor h-full',
             { 'is-dirty': showDirty, 'is-match': !!match },
-            editorState,
+            state.state,
           )}
         >
           <MonacoDiffEditor

@@ -1,6 +1,8 @@
 import { useAnalyzerContext } from "@/components/editor/analyzer-context";
 import {
+	AnalysisLog,
 	FileResultMessage,
+	isAnalysisLog,
 	isMatch,
 	isResult,
 	isRewrite,
@@ -62,15 +64,28 @@ export const useDiffEditor = ({
 			}
 			return false;
 		});
-		console.log("info", patternInfo);
-		if (!foundResult) {
+		const logs = fileResults
+			.filter((result) => {
+				if (result.pattern !== pattern) {
+					return false;
+				}
+				return isAnalysisLog(result.result);
+			})
+			.map((result) => result.result as AnalysisLog);
+		if (foundResult) {
 			return {
-				state: "loading",
+				state: "loaded",
+				result: foundResult,
+			};
+		}
+		if (logs.length > 0) {
+			return {
+				state: "error",
+				log: logs[0],
 			};
 		}
 		return {
-			state: "loaded",
-			result: foundResult,
+			state: "loading",
 		};
 	}, [pattern, fileResults, patternInfo]);
 
