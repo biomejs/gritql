@@ -69,7 +69,6 @@ export const StandaloneEditor: React.FC<{
             scrollBeyondLastLine: true,
             ...EDITOR_OPTIONS,
           }}
-          onCursorPositionChange={onCursorPositionChange}
           placeholderColor='#9ca3af'
         />
       </div>
