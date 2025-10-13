@@ -3,7 +3,7 @@
 import { WithChildren } from '@/custom-types/shared';
 import { MonacoDiffEditor } from '@/components/editor/monaco-diff-editor';
 
-import { cleanHlTags, getHighlights, SnippetEditor } from './editor';
+import { cleanHlTags, SnippetEditor } from './editor';
 import { SnippetHeading } from './heading';
 
 export type DiffEditorProps = WithChildren<{
@@ -32,9 +32,8 @@ export const DiffEditor = ({ children }: DiffEditorProps) => {
           language={input.props.language}
           original={cleanHlTags(input.props.children).trim()}
           modified={cleanHlTags(output.props.children).trim()}
-          oldHighlights={getHighlights(input.props.children)}
-          newHighlights={getHighlights(output.props.children)}
           placeholderColor='#9ca3af'
+          highlights={[]}
         />
       </div>
     </div>
