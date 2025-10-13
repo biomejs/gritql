@@ -47,11 +47,9 @@ export const MonacoDiffEditor = ({
   onChange = noop,
   ...rest
 }: MonacoDiffProps) => {
-  const monaco = useMonaco();
   const readOnly = options?.readOnly ?? true;
   const editorRef = useRef<any>(null);
   const [didMount, setDidMount] = useState(false);
-  const [isClient, setIsClient] = useState(false);
 
   const height = useMemo(() => {
     const lines = Math.max(
@@ -74,10 +72,8 @@ export const MonacoDiffEditor = ({
     editorRef.current.getOriginalEditor().setValue(original ?? '');
   }, [original, modified, didMount]);
 
-  // NOTE: return plain text side by side if SSR, Monaco doesn't handle this internally.
-  useEffect(() => setIsClient(true), []);
 
-  return isClient ? (
+  return (
     <DiffEditor
       theme='grit'
       loading={<Loading original={original ?? ''} modified={modified ?? ''} />}
@@ -85,11 +81,8 @@ export const MonacoDiffEditor = ({
       options={merge(diffEditorOptions, readOnly && { ...readOnlyOptions }, options)}
       onMount={handleEditorDidMount}
       language={language}
-    // {...rest}
     />
-  ) : (
-    <Loading original={original ?? ''} modified={modified ?? ''} />
-  );
+  )
 };
 
 const Loading = ({ original, modified }: { original: string; modified: string }) => (
