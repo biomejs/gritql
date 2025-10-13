@@ -1,26 +1,34 @@
+[build-system]
+requires = ["poetry-core >=2.0"]
+build-backend = "poetry.core.masonry.api"
+
 [project]
 name = "gritql"
-requires-python = ">=3.8"
+version = "0.2.0"
+description = "Python bindings for GritQL"
+requires-python = ">=3.9"
+license.text = "MIT"
+readme = "README.md"
+authors = [{name = "Grit", email = "developers@grit.io"}]
+dependencies = ["httpx>=0.18.2"]
+project.links.Source = "https://github.com/honeycombio/gritql/tree/main/python"
 classifiers = [
-  "Programming Language :: Rust",
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
+  "Programming Language :: Rust",
+  "Topic :: File Formats :: JSON",
+  "Topic :: Software Development :: Quality Assurance",
+  "Topic :: Text Processing :: Markup :: HTML",
+  "Topic :: Text Processing :: Markup :: Markdown",
+  "Topic :: Text Processing :: Markup",
+  "Topic :: Text Processing",
 ]
-version = "0.2.0"
-dependencies = ["typer>=0.9.0", "httpx>=0.18.2"]
 
 [project.optional-dependencies]
 dev = ["pytest>=7.0"]
 
-
 [tool.poetry]
-name = "gritql"
-version = "0.2.0"
-description = "Python bindings for GritQL"
-authors = ["Grit <developers@grit.io>"]
-license = "MIT"
-readme = "README.md"
+include = [{ path = "tests", format = "sdist" }]
 
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+[tool.pytest.ini_options]
+addopts = ["--color=yes", "-Werror", "--tb=long", "-vv"]

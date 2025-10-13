@@ -26,23 +26,3 @@ export const PatternGitHubButton: React.FC<
     </a>
   );
 };
-
-export const PatternStudioButton: React.FC<
-  {
-    pattern: Pick<DocPattern, 'name'>;
-  } & CommonButtonProps
-> = ({ pattern, size }) => {
-  if (!pattern.name) return null;
-  return (
-    <a
-      target='_blank'
-      rel='noreferrer'
-      href={`${config.WEB_URL}/studio?preset=${pattern.name}`}
-      className='no-underline'
-    >
-      <BaseButton onClick={undefined}>
-        {<FiExternalLink size={computeButtonIconSize(size)} title='Open in Grit Studio' />}
-      </BaseButton>
-    </a>
-  );
-};
