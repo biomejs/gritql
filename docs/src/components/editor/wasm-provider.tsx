@@ -50,14 +50,14 @@ export const WasmProvider: React.FC<PropsWithChildren<AnalyzerInput>> = ({ child
           analyze({
             command: 'parse',
             ...inputs,
-          }).then((r) => updateFileResults(r, pattern, 'parse')),
+          }).then((r) => updateFileResults(r, pattern)),
         ];
         if (!justParse) {
           promises.push(
             analyze({
               command: 'match',
               ...inputs,
-            }).then((r) => updateFileResults(r, pattern, 'match')),
+            }).then((r) => updateFileResults(r, pattern)),
           );
           setDispatched(files.map((f) => ({ pattern, file: f })));
         }
@@ -74,7 +74,6 @@ export const WasmProvider: React.FC<PropsWithChildren<AnalyzerInput>> = ({ child
     (
       results: MatchResult[],
       pattern: string,
-      command: AnalyzerData['command'],
     ) => {
       console.log('updateFileResults', results);
       const ourResults: FileResultMessage[] = [];
