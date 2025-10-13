@@ -6,7 +6,6 @@ export interface AnalyzerContextType {
   fileResults: FileResultMessage[];
   patternInfo?: PatternResultMessage;
   kind: 'wasm';
-  reset: (excludeFilePaths?: string[]) => void;
   dispatched: { pattern: string; file: RichFile }[];
 }
 
@@ -14,7 +13,6 @@ export const AnalyzerContext = createContext<AnalyzerContextType>({
   analyzeFiles: async () => { },
   fileResults: [],
   kind: 'wasm',
-  reset: () => { },
   dispatched: [],
 });
 

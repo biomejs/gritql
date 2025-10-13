@@ -30,16 +30,11 @@ export const WasmProvider: React.FC<PropsWithChildren<AnalyzerInput>> = ({ child
   const [patternInfo, setPatternInfo] = useState<any>();
   const [dispatched, setDispatched] = useState<{ pattern: string; file: RichFile }[]>([]);
 
-  const reset = useCallback((excludeFilePaths?: string[]) => {
-    if (excludeFilePaths) {
-      setParseResults((prev) => prev.filter((r) => excludeFilePaths.includes((r as any).filePath)));
-      setAnalyzeResults((prev) => prev.filter((r) => excludeFilePaths.includes((r as any).filePath)));
-    } else {
-      setParseResults([]);
-      setAnalyzeResults([]);
-    }
-    setPatternInfo(undefined);
-  }, []);
+  console.log('parseResults', parseResults);
+  console.log('analyzeResults', analyzeResults);
+  console.log('patternInfo', patternInfo);
+  console.log('dispatched', dispatched);
+
 
   const rawAnalyzeFiles = useCallback(
     async (files: RichFile[], pattern: string, justParse: boolean) => {
@@ -132,7 +127,6 @@ export const WasmProvider: React.FC<PropsWithChildren<AnalyzerInput>> = ({ child
     fileResults,
     patternInfo,
     kind: 'wasm' as const,
-    reset,
     dispatched,
   };
 
