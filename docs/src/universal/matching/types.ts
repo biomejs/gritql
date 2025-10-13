@@ -23,11 +23,11 @@ export type Rewrite = {
 	__typename: "Rewrite";
 	original: {
 		sourceFile: string;
-		range: Range;
+		content: string;
 	};
 	rewritten: {
 		sourceFile: string;
-		range: Range;
+		content: string;
 	};
 	message?: string;
 };

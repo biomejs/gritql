@@ -26,18 +26,15 @@ export const WorkerAnalysisProvider: React.FC<
     <WasmProvider
       analyze={(data) => {
         const id = Math.random().toString(36).substring(2);
-        return new Promise<MatchResult[]>(async (resolve, reject) => {
+        return new Promise<MatchResult[]>((resolve, reject) => {
           if (!workerRef.current) {
             reject(new Error('Studio worker is not available'));
             return;
           }
           messageIds.current.set(id, { resolve, reject });
-          const api_key = '';
           workerRef.current.postMessage({
             id,
             request: data,
-            api_key,
-            api_endpoint: 'https://api2.grit.io',
           });
         });
       }}
