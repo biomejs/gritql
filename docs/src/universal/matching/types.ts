@@ -14,7 +14,7 @@ export type Range = {
 
 export type Match = {
 	__typename: "Match";
-	range: Range;
+	ranges: Range[];
 	sourceFile: string;
 	message?: string;
 };

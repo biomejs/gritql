@@ -44,6 +44,12 @@ export const StandaloneEditor: React.FC<{
 
   const showDirty = useDelayedLoader(state.state === 'loading');
 
+  const highlights = useMemo(() => {
+    if (!match) return [];
+    return match.ranges;
+  }, [match]);
+
+
   return (
     <div className='flex relative flex-col gap-4 h-full w-full p-2 overflow-hidden rounded-lg bg-neutral-800 transition ease-in-out'>
       <div className='h-1/2 rounded-md overflow-hidden monaco-pattern-editor relative'>
@@ -98,6 +104,7 @@ export const StandaloneEditor: React.FC<{
               ...EDITOR_OPTIONS,
             }}
             placeholderColor='#9ca3af'
+            highlights={highlights}
           />
         </div>
       </div>

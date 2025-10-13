@@ -3,10 +3,9 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { DiffEditor, DiffEditorProps, useMonaco } from '@monaco-editor/react';
 import merge from 'lodash/merge';
 
-import { Match, Position } from '@/universal/matching/types';
+import { Match, Position, Range } from '@/universal/matching/types';
 
 import { diffEditorOptions, readOnlyOptions } from './config';
-import { MatchIndex } from './highlights';
 
 const noop = () => { };
 
@@ -24,10 +23,7 @@ export interface MonacoDiffProps extends DiffEditorProps {
   minLines?: number;
   noCliff?: boolean;
   highlightedVariable?: string | null;
-  oldHighlights?: MatchIndex[];
-  newHighlights?: MatchIndex[];
-  oldVariables?: any[];
-  newVariables?: any[];
+  highlights?: Range[];
   match?: Match;
   onCursorPositionChange?: (position?: Position) => void;
   onChange?: (original: string, modified: string) => void;
@@ -45,6 +41,7 @@ export const MonacoDiffEditor = ({
   minLines = 1,
   onCursorPositionChange = noop,
   onChange = noop,
+  highlights,
   ...rest
 }: MonacoDiffProps) => {
   const readOnly = options?.readOnly ?? true;
@@ -66,6 +63,12 @@ export const MonacoDiffEditor = ({
     editor.getOriginalEditor().onDidChangeCursorPosition(onCursorPositionChange);
   };
 
+  useMemo(() => {
+    if (!didMount || !editorRef.current) return;
+    console.log('editorRef.current', editorRef.current, highlights);
+  }, [didMount, highlights]);
+
+
   useEffect(() => {
     if (!didMount || !editorRef.current) return;
     editorRef.current.getModifiedEditor().setValue(modified ?? '');
@@ -81,6 +84,7 @@ export const MonacoDiffEditor = ({
       options={merge(diffEditorOptions, readOnly && { ...readOnlyOptions }, options)}
       onMount={handleEditorDidMount}
       language={language}
+      oldH
     />
   )
 };
