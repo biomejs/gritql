@@ -1,4 +1,5 @@
 import {
+	isAnalysisLog,
 	isCreateFile,
 	isMatch,
 	isRemoveFile,
@@ -80,18 +81,21 @@ export type LiveData = {
 
 // Add missing exports
 export type ImplicitFile = any;
-export const extractPath = (path: MatchResult) => {
-	if (isMatch(path)) {
-		return path.sourceFile;
+export const extractPath = (result: MatchResult) => {
+	if (isMatch(result)) {
+		return result.sourceFile;
 	}
-	if (isRewrite(path)) {
-		return path.original.sourceFile;
+	if (isRewrite(result)) {
+		return result.original.sourceFile;
 	}
-	if (isRemoveFile(path)) {
-		return path.sourceFile;
+	if (isRemoveFile(result)) {
+		return result.sourceFile;
 	}
-	if (isCreateFile(path)) {
-		return path.sourceFile;
+	if (isCreateFile(result)) {
+		return result.sourceFile;
+	}
+	if (isAnalysisLog(result)) {
+		return result.file;
 	}
 	return undefined;
 };

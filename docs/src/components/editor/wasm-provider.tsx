@@ -95,6 +95,7 @@ export const WasmProvider: React.FC<PropsWithChildren<AnalyzerInput>> = ({ child
           });
         }
       }
+      console.log('ourResults', ourResults);
       setFileResults(ourResults);
     },
     [],
