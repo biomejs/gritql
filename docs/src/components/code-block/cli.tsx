@@ -2,7 +2,6 @@
 
 import { BiTerminal } from 'react-icons/bi';
 
-import { MonacoEditor } from '@/components/editor/monaco-editor';
 
 import { CopyButton } from './buttons';
 
@@ -20,7 +19,7 @@ export function TerminalCommandBlock({
           <CopyButton data={command} />
         </div>
       </div>
-      <MonacoEditor options={{ readOnly: true }} value={command} language={'bash'} />
+      <pre>{command}</pre>
     </div>
   );
 }

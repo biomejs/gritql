@@ -5,9 +5,7 @@
 import { FaPencilRuler, FaPlay } from 'react-icons/fa';
 
 import { WithChildren } from '@/custom-types/shared';
-import { useSidebarContext } from '@/hooks/sidebar';
 import { MonacoEditor } from '@/components/editor/monaco-editor';
-import { useStandaloneEditor } from '@/components/editor/context';
 
 import { CopyButton, TryButton } from './buttons';
 import { extractCodeString } from './extract';
@@ -32,7 +30,7 @@ export type FenceProps = {
   };
 };
 
-export function MonacoBlock(props: MarkdocCodeFenceProps) {
+export function CodeBlock(props: MarkdocCodeFenceProps) {
   const {
     children,
     language,
@@ -43,8 +41,6 @@ export function MonacoBlock(props: MarkdocCodeFenceProps) {
     firstInPair = false,
     secondInPair = false,
   } = props;
-  const { setPattern, setInput } = useStandaloneEditor();
-  const { setShowEditorSidebar } = useSidebarContext();
   let editorLang = language;
 
   if (diff || match) {
@@ -77,7 +73,6 @@ export function MonacoBlock(props: MarkdocCodeFenceProps) {
     );
   }
 
-  const options = { readOnly: true };
 
   const title = props.title ?? (firstInPair ? 'Before' : secondInPair ? 'After' : language);
 
@@ -87,32 +82,10 @@ export function MonacoBlock(props: MarkdocCodeFenceProps) {
         <SnippetHeading fileName={fileName} title={title} />
         <div className='flex gap-2 w-72 justify-end'>
           <CopyButton data={code} />
-          {snippet && (
-            <TryButton
-              className='float-right'
-              onClick={() => {
-                setPattern(code);
-                setInput(sample);
-                setShowEditorSidebar(true);
-              }}
-            >
-              <FaPlay size={7} /> Run Pattern
-            </TryButton>
-          )}
-          {firstInPair && (
-            <TryButton
-              className='float-right'
-              onClick={() => {
-                setInput(sample);
-                setShowEditorSidebar(true);
-              }}
-            >
-              <FaPencilRuler size={10} /> Edit
-            </TryButton>
-          )}
+
         </div>
       </div>
-      <MonacoEditor options={options} value={code.trim()} language={editorLang} />
+      <pre className='my-0'>{code.trim()}</pre>
     </div>
   );
 }

@@ -1,4 +1,3 @@
-import { MonacoEditor } from '@/components/editor/monaco-editor';
 
 import { CopyButton } from './buttons';
 import { SnippetHeading } from './heading';
