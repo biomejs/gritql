@@ -22,7 +22,6 @@ const Footer = ({ }) => (
 );
 
 export const Template = ({ children, path, layout }: TemplateProps) => {
-  console.log('path', path, layout);
   return (
     <MainProvider>
       <div className='fixed top-0 left-0 w-full z-50'>
