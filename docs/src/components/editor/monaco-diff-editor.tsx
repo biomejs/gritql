@@ -80,9 +80,9 @@ export const MonacoDiffEditor = ({
     const decorations = highlights.map((range: Range) => ({
       range: {
         startLineNumber: range.start.line,
-        startColumn: range.start.column + 1, // Monaco uses 1-based columns
+        startColumn: range.start.column,
         endLineNumber: range.end.line,
-        endColumn: range.end.column + 1,
+        endColumn: range.end.column,
       },
       options: {
         className: 'highlight-decoration',
