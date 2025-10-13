@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { DiffEditor, DiffEditorProps, useMonaco } from '@monaco-editor/react';
+import { DiffEditor, DiffEditorProps } from '@monaco-editor/react';
 import merge from 'lodash/merge';
 
 import { Match, Position, Range } from '@/universal/matching/types';
@@ -47,6 +47,7 @@ export const MonacoDiffEditor = ({
   const readOnly = options?.readOnly ?? true;
   const editorRef = useRef<any>(null);
   const [didMount, setDidMount] = useState(false);
+  const decorationsRef = useRef<string[]>([]);
 
   const height = useMemo(() => {
     const lines = Math.max(
@@ -63,11 +64,36 @@ export const MonacoDiffEditor = ({
     editor.getOriginalEditor().onDidChangeCursorPosition(onCursorPositionChange);
   };
 
-  useMemo(() => {
-    if (!didMount || !editorRef.current) return;
-    console.log('editorRef.current', editorRef.current, highlights);
-  }, [didMount, highlights]);
+  useEffect(() => {
+    if (!didMount || !editorRef.current || !highlights || highlights.length === 0) {
+      // Clear existing decorations if no highlights
+      if (didMount && editorRef.current && decorationsRef.current.length > 0) {
+        const originalEditor = editorRef.current.getOriginalEditor();
+        decorationsRef.current = originalEditor.deltaDecorations(decorationsRef.current, []);
+      }
+      return;
+    }
 
+    const originalEditor = editorRef.current.getOriginalEditor();
+
+    // Convert highlights to Monaco decorations
+    const decorations = highlights.map((range: Range) => ({
+      range: {
+        startLineNumber: range.start.line,
+        startColumn: range.start.column + 1, // Monaco uses 1-based columns
+        endLineNumber: range.end.line,
+        endColumn: range.end.column + 1,
+      },
+      options: {
+        className: 'highlight-decoration',
+        inlineClassName: 'highlight-inline',
+        isWholeLine: false,
+      },
+    }));
+
+    // Apply decorations to the original editor (left side)
+    decorationsRef.current = originalEditor.deltaDecorations(decorationsRef.current, decorations);
+  }, [didMount, highlights]);
 
   useEffect(() => {
     if (!didMount || !editorRef.current) return;
@@ -84,7 +110,7 @@ export const MonacoDiffEditor = ({
       options={merge(diffEditorOptions, readOnly && { ...readOnlyOptions }, options)}
       onMount={handleEditorDidMount}
       language={language}
-      oldH
+      {...rest}
     />
   )
 };
