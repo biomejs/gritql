@@ -12,6 +12,7 @@ import {
   isPatternInfo,
   makeAnalysisLog,
 } from '../../universal';
+import { AnalyzerContext } from './analyzer-context';
 
 export interface AnalyzerData {
   command: 'parse' | 'match';
@@ -26,7 +27,6 @@ interface AnalyzerInput {
   analyze: (data: AnalyzerData) => Promise<MatchResult[]>;
 }
 
-export const AnalyzerContext = createContext<any>(null);
 
 export const WasmProvider: React.FC<PropsWithChildren<AnalyzerInput>> = ({ children, analyze }) => {
   const [parseResults, setParseResults] = useState<any[]>([]);

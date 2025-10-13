@@ -35,7 +35,7 @@ export const StandaloneEditor: React.FC<{
   const { pattern, setPattern, input, setInput } = useStandaloneEditor();
 
   const language = useMemo(() => extractLanguageFromPatternBody(pattern), [pattern]);
-  const { output, onPatternChange, onDiffChange, state, editorState, usesAi, analyze } =
+  const { output, onPatternChange, state, editorState } =
     useDiffEditor({
       pattern,
       setPattern,

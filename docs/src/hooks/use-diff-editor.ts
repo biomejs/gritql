@@ -1,11 +1,11 @@
-import { useState, useCallback } from "react";
+import { useAnalyzerContext } from "@/components/editor/analyzer-context";
+import { useState, useCallback, useMemo } from "react";
 
 interface UseDiffEditorProps {
 	pattern: string;
 	setPattern: (pattern: string) => void;
 	input: string;
 	setInput: (input: string) => void;
-	path?: string;
 }
 
 interface EditorState {
@@ -21,17 +21,17 @@ export const useDiffEditor = ({
 	setPattern,
 	input,
 	setInput,
-	path,
 }: UseDiffEditorProps) => {
-	const [output, setOutput] = useState("");
-	const [state, setState] = useState<EditorState>({ state: "loading" });
-	const [editorState, setEditorState] = useState("");
+	const analysis = useAnalyzerContext();
 
-	const usesAi = false;
+	const [editorState, setEditorState] = useState<EditorState>({
+		state: "loading",
+	});
 
 	const onPatternChange = useCallback(
 		(value: string | undefined) => {
 			setPattern(value ?? "");
+			console.log("onPatternChange", value);
 		},
 		[setPattern],
 	);
@@ -43,18 +43,22 @@ export const useDiffEditor = ({
 		[setInput],
 	);
 
-	const analyze = useCallback(() => {
-		// TODO: Implement pattern analysis
-		setState({ state: "loaded", result: { type: "match" } });
-	}, []);
+	const result = useMemo(() => {
+		console.log("result", input, pattern, analysis);
+		return {
+			type: "match",
+			output: `${input} => ${pattern}`,
+		};
+	}, [input, pattern, analysis]);
+
+	const output = useMemo(() => {
+		return result.output;
+	}, [result]);
 
 	return {
 		output,
 		onPatternChange,
 		onDiffChange,
-		state,
-		editorState,
-		usesAi,
-		analyze,
+		state: editorState,
 	};
 };

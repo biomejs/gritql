@@ -34,7 +34,6 @@ export const MonacoEditor = ({
   const monaco = useMonaco();
 
   const mergedOptions = merge(editorOptions, readOnly && { ...readOnlyOptions }, options)
-  console.log("options", mergedOptions);
 
   const handleEditorDidMount: OnMount = async (editor, _monaco) => {
     editorRef.current = editor;
