@@ -26,7 +26,7 @@ export interface MonacoDiffProps extends DiffEditorProps {
   highlights?: Range[];
   match?: Match;
   onCursorPositionChange?: (position?: Position) => void;
-  onChange?: (original: string, modified: string) => void;
+  onChange?: (original: string) => void;
   placeholderColor?: string;
   focusIfEmpty?: boolean;
 }
@@ -57,11 +57,15 @@ export const MonacoDiffEditor = ({
     return Math.max(minLines, Math.min(maxLines ?? lines, lines)) * 18;
   }, [original, modified, maxLines, minLines]);
 
-  const handleEditorDidMount = async (editor: any) => {
+  const handleEditorDidMount = (editor: any) => {
     editorRef.current = editor;
     setDidMount(true);
     editor.getModifiedEditor().onDidChangeCursorPosition(onCursorPositionChange);
     editor.getOriginalEditor().onDidChangeCursorPosition(onCursorPositionChange);
+    editor.getOriginalEditor().onDidChangeModelContent(() => {
+      const original = editor.getOriginalEditor().getValue();
+      onChange(original);
+    });
   };
 
   useEffect(() => {
@@ -97,10 +101,16 @@ export const MonacoDiffEditor = ({
 
   useEffect(() => {
     if (!didMount || !editorRef.current) return;
-    editorRef.current.getModifiedEditor().setValue(modified ?? '');
-    editorRef.current.getOriginalEditor().setValue(original ?? '');
-  }, [original, modified, didMount]);
-
+    if (editorRef.current.getOriginalEditor().getValue() !== original) {
+      editorRef.current.getOriginalEditor().setValue(original ?? '');
+    }
+  }, [original, didMount]);
+  useEffect(() => {
+    if (!didMount || !editorRef.current) return;
+    if (editorRef.current.getModifiedEditor().getValue() !== modified) {
+      editorRef.current.getModifiedEditor().setValue(modified ?? '');
+    }
+  }, [modified, didMount]);
 
   return (
     <DiffEditor

@@ -8,7 +8,7 @@ import {
 	isRewrite,
 } from "@/universal/matching/types";
 import { extractPath } from "@/universal/patterns/types";
-import { useState, useCallback, useMemo, useEffect } from "react";
+import { useCallback, useMemo, useEffect } from "react";
 
 interface UseDiffEditorProps {
 	pattern: string;
@@ -42,8 +42,9 @@ export const useDiffEditor = ({
 		[setPattern],
 	);
 
-	const onDiffChange = useCallback(
+	const onInputChange = useCallback(
 		(value: string | undefined) => {
+			console.log("onDiffChange", value);
 			setInput(value ?? "");
 		},
 		[setInput],
@@ -106,7 +107,7 @@ export const useDiffEditor = ({
 	return {
 		output,
 		onPatternChange,
-		onDiffChange,
+		onInputChange,
 		state: editorState,
 		match,
 	};

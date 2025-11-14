@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import cx from 'classnames';
 import { editor } from 'monaco-editor';
@@ -25,14 +25,11 @@ const EDITOR_OPTIONS: editor.IStandaloneEditorConstructionOptions = {
   scrollBeyondLastLine: false,
 };
 
-export const StandaloneEditor: React.FC<{
-  patternTitle?: string;
-  resultTitle?: string;
-}> = ({ }) => {
+export const StandaloneEditor: React.FC = () => {
   const { pattern, setPattern, input, setInput } = useStandaloneEditor();
 
   const language = useMemo(() => extractLanguageFromPatternBody(pattern), [pattern]);
-  const { output, onPatternChange, state, match } =
+  const { output, onPatternChange, onInputChange, state, match } =
     useDiffEditor({
       pattern,
       setPattern,
@@ -48,7 +45,6 @@ export const StandaloneEditor: React.FC<{
     if (!match) return [];
     return match.ranges;
   }, [match]);
-
 
   return (
     <div className='flex relative flex-col gap-4 h-full w-full p-2 overflow-hidden rounded-lg bg-neutral-800 transition ease-in-out'>
@@ -96,6 +92,7 @@ export const StandaloneEditor: React.FC<{
             original={input}
             language={language ? getEditorLangIdFromLanguage(language) : 'js'}
             modified={output}
+            onChange={onInputChange}
             options={{
               renderIndicators: true,
               renderSideBySide: true,
