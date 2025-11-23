@@ -16792,8 +16792,7 @@ fn csharp_throw_exception() {
 }
 
 #[test]
-fn run_pattern_file_with_utf8_content() {
-
+fn rewrite_pattern_correct_with_utf8_content() {
     run_test_expected({
         TestArgExpected {
             pattern: r#"
@@ -16896,6 +16895,70 @@ fn run_pattern_file_with_utf8_content() {
                 |
                 |    @TableField
                 |    private Date createdTime;
+                |}
+                |"#
+                .trim_margin()
+                .unwrap(),
+        }
+    })
+        .unwrap();
+}
+
+#[test]
+fn rewrite_pattern_remove_dangling_comma_with_utf8_content() {
+    run_test_expected({
+        TestArgExpected {
+            pattern: r#"
+                |language java
+                |file($body) where {
+                |	$body <: contains {
+                |		bubble() method_declaration($modifiers, $name, $parameters) where {
+                |			$parameters <: maybe contains bubble() formal_parameter($type, name=$param_name) as $p where {
+                |				$type <: `String`,
+                |				$p => .
+                |			}
+                |		}
+                |	}
+                |}
+                |"#
+                .trim_margin()
+                .unwrap(),
+            source: r#"
+                |package a.b;
+                |
+                |import javax.persistence.Entity;
+                |
+                |public class BEntity {
+                |    /**
+                |     * 你
+                |     */
+                |    private Messeges messages;
+                |
+                |    private String field;
+                |
+                |    private void fillInfo(String field, Messeges messages) {
+                |        this.messages = messages;
+                |    }
+                |}
+                |"#
+                .trim_margin()
+                .unwrap(),
+            expected: r#"
+                |package a.b;
+                |
+                |import javax.persistence.Entity;
+                |
+                |public class BEntity {
+                |    /**
+                |     * 你
+                |     */
+                |    private Messeges messages;
+                |
+                |    private String field;
+                |
+                |    private void fillInfo( Messeges messages) {
+                |        this.messages = messages;
+                |    }
                 |}
                 |"#
                 .trim_margin()

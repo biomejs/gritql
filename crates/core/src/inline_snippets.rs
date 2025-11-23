@@ -343,7 +343,7 @@ fn delete_hanging_comma(
     let mut to_delete = to_delete.iter();
     let mut result = String::new();
 
-    let chars = code.chars().enumerate();
+    let chars = code.char_indices().enumerate();
 
     let mut next_comma = to_delete.next();
 
@@ -352,19 +352,19 @@ fn delete_hanging_comma(
         .map(|r| (r.0.effective_range(), r.1.len()))
         .collect();
 
-    for (index, c) in chars {
-        if Some(&index) != next_comma {
+    for (_, (byte_index, c)) in chars {
+        if Some(&byte_index) != next_comma {
             result.push(c);
         } else {
             // Keep track of ranges we need to expand into, since we deleted code in the range
             // This isn't perfect, but it's good enough for tracking cell boundaries
             for (range, ..) in replacement_ranges.iter_mut().rev() {
-                if range.end >= index {
+                if range.end >= byte_index {
                     range.end += 1;
                     break;
                 }
             }
-            ranges_updates = update_range_shifts(index + offset, &ranges_updates, &ranges);
+            ranges_updates = update_range_shifts(byte_index + offset, &ranges_updates, &ranges);
             next_comma = to_delete.next();
         }
     }
@@ -421,14 +421,14 @@ fn update_comma_insertion_strings(input: &str, ranges: &[(usize, Rc<RefCell<&mut
     let mut is_double_quoted_string_literal = false;
     let mut is_single_quoted_string_literal = false;
     let mut delete_future_comma = false;
-    let mut chars = input.chars().enumerate().peekable();
-    while let Some((index, c)) = chars.next() {
-        if let Some(insertion) = get_insertion_at_index(index, ranges) {
+    let mut chars = input.char_indices().enumerate().peekable();
+    while let Some((_, (byte_index, c))) = chars.next() {
+        if let Some(insertion) = get_insertion_at_index(byte_index, ranges) {
             let mut comma_index = None;
             {
                 let borrow = insertion.borrow();
-                let chars = borrow.chars().enumerate();
-                for (i, c) in chars {
+                let chars = borrow.char_indices().enumerate();
+                for (i, (_, c)) in chars {
                     if !c.is_whitespace() {
                         if c == ',' && delete_future_comma {
                             comma_index = Some(i);
@@ -444,11 +444,11 @@ fn update_comma_insertion_strings(input: &str, ranges: &[(usize, Rc<RefCell<&mut
 
         match c {
             '/' => {
-                if let Some((_, '/')) = chars.peek() {
+                if let Some((_, (_, '/'))) = chars.peek() {
                     if !in_multiline_comment {
                         in_single_line_comment = true;
                     }
-                } else if let Some((_, '*')) = chars.peek() {
+                } else if let Some((_, (_, '*'))) = chars.peek() {
                     in_multiline_comment = true;
                 }
                 if !in_single_line_comment && !in_multiline_comment {
@@ -462,7 +462,7 @@ fn update_comma_insertion_strings(input: &str, ranges: &[(usize, Rc<RefCell<&mut
                 if is_double_quoted_string_literal || is_single_quoted_string_literal {
                     continue;
                 }
-                if in_multiline_comment && matches!(chars.peek(), Some((_, '/'))) {
+                if in_multiline_comment && matches!(chars.peek(), Some((_, (_, '/')))) {
                     in_multiline_comment = false;
                     chars.next().unwrap();
                 } else if !in_single_line_comment && !in_multiline_comment {
@@ -528,7 +528,7 @@ fn get_deletion_indices(input: &str, ranges: &[Range<usize>]) -> Vec<usize> {
     let mut last_comma: Option<usize> = None;
     let mut chars = input.char_indices().enumerate().peekable();
     let mut result: Vec<usize> = vec![];
-    while let Some((index, (byte_index, c))) = chars.next() {
+    while let Some((_, (byte_index, c))) = chars.next() {
         if is_in_deletion_range(byte_index, &deletion_ranges) {
             deletion_range = RewriteRange::Rewrite;
         } else if let RewriteRange::Rewrite = deletion_range {
@@ -615,12 +615,12 @@ fn get_deletion_indices(input: &str, ranges: &[Range<usize>]) -> Vec<usize> {
                 match deletion_range {
                     RewriteRange::Rewrite => {}
                     RewriteRange::PostRewrite => {
-                        result.push(index);
+                        result.push(byte_index);
                         last_comma = None;
                         deletion_range = RewriteRange::Unknown;
                     }
                     RewriteRange::Unknown => {
-                        last_comma = Some(index);
+                        last_comma = Some(byte_index);
                     }
                 }
             }
