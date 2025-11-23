@@ -16790,3 +16790,117 @@ fn csharp_throw_exception() {
     })
     .unwrap();
 }
+
+#[test]
+fn run_pattern_file_with_utf8_content() {
+
+    run_test_expected({
+        TestArgExpected {
+            pattern: r#"
+                |language java
+                |file($body) where {
+                |	$body <: contains {
+                |		bubble() field_declaration($modifiers, $declarator) where {
+                |			$replaced_ann = "",
+                |			$delete_annotations = [],
+                |			maybe $modifiers <: contains bubble($replaced_ann) annotation(name=$ann_name) as $anno where {
+                |				if ($ann_name <: "Column") {
+                |					if ($replaced_ann <: "") { $replaced_ann = $anno },
+                |					$anno => .
+                |				} else if ($ann_name <: "Convert") {
+                |					if ($replaced_ann <: not "") { $replaced_ann => . },
+                |					$replaced_ann = $anno
+                |				}
+                |			},
+                |			if ($replaced_ann <: not "") {
+                |				log($replaced_ann),
+                |				$replaced_ann => `@TableField`
+                |			},
+                |			$replaced_ann = ``
+                |		}
+                |	}
+                |}
+                |"#
+                .trim_margin()
+                .unwrap(),
+            source: r#"
+                |package a.b;
+                |
+                |import javax.persistence.Entity;
+                |
+                |public class AEntity implements Serializable {
+                |    /**
+                |     * 大大大
+                |     */
+                |    /**
+                |     * 0. 大大 1. 大大大大大 2. 大大大大 3大大大大大大 4. 大大大大.
+                |     */
+                |    /**
+                |     * 0. 大大 1. 大大大大大 2. 大大大大 3. 大大大大大大大 4. 大大大大大大大 5. 大大大大大大大大.
+                |     */
+                |    /**
+                |     * 0. 大大 1. 大大大大 2. 大大大大 3. 大大大大 4. 大大大大 5. 大大大大.
+                |     */
+                |    /**
+                |     * 大大大大大.
+                |     */
+                |    /**
+                |     * 大大大大大大大大.
+                |     */
+                |    @Convert(converter = T.class)
+                |    @Column(name = "messages")
+                |    private Messeges messages;
+                |
+                |
+                |    @Column(name = "field"                                                             )
+                |    private String field;
+                |
+                |
+                |    @Column(name = "created_time", nullable = false, length = 19)
+                |    private Date createdTime;
+                |}
+                |"#
+                .trim_margin()
+                .unwrap(),
+            expected: r#"
+                |package a.b;
+                |
+                |import javax.persistence.Entity;
+                |
+                |public class AEntity implements Serializable {
+                |    /**
+                |     * 大大大
+                |     */
+                |    /**
+                |     * 0. 大大 1. 大大大大大 2. 大大大大 3大大大大大大 4. 大大大大.
+                |     */
+                |    /**
+                |     * 0. 大大 1. 大大大大大 2. 大大大大 3. 大大大大大大大 4. 大大大大大大大 5. 大大大大大大大大.
+                |     */
+                |    /**
+                |     * 0. 大大 1. 大大大大 2. 大大大大 3. 大大大大 4. 大大大大 5. 大大大大.
+                |     */
+                |    /**
+                |     * 大大大大大.
+                |     */
+                |    /**
+                |     * 大大大大大大大大.
+                |     */
+                |    @TableField
+                |    private Messeges messages;
+                |
+                |
+                |    @TableField
+                |    private String field;
+                |
+                |
+                |    @TableField
+                |    private Date createdTime;
+                |}
+                |"#
+                .trim_margin()
+                .unwrap(),
+        }
+    })
+        .unwrap();
+}

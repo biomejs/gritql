@@ -526,21 +526,21 @@ fn get_deletion_indices(input: &str, ranges: &[Range<usize>]) -> Vec<usize> {
     let mut is_single_quoted_string_literal = false;
     let mut deletion_range = RewriteRange::Unknown;
     let mut last_comma: Option<usize> = None;
-    let mut chars = input.chars().enumerate().peekable();
+    let mut chars = input.char_indices().enumerate().peekable();
     let mut result: Vec<usize> = vec![];
-    while let Some((index, c)) = chars.next() {
-        if is_in_deletion_range(index, &deletion_ranges) {
+    while let Some((index, (byte_index, c))) = chars.next() {
+        if is_in_deletion_range(byte_index, &deletion_ranges) {
             deletion_range = RewriteRange::Rewrite;
         } else if let RewriteRange::Rewrite = deletion_range {
             deletion_range = RewriteRange::PostRewrite
         }
         match c {
             '/' => {
-                if let Some((_, '/')) = chars.peek() {
+                if let Some((_, (_, '/'))) = chars.peek() {
                     if !in_multiline_comment {
                         in_single_line_comment = true;
                     }
-                } else if let Some((_, '*')) = chars.peek() {
+                } else if let Some((_, (_,'*'))) = chars.peek() {
                     in_multiline_comment = true;
                 }
                 if !in_single_line_comment && !in_multiline_comment {
@@ -559,7 +559,7 @@ fn get_deletion_indices(input: &str, ranges: &[Range<usize>]) -> Vec<usize> {
                 if is_double_quoted_string_literal || is_single_quoted_string_literal {
                     continue;
                 }
-                if in_multiline_comment && matches!(chars.peek(), Some((_, '/'))) {
+                if in_multiline_comment && matches!(chars.peek(), Some((_, (_, '/')))) {
                     in_multiline_comment = false;
                     chars.next().unwrap();
                 } else if !in_single_line_comment && !in_multiline_comment {
