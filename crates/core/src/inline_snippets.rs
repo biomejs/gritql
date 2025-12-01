@@ -540,7 +540,7 @@ fn get_deletion_indices(input: &str, ranges: &[Range<usize>]) -> Vec<usize> {
                     if !in_multiline_comment {
                         in_single_line_comment = true;
                     }
-                } else if let Some((_, (_,'*'))) = chars.peek() {
+                } else if let Some((_, (_, '*'))) = chars.peek() {
                     in_multiline_comment = true;
                 }
                 if !in_single_line_comment && !in_multiline_comment {
