@@ -70,6 +70,9 @@ impl Language for Python {
             ("{ ", " }"),
             ("", "\ndef GRIT_FUNCTION():\n    return;"),
             ("GRIT_FN(", ")"),
+            // Allow snippets to be parsed in return type annotation position, so we can match
+            // metavariables bound to Python `type` nodes (e.g. `$type <: `List``).
+            ("def GRIT_FUNCTION() -> ", ":\n    pass"),
         ]
     }
 
