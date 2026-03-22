@@ -1,0 +1,501 @@
+name: NAPI Bindings
+
+env:
+  DEBUG: napi:*
+  APP_NAME: gritql
+  MACOSX_DEPLOYMENT_TARGET: "10.13"
+  WORKING_DIR: js/gritql
+
+permissions:
+  contents: write
+  id-token: write
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "js/gritql/**"
+      - "crates/**"
+      - "Cargo.toml"
+      - "Cargo.lock"
+      - ".github/workflows/napi.yaml"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "js/gritql/**"
+      - "crates/**"
+      - "Cargo.toml"
+      - "Cargo.lock"
+      - ".github/workflows/napi.yaml"
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: "Publish to npm"
+        required: false
+        type: boolean
+        default: false
+
+concurrency:
+  group: ${{ github.workflow }}-${{ (github.ref == 'refs/heads/main' && github.sha) || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        settings:
+          - host: macos-latest
+            target: x86_64-apple-darwin
+            build: cd js/gritql && npm run build -- --target x86_64-apple-darwin
+          - host: windows-latest
+            target: x86_64-pc-windows-msvc
+            build: cd js/gritql && npm run build -- --target x86_64-pc-windows-msvc
+          - host: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian
+            build: cd /build/js/gritql && npm run build -- --target x86_64-unknown-linux-gnu
+          - host: ubuntu-latest
+            target: x86_64-unknown-linux-musl
+            docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-alpine
+            build: |-
+              set -e &&
+              apk add --no-cache perl make g++ &&
+              export CXX=g++ &&
+              cd /build/js/gritql && npm run build -- --target x86_64-unknown-linux-musl
+          - host: macos-latest
+            target: aarch64-apple-darwin
+            build: cd js/gritql && npm run build -- --target aarch64-apple-darwin
+          - host: ubuntu-latest
+            target: aarch64-unknown-linux-gnu
+            docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian-aarch64
+            build: |-
+              set -e &&
+              apt-get update && apt-get install -y g++-aarch64-linux-gnu &&
+              export CC_aarch64_unknown_linux_gnu="aarch64-linux-gnu-gcc -mno-outline-atomics" &&
+              export CXX_aarch64_unknown_linux_gnu="aarch64-linux-gnu-g++ -mno-outline-atomics" &&
+              mkdir -p /build/.cargo &&
+              echo '[target.aarch64-unknown-linux-gnu]' >> /build/.cargo/config.toml &&
+              echo 'rustflags = ["-C", "target-feature=-outline-atomics"]' >> /build/.cargo/config.toml &&
+              cd /build/js/gritql && npm run build -- --target aarch64-unknown-linux-gnu
+          - host: ubuntu-latest
+            target: aarch64-linux-android
+            build: cd js/gritql && npm run build -- --target aarch64-linux-android
+          - host: ubuntu-latest
+            target: aarch64-unknown-linux-musl
+            docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-alpine
+            build: |-
+              set -e &&
+              apk add --no-cache perl make &&
+              export CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER=aarch64-linux-musl-gcc &&
+              export CC_aarch64_unknown_linux_musl=aarch64-linux-musl-gcc &&
+              export CXX_aarch64_unknown_linux_musl=aarch64-linux-musl-g++ &&
+              rustup target add aarch64-unknown-linux-musl &&
+              cd /build/js/gritql && npm run build -- --target aarch64-unknown-linux-musl
+          - host: windows-latest
+            target: aarch64-pc-windows-msvc
+            build: cd js/gritql && npm run build -- --target aarch64-pc-windows-msvc
+          - host: ubuntu-latest
+            target: riscv64gc-unknown-linux-gnu
+            setup: |
+              sudo apt-get update
+              sudo apt-get install gcc-riscv64-linux-gnu g++-riscv64-linux-gnu -y
+            build: cd js/gritql && npm run build -- --target riscv64gc-unknown-linux-gnu
+    name: Build - ${{ matrix.settings.target }}
+    runs-on: ${{ matrix.settings.host }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Setup node
+        uses: actions/setup-node@v4
+        if: ${{ !matrix.settings.docker }}
+        with:
+          node-version: 20
+      - name: Install Rust toolchain
+        if: ${{ !matrix.settings.docker }}
+        shell: bash
+        run: |
+          # Install the toolchain specified in rust-toolchain.toml and add the cross-compilation target
+          rustup show
+          rustup target add ${{ matrix.settings.target }}
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            .cargo-cache
+            target/
+          key: ${{ matrix.settings.target }}-cargo-${{ matrix.settings.host }}
+      - name: Setup toolchain
+        run: ${{ matrix.settings.setup }}
+        if: ${{ matrix.settings.setup }}
+        shell: bash
+      - name: Install dependencies
+        run: npm install --ignore-scripts
+        working-directory: ${{ env.WORKING_DIR }}
+      - name: Build in docker
+        uses: addnab/docker-run-action@v3
+        if: ${{ matrix.settings.docker }}
+        with:
+          image: ${{ matrix.settings.docker }}
+          options: "--user 0:0 -v ${{ github.workspace }}/.cargo-cache/git/db:/usr/local/cargo/git/db -v ${{ github.workspace }}/.cargo/registry/cache:/usr/local/cargo/registry/cache -v ${{ github.workspace }}/.cargo/registry/index:/usr/local/cargo/registry/index -v ${{ github.workspace }}:/build -w /build"
+          run: |
+            # Install target for the toolchain that rust-toolchain.toml specifies
+            rustup target add ${{ matrix.settings.target }} || true
+            ${{ matrix.settings.build }}
+      - name: Build
+        run: ${{ matrix.settings.build }}
+        if: ${{ !matrix.settings.docker }}
+        shell: bash
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: bindings-${{ matrix.settings.target }}
+          path: js/gritql/${{ env.APP_NAME }}.*.node
+          if-no-files-found: error
+
+  build-freebsd:
+    runs-on: ubuntu-latest
+    name: Build - FreeBSD x64
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Build
+        id: build
+        uses: cross-platform-actions/action@v0.25.0
+        env:
+          DEBUG: napi:*
+          RUSTUP_IO_THREADS: 1
+        with:
+          operating_system: freebsd
+          version: "14.1"
+          memory: 8G
+          cpu_count: 3
+          environment_variables: DEBUG RUSTUP_IO_THREADS
+          shell: bash
+          run: |
+            sudo pkg install -y -f curl node20 npm-node20 libnghttp2 perl5 gmake
+            curl https://sh.rustup.rs -sSf --output rustup.sh
+            sh rustup.sh -y --profile minimal --default-toolchain stable
+            source "$HOME/.cargo/env"
+            echo "~~~~ rustc --version ~~~~"
+            rustc --version
+            echo "~~~~ node -v ~~~~"
+            node -v
+            cd js/gritql
+            npm install --ignore-scripts
+            npm run build
+            rm -rf node_modules
+            cd ../..
+            rm -rf target
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: bindings-freebsd
+          path: js/gritql/${{ env.APP_NAME }}.*.node
+          if-no-files-found: error
+
+  test-macOS-windows-binding:
+    name: Test - ${{ matrix.settings.target }} - node@${{ matrix.node }}
+    needs:
+      - build
+      - universal-macOS
+    strategy:
+      fail-fast: false
+      matrix:
+        settings:
+          - host: macos-latest
+            target: universal-apple-darwin
+            artifact: bindings-universal-apple-darwin
+          - host: windows-latest
+            target: x86_64-pc-windows-msvc
+            artifact: bindings-x86_64-pc-windows-msvc
+        node:
+          - "18"
+          - "20"
+    runs-on: ${{ matrix.settings.host }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Setup bun
+        uses: oven-sh/setup-bun@v2
+      - name: Install dependencies
+        run: npm install --ignore-scripts
+        working-directory: ${{ env.WORKING_DIR }}
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ matrix.settings.artifact }}
+          path: ${{ env.WORKING_DIR }}/__generated__
+      - name: List packages
+        run: ls -R .
+        shell: bash
+        working-directory: ${{ env.WORKING_DIR }}
+      - name: Test bindings
+        run: npm test
+        working-directory: ${{ env.WORKING_DIR }}
+
+  test-linux-x64-gnu-binding:
+    name: Test - Linux x64 gnu - node@${{ matrix.node }}
+    needs:
+      - build
+    strategy:
+      fail-fast: false
+      matrix:
+        node:
+          - "18"
+          - "20"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Setup bun
+        uses: oven-sh/setup-bun@v2
+      - name: Install dependencies
+        run: npm install --ignore-scripts
+        working-directory: ${{ env.WORKING_DIR }}
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: bindings-x86_64-unknown-linux-gnu
+          path: ${{ env.WORKING_DIR }}/__generated__
+      - name: List packages
+        run: ls -R .
+        shell: bash
+        working-directory: ${{ env.WORKING_DIR }}
+      - name: Test bindings
+        run: npm test
+        working-directory: ${{ env.WORKING_DIR }}
+
+  test-linux-x64-musl-binding:
+    name: Test - Linux x64 musl - node@${{ matrix.node }}
+    needs:
+      - build
+    strategy:
+      fail-fast: false
+      matrix:
+        node:
+          - "18"
+          - "20"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Install dependencies
+        run: npm install --ignore-scripts
+        working-directory: ${{ env.WORKING_DIR }}
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: bindings-x86_64-unknown-linux-musl
+          path: ${{ env.WORKING_DIR }}/__generated__
+      - name: List packages
+        run: ls -R .
+        shell: bash
+        working-directory: ${{ env.WORKING_DIR }}
+      - name: Test bindings
+        uses: addnab/docker-run-action@v3
+        with:
+          image: oven/bun:alpine
+          options: "-v ${{ github.workspace }}:/build -w /build/js/gritql"
+          run: |
+            set -e
+            bun test
+
+  test-linux-aarch64-gnu-binding:
+    name: Test - Linux aarch64 gnu - node@${{ matrix.node }}
+    needs:
+      - build
+    strategy:
+      fail-fast: false
+      matrix:
+        node:
+          - "18"
+          - "20"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: bindings-aarch64-unknown-linux-gnu
+          path: ${{ env.WORKING_DIR }}/__generated__
+      - name: List packages
+        run: ls -R .
+        shell: bash
+        working-directory: ${{ env.WORKING_DIR }}
+      - name: Install dependencies
+        run: npm install --ignore-scripts
+        working-directory: ${{ env.WORKING_DIR }}
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: arm64
+      - run: docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+      - name: Setup and run tests
+        uses: addnab/docker-run-action@v3
+        with:
+          image: node:${{ matrix.node }}-bookworm
+          options: "--platform linux/arm64 -v ${{ github.workspace }}:/build -w /build/js/gritql"
+          run: |
+            set -e
+            npm install -g bun
+            bun test
+            ls -la
+
+  test-linux-aarch64-musl-binding:
+    name: Test - Linux aarch64 musl
+    needs:
+      - build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: bindings-aarch64-unknown-linux-musl
+          path: ${{ env.WORKING_DIR }}/__generated__
+      - name: List packages
+        run: ls -R .
+        shell: bash
+        working-directory: ${{ env.WORKING_DIR }}
+      - name: Install dependencies
+        run: npm install --ignore-scripts
+        working-directory: ${{ env.WORKING_DIR }}
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: arm64
+      - run: docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+      - name: Setup and run tests
+        uses: addnab/docker-run-action@v3
+        with:
+          image: oven/bun:alpine
+          options: "--platform linux/arm64 -v ${{ github.workspace }}:/build -w /build/js/gritql"
+          run: |
+            set -e
+            bun test
+
+  universal-macOS:
+    name: Build universal macOS binary
+    needs:
+      - build
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install dependencies
+        run: npm install --ignore-scripts
+        working-directory: ${{ env.WORKING_DIR }}
+      - name: Download macOS x64 artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: bindings-x86_64-apple-darwin
+          path: ${{ env.WORKING_DIR }}/artifacts
+      - name: Download macOS arm64 artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: bindings-aarch64-apple-darwin
+          path: ${{ env.WORKING_DIR }}/artifacts
+      - name: Combine binaries
+        run: npm run universal
+        working-directory: ${{ env.WORKING_DIR }}
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: bindings-universal-apple-darwin
+          path: js/gritql/${{ env.APP_NAME }}.*.node
+          if-no-files-found: error
+
+  publish:
+    name: Publish to npm
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    needs:
+      - build-freebsd
+      - test-macOS-windows-binding
+      - test-linux-x64-gnu-binding
+      - test-linux-x64-musl-binding
+      - test-linux-aarch64-gnu-binding
+      - test-linux-aarch64-musl-binding
+      - universal-macOS
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install dependencies
+        run: npm install --ignore-scripts
+        working-directory: ${{ env.WORKING_DIR }}
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: ${{ env.WORKING_DIR }}/artifacts
+      - name: Move artifacts
+        run: npm run artifacts
+        working-directory: ${{ env.WORKING_DIR }}
+      - name: List packages
+        run: ls -R ./npm
+        shell: bash
+        working-directory: ${{ env.WORKING_DIR }}
+      - name: Check if version changed
+        id: version_check
+        run: |
+          LOCAL_VERSION=$(node -p "require('./package.json').version")
+          echo "local_version=$LOCAL_VERSION" >> $GITHUB_OUTPUT
+          PUBLISHED_VERSION=$(npm view @getgrit/gritql version 2>/dev/null || echo "0.0.0")
+          echo "published_version=$PUBLISHED_VERSION" >> $GITHUB_OUTPUT
+          if [ "$LOCAL_VERSION" != "$PUBLISHED_VERSION" ]; then
+            echo "should_publish=true" >> $GITHUB_OUTPUT
+            echo "Version changed: $PUBLISHED_VERSION -> $LOCAL_VERSION"
+          else
+            echo "should_publish=false" >> $GITHUB_OUTPUT
+            echo "Version unchanged: $LOCAL_VERSION"
+          fi
+        working-directory: ${{ env.WORKING_DIR }}
+      - name: Publish
+        if: steps.version_check.outputs.should_publish == 'true' || github.event.inputs.publish == 'true'
+        run: |
+          echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+          npm config set provenance true
+          LOCAL_VERSION="${{ steps.version_check.outputs.local_version }}"
+          if echo "$LOCAL_VERSION" | grep -q "-"; then
+            echo "Publishing $LOCAL_VERSION as next"
+            npm publish --tag next --access public
+          else
+            echo "Publishing $LOCAL_VERSION as latest"
+            npm publish --access public
+          fi
+        working-directory: ${{ env.WORKING_DIR }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

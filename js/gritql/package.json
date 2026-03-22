@@ -1,23 +1,57 @@
 {
   "name": "@getgrit/gritql",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "__generated__/index.js",
   "types": "__generated__/index.d.ts",
   "napi": {
     "name": "gritql",
-    "triples": {}
+    "triples": {
+      "defaults": false,
+      "additional": [
+        "x86_64-pc-windows-msvc",
+        "x86_64-unknown-linux-gnu",
+        "x86_64-apple-darwin",
+        "aarch64-apple-darwin",
+        "universal-apple-darwin",
+        "x86_64-unknown-linux-musl",
+        "aarch64-unknown-linux-gnu",
+        "aarch64-unknown-linux-musl",
+        "aarch64-pc-windows-msvc",
+        "aarch64-linux-android",
+        "riscv64gc-unknown-linux-gnu"
+      ]
+    }
   },
   "license": "MIT",
   "devDependencies": {
     "@napi-rs/cli": "^2.18.4"
   },
+  "optionalDependencies": {
+    "@getgrit/gritql-win32-x64-msvc": "0.0.2",
+    "@getgrit/gritql-darwin-x64": "0.0.2",
+    "@getgrit/gritql-linux-x64-gnu": "0.0.2",
+    "@getgrit/gritql-darwin-arm64": "0.0.2",
+    "@getgrit/gritql-linux-x64-musl": "0.0.2",
+    "@getgrit/gritql-linux-arm64-gnu": "0.0.2",
+    "@getgrit/gritql-linux-arm64-musl": "0.0.2",
+    "@getgrit/gritql-win32-arm64-msvc": "0.0.2",
+    "@getgrit/gritql-darwin-universal": "0.0.2",
+    "@getgrit/gritql-android-arm64": "0.0.2",
+    "@getgrit/gritql-freebsd-x64": "0.0.2",
+    "@getgrit/gritql-linux-riscv64-gnu": "0.0.2"
+  },
   "engines": {
     "node": ">= 10"
   },
   "scripts": {
-    "build": "RUSTFLAGS=\"-A warnings\" napi build --no-const-enum --platform --release --dts __generated__/index.d.ts --js __generated__/index.js && mv gritql.darwin-arm64.node npm/darwin-arm64/",
+    "artifacts": "napi artifacts",
+    "build": "napi build --no-const-enum --platform --release --dts __generated__/index.d.ts --js __generated__/index.js",
+    "build:local": "RUSTFLAGS=\"-A warnings\" napi build --no-const-enum --platform --release --dts __generated__/index.d.ts --js __generated__/index.js && mv gritql.darwin-arm64.node npm/darwin-arm64/",
+    "prepublishOnly": "napi prepublish -t npm",
     "test": "bun test",
     "test:ci": "bun test --run",
+    "universal": "napi universal",
+    "version": "napi version",
     "example:search": "bun run examples/search.ts",
     "example:search:node": "node examples/search.js"
   }

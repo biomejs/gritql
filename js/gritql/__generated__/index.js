@@ -43,18 +43,6 @@ switch (platform) {
           loadError = e
         }
         break
-      case 'arm':
-        localFileExisted = existsSync(join(__dirname, 'gritql.android-arm-eabi.node'))
-        try {
-          if (localFileExisted) {
-            nativeBinding = require('./gritql.android-arm-eabi.node')
-          } else {
-            nativeBinding = require('@getgrit/gritql-android-arm-eabi')
-          }
-        } catch (e) {
-          loadError = e
-        }
-        break
       default:
         throw new Error(`Unsupported architecture on Android ${arch}`)
     }
@@ -70,20 +58,6 @@ switch (platform) {
             nativeBinding = require('./gritql.win32-x64-msvc.node')
           } else {
             nativeBinding = require('@getgrit/gritql-win32-x64-msvc')
-          }
-        } catch (e) {
-          loadError = e
-        }
-        break
-      case 'ia32':
-        localFileExisted = existsSync(
-          join(__dirname, 'gritql.win32-ia32-msvc.node')
-        )
-        try {
-          if (localFileExisted) {
-            nativeBinding = require('./gritql.win32-ia32-msvc.node')
-          } else {
-            nativeBinding = require('@getgrit/gritql-win32-ia32-msvc')
           }
         } catch (e) {
           loadError = e
@@ -223,35 +197,6 @@ switch (platform) {
           }
         }
         break
-      case 'arm':
-        if (isMusl()) {
-          localFileExisted = existsSync(
-            join(__dirname, 'gritql.linux-arm-musleabihf.node')
-          )
-          try {
-            if (localFileExisted) {
-              nativeBinding = require('./gritql.linux-arm-musleabihf.node')
-            } else {
-              nativeBinding = require('@getgrit/gritql-linux-arm-musleabihf')
-            }
-          } catch (e) {
-            loadError = e
-          }
-        } else {
-          localFileExisted = existsSync(
-            join(__dirname, 'gritql.linux-arm-gnueabihf.node')
-          )
-          try {
-            if (localFileExisted) {
-              nativeBinding = require('./gritql.linux-arm-gnueabihf.node')
-            } else {
-              nativeBinding = require('@getgrit/gritql-linux-arm-gnueabihf')
-            }
-          } catch (e) {
-            loadError = e
-          }
-        }
-        break
       case 'riscv64':
         if (isMusl()) {
           localFileExisted = existsSync(
@@ -279,20 +224,6 @@ switch (platform) {
           } catch (e) {
             loadError = e
           }
-        }
-        break
-      case 's390x':
-        localFileExisted = existsSync(
-          join(__dirname, 'gritql.linux-s390x-gnu.node')
-        )
-        try {
-          if (localFileExisted) {
-            nativeBinding = require('./gritql.linux-s390x-gnu.node')
-          } else {
-            nativeBinding = require('@getgrit/gritql-linux-s390x-gnu')
-          }
-        } catch (e) {
-          loadError = e
         }
         break
       default:
