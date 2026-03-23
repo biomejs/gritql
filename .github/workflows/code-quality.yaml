@@ -12,11 +12,11 @@ jobs:
     runs-on: namespace-profile-cached-arm64-grit
     steps:
       - name: clone code
-        uses: namespacelabs/nscloud-checkout-action@v5
+        uses: namespacelabs/nscloud-checkout-action@938f5d2d403d6224d9a0c0dc559b1dae09c2ede4 # v8.1.1
         with:
           submodules: recursive
       - name: install Rust
-        uses: actions-rs/toolchain@v1
+        uses: actions-rs/toolchain@b2417cde72dcf67f306c0ae8e0828a81bf0b189f # v1.0.6
         with:
           # Sync with rust-toolchain.toml
           toolchain: 1.82
