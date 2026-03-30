@@ -1,6 +1,6 @@
 {
   "name": "@getgrit/gritql",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "__generated__/index.js",
   "types": "__generated__/index.d.ts",
   "napi": {
@@ -28,18 +28,18 @@
     "@napi-rs/cli": "^2.18.4"
   },
   "optionalDependencies": {
-    "@getgrit/gritql-win32-x64-msvc": "0.0.2",
-    "@getgrit/gritql-darwin-x64": "0.0.2",
-    "@getgrit/gritql-linux-x64-gnu": "0.0.2",
-    "@getgrit/gritql-darwin-arm64": "0.0.2",
-    "@getgrit/gritql-linux-x64-musl": "0.0.2",
-    "@getgrit/gritql-linux-arm64-gnu": "0.0.2",
-    "@getgrit/gritql-linux-arm64-musl": "0.0.2",
-    "@getgrit/gritql-win32-arm64-msvc": "0.0.2",
-    "@getgrit/gritql-darwin-universal": "0.0.2",
-    "@getgrit/gritql-android-arm64": "0.0.2",
-    "@getgrit/gritql-freebsd-x64": "0.0.2",
-    "@getgrit/gritql-linux-riscv64-gnu": "0.0.2"
+    "@getgrit/gritql-win32-x64-msvc": "0.0.3",
+    "@getgrit/gritql-darwin-x64": "0.0.3",
+    "@getgrit/gritql-linux-x64-gnu": "0.0.3",
+    "@getgrit/gritql-darwin-arm64": "0.0.3",
+    "@getgrit/gritql-linux-x64-musl": "0.0.3",
+    "@getgrit/gritql-linux-arm64-gnu": "0.0.3",
+    "@getgrit/gritql-linux-arm64-musl": "0.0.3",
+    "@getgrit/gritql-win32-arm64-msvc": "0.0.3",
+    "@getgrit/gritql-darwin-universal": "0.0.3",
+    "@getgrit/gritql-android-arm64": "0.0.3",
+    "@getgrit/gritql-freebsd-x64": "0.0.3",
+    "@getgrit/gritql-linux-riscv64-gnu": "0.0.3"
   },
   "engines": {
     "node": ">= 10"
@@ -55,5 +55,6 @@
     "version": "napi version",
     "example:search": "bun run examples/search.ts",
     "example:search:node": "node examples/search.js"
-  }
+  },
+  "repository": "https://github.com/biomejs/gritql"
 }

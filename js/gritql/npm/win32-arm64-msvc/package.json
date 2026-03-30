@@ -1,6 +1,6 @@
 {
   "name": "@getgrit/gritql-win32-arm64-msvc",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "os": [
     "win32"
   ],
@@ -14,5 +14,6 @@
   "license": "MIT",
   "engines": {
     "node": ">= 10"
-  }
+  },
+  "repository": "https://github.com/biomejs/gritql"
 }

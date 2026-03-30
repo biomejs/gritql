@@ -1,6 +1,6 @@
 {
   "name": "@getgrit/gritql-darwin-universal",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "os": [
     "darwin"
   ],
@@ -11,5 +11,6 @@
   "license": "MIT",
   "engines": {
     "node": ">= 10"
-  }
+  },
+  "repository": "https://github.com/biomejs/gritql"
 }

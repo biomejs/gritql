@@ -1,6 +1,6 @@
 {
   "name": "@getgrit/gritql-linux-arm64-musl",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "os": [
     "linux"
   ],
@@ -17,5 +17,6 @@
   },
   "libc": [
     "musl"
-  ]
+  ],
+  "repository": "https://github.com/biomejs/gritql"
 }
