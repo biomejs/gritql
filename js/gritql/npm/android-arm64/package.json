@@ -1,6 +1,6 @@
 {
   "name": "@getgrit/gritql-android-arm64",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "os": [
     "android"
   ],
@@ -14,5 +14,6 @@
   "license": "MIT",
   "engines": {
     "node": ">= 10"
-  }
+  },
+  "repository": "https://github.com/biomejs/gritql"
 }
