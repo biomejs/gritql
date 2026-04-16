@@ -16,7 +16,7 @@ A high-level overview of tools you need to have installed:
 - Yarn package manager. You'll need [`yarn`](https://classic.yarnpkg.com/en/docs/install) (classic). Install v1.22.19 with `npm install --global yarn`.
 - Tree-Sitter CLI: provides [`tree-sitter`](https://github.com/tree-sitter/tree-sitter/tree/master/cli) binary for testing grammars. Install v0.22.2 with `npm install --global tree-sitter-cli`.
 - Terraform CLI. Install [`terraform`](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli) with `brew tap hashicorp/tap && brew install hashicorp/tap/terraform`.
-- For snapshot testing review, you should install the cargo insta plugin: `curl -LsSf https://insta.rs/install.sh | sh` (https://insta.rs/docs/cli/)
+- For snapshot testing review, you should install the cargo insta plugin: `curl -LsSf https://insta.rs/install.sh | sh` (<https://insta.rs/docs/cli/>)
 
 ## Building the Code
 
@@ -63,13 +63,13 @@ After making your changes, run the [./resources/edit_grammars.mjs](./resources/e
 
 For example:
 
-```
+```sh
 node ./resources/edit_grammars.mjs yaml
 ```
 
 ### Snippet contexts
 
-Snippet contexts help when a snippet is a valid AST subtree, but needs to be in a larger tree to parse. For example, matching on a table name like ` $schema.$table` in SQL is not valid SQL by itself, only when surrounded by something like `SELECT x from $schema.$table` is the snippet valid.
+Snippet contexts help when a snippet is a valid AST subtree, but needs to be in a larger tree to parse. For example, matching on a table name like `$schema.$table` in SQL is not valid SQL by itself, only when surrounded by something like `SELECT x from $schema.$table` is the snippet valid.
 
 Snippet contexts are defined by implementing the `snippet_context_strings` method in the `Language` trait. This method returns a list of strings that are used to match the snippet in the larger tree. For example, the SQL implementation returns `["SELECT 1 from ", ";"]` to match a table name in a SQL query.
 
@@ -100,9 +100,9 @@ These steps are done in our cloud environment and are not necessary for contribu
 
 - grep for an existing language like `Sol` for solidity, and add it to all the `Language` enums you find.
   - Add the language to `apps/web/src/views/project/details.tsx`, so repos with this language don’t get an “unsupported language” warning. (5 minutes)
-  - LSP target languages list: https://github.com/getgrit/rewriter/pull/7734/files#diff-f9d4f097b08d33241c5c8d15a2fbde0e37086c265ce0eba8decac20d5cd989c6R23
-  - VS Code client list: https://github.com/getgrit/rewriter/blob/f992490394a4807789504f1cea6a04b934ad3b24/apps/poolish/src/lsp-client.ts
-  - VS Code command palette triggers: https://github.com/getgrit/rewriter/pull/7734/files#diff-b38f1d6304993a250903310722206e6c89c58c52c2d1bd4b6fdd8f7218810570R103
+  - LSP target languages list: <https://github.com/getgrit/rewriter/pull/7734/files#diff-f9d4f097b08d33241c5c8d15a2fbde0e37086c265ce0eba8decac20d5cd989c6R23>
+  - VS Code client list: <https://github.com/getgrit/rewriter/blob/f992490394a4807789504f1cea6a04b934ad3b24/apps/poolish/src/lsp-client.ts>
+  - VS Code command palette triggers: <https://github.com/getgrit/rewriter/pull/7734/files#diff-b38f1d6304993a250903310722206e6c89c58c52c2d1bd4b6fdd8f7218810570R103>
 - There are also `exhaustive` runtime checks that error if a switch case doesn’t handle a language, like `makeSingleLineComment`. Search for `exhaustive(lang` and fill those out too.
 - Regenerate both DB/prisma types to add it to the DB schema and GraphQL types.
 - Add the language to `language-selector.tsx`. Pick an icon from [https://react-icons.github.io](https://react-icons.github.io/), usually from the Simple Icons category.

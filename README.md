@@ -37,7 +37,7 @@ Read the [documentation](https://docs.grit.io/language/overview), [interactive t
 
 Install the Grit CLI:
 
-```
+```sh
 curl -fsSL https://docs.grit.io/install | bash
 ```
 
@@ -45,19 +45,19 @@ curl -fsSL https://docs.grit.io/install | bash
 
 Search for all your `console.log` calls by putting the desired pattern in backticks:
 
-```
+```sh
 grit apply '`console.log($_)`'
 ```
 
 Replace `console.log` with `winston.log`, using `=>` to create rewrites:
 
-```
+```sh
 grit apply '`console.log($msg)` => `winston.log($msg)`'
 ```
 
 Save the pattern to a [`grit.yaml`](https://docs.grit.io/guides/config) file and exclude test cases in a where clause:
 
-```
+```sh
 cat << 'EOF' > .grit/grit.yaml
 patterns:
   - name: use_winston
@@ -72,7 +72,7 @@ grit apply use_winston
 
 Run `grit check` to enforce your patterns as [custom lints](https://docs.grit.io/guides/ci).
 
-```
+```sh
 grit check
 ```
 
@@ -107,6 +107,7 @@ GritQL comes from our experiences with conducting large scale refactors and migr
 Usually, migrations start with exploratory work to figure out the scope of the problem—often using simple grep searches. These are easy to start with, but most migrations end up accumulating additional requirements like ensuring the right packages are imported and excluding cases which don’t have a viable migration path.
 
 Eventually, any complex migration ends up being a full codemod program written with a tool like [jscodeshift](https://github.com/facebook/jscodeshift). This comes with its own problems:
+
 - Most of the exploratory work has to be abandoned as you figure out how to represent your original regex search as an AST.
 - Reading/writing a codemod requires mentally translating from AST names back to what source code actually looks like.
 - Most frameworks are not composable, so you’re stuck copying patterns back and forth.
@@ -114,6 +115,7 @@ Eventually, any complex migration ends up being a full codemod program written w
 - Codemod frameworks are language-specific, so if you’re hopping between multiple languages—or trying to migrate a shared API—you have to learn different frameworks.
 
 GritQL is our attempt to develop a powerful middle ground:
+
 - Exploratory analysis is easy: just put a code snippet in backticks and use `$metavariables` for holes you want to represent.
 - Incrementally add complexity by introducing side conditions with where clauses.
 - Reuse named patterns to avoid rebuilding queries, and use shared patterns from our [standard library](https://github.com/getgrit/stdlib) for common tasks like ensuring modules are imported.
