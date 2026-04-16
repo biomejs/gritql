@@ -346,16 +346,11 @@ jobs:
       - name: Install dependencies
         run: npm install --ignore-scripts
         working-directory: ${{ env.WORKING_DIR }}
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-        with:
-          platforms: arm64
-      - run: docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
       - name: Setup and run tests
         uses: addnab/docker-run-action@v3
         with:
           image: node:${{ matrix.node }}-bookworm
-          options: "--platform linux/arm64 -v ${{ github.workspace }}:/build -w /build/js/gritql"
+          options: "-v ${{ github.workspace }}:/build -w /build/js/gritql"
           run: |
             set -e
             npm install -g bun
@@ -383,16 +378,11 @@ jobs:
       - name: Install dependencies
         run: npm install --ignore-scripts
         working-directory: ${{ env.WORKING_DIR }}
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-        with:
-          platforms: arm64
-      - run: docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
       - name: Setup and run tests
         uses: addnab/docker-run-action@v3
         with:
           image: oven/bun:alpine
-          options: "--platform linux/arm64 -v ${{ github.workspace }}:/build -w /build/js/gritql"
+          options: "-v ${{ github.workspace }}:/build -w /build/js/gritql"
           run: |
             set -e
             bun test
