@@ -395,7 +395,7 @@ fn random_fn<'a>(
             let start = start.parse::<i64>().unwrap();
             let end = end.parse::<i64>().unwrap();
             // Inclusive range
-            let value = state.get_rng().gen_range(start..=end);
+            let value = state.get_rng().random_range(start..=end);
             Ok(ResolvedPattern::from_constant(Constant::Integer(value)))
         }
         [Some(_), None] => {
@@ -405,7 +405,7 @@ fn random_fn<'a>(
             bail!("If you provide an end argument to random(), you must provide a start argument")
         }
         [None, None] => {
-            let value = state.get_rng().gen::<f64>();
+            let value = state.get_rng().random::<f64>();
             Ok(ResolvedPattern::from_constant(Constant::Float(value)))
         }
         _ => bail!("random() takes 0 or 2 arguments"),

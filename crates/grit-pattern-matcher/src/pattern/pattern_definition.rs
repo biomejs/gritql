@@ -42,7 +42,7 @@ impl<Q: QueryContext> PatternDefinition<Q> {
     /// Create an unnamed ephemeral pattern
     /// This is primarily useful for the bubble pattern, where we want to create a new scope
     pub fn new_ephemeral(params: Vec<(String, Variable)>, pattern: Pattern<Q>) -> Self {
-        let random_name = format!("<bubble:{}>", rand::thread_rng().gen::<u32>());
+        let random_name = format!("<bubble:{}>", rand::rng().random::<u32>());
 
         Self {
             name: random_name,
