@@ -3,3 +3,4 @@ target
 node_modules
 .aider*
 .zed
+resources/language-metavariables/**/Cargo.lock
