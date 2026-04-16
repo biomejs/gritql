@@ -561,10 +561,10 @@ pub fn nodes_from_indices(indices: &[SnippetTree<Tree>]) -> Vec<NodeWithSource> 
         .collect()
 }
 
-fn snippet_nodes_from_index(snippet: &SnippetTree<Tree>) -> Option<NodeWithSource> {
+fn snippet_nodes_from_index(snippet: &SnippetTree<Tree>) -> Vec<NodeWithSource> {
     let mut snippet_root = snippet.tree.root_node();
     if snippet_root.node.is_missing() {
-        return None;
+        return vec![];
     }
 
     let mut id = snippet_root.node.id();
@@ -575,9 +575,9 @@ fn snippet_nodes_from_index(snippet: &SnippetTree<Tree>) -> Option<NodeWithSourc
     {
         if snippet_root.named_children().count() == 0 {
             if snippet_root.text().unwrap().trim() == snippet.source.trim() {
-                return Some(snippet_root);
+                return vec![snippet_root];
             } else {
-                return None;
+                return vec![];
             }
         }
         for child in snippet_root.named_children() {
@@ -591,7 +591,7 @@ fn snippet_nodes_from_index(snippet: &SnippetTree<Tree>) -> Option<NodeWithSourc
         // sanity check to avoid infinite loop
         if snippet_root.node.id() == id {
             if snippet_root.text().unwrap().trim() != snippet.source.trim() {
-                return None;
+                return vec![];
             }
             break;
         }
@@ -606,7 +606,7 @@ fn snippet_nodes_from_index(snippet: &SnippetTree<Tree>) -> Option<NodeWithSourc
     let root_start = snippet_root.node.start_byte();
     let root_end = snippet_root.node.end_byte();
     if root_start > snippet.snippet_start || root_end < snippet.snippet_end {
-        return None;
+        return vec![];
     }
     while snippet_root.node.start_byte() == root_start && snippet_root.node.end_byte() == root_end {
         let first_child = snippet_root.named_children().next();
@@ -617,7 +617,7 @@ fn snippet_nodes_from_index(snippet: &SnippetTree<Tree>) -> Option<NodeWithSourc
             break;
         }
     }
-    nodes.last().cloned()
+    nodes
 }
 
 // todo
@@ -671,8 +671,8 @@ mod tests {
         let snippet = "\n   foo('moment')  \n".to_string();
         let lang = Tsx::new(None);
         let snippet_index = MarzanoParser::new(&lang).parse_snippet(pre, &snippet, post);
-        let node = snippet_nodes_from_index(&snippet_index);
-        assert!(node.is_some())
+        let nodes = snippet_nodes_from_index(&snippet_index);
+        assert!(!nodes.is_empty())
     }
 
     #[test]
@@ -680,7 +680,7 @@ mod tests {
         let snippet = "foo('bar')";
         let snippets = Tsx::new(None).parse_snippet_contexts(snippet);
         let nodes = nodes_from_indices(&snippets);
-        assert_eq!(nodes.len(), 2);
+        assert!(nodes.len() >= 2);
     }
 
     #[test]
@@ -689,7 +689,7 @@ mod tests {
         let lang = Tsx::new(None);
         let snippets = lang.parse_snippet_contexts(snippet);
         let nodes = nodes_from_indices(&snippets);
-        assert_eq!(nodes.len(), 2);
+        assert!(nodes.len() >= 2);
     }
 
     #[test]

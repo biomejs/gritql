@@ -3436,6 +3436,36 @@ fn python_match_simple_assignment() {
 }
 
 #[test]
+fn python_match_type_predicate_on_return_annotation() {
+    // Regression test for https://github.com/biomejs/gritql/issues/424
+    //
+    // In Python, return type annotations are wrapped in a `type` node. Snippets like `List` must
+    // be parsable in that context so `$type <: `List`` can match.
+    run_test_match({
+        TestArg {
+            pattern: r#"
+                |engine marzano(0.1)
+                |language python
+                |
+                |`def matching_method($_) -> $type:
+                |  $body` where {
+                |    $type <: `List`
+                |  }
+                |"#
+            .trim_margin()
+            .unwrap(),
+            source: r#"
+                |def matching_method(x) -> List:
+                |  return x
+                |"#
+            .trim_margin()
+            .unwrap(),
+        }
+    })
+    .unwrap();
+}
+
+#[test]
 fn javascript_match_simple_assignment() {
     run_test_match({
         TestArg {

@@ -3,3 +3,5 @@ target
 node_modules
 .aider*
 .zed
+
+.tools
