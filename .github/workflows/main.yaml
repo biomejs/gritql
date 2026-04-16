@@ -10,7 +10,7 @@ jobs:
   test-rust:
     name: Rust tests (marzano)
     timeout-minutes: 20
-    runs-on: namespace-profile-cached-arm64-grit
+    runs-on: depot-ubuntu-24.04-arm-16
     permissions:
       contents: "read"
       id-token: "write"
@@ -21,7 +21,7 @@ jobs:
       BUILD_PLATFORM: amd64
     steps:
       - name: clone code
-        uses: namespacelabs/nscloud-checkout-action@v5
+        uses: actions/checkout@v4
         with:
           submodules: recursive
       - name: install Rust
@@ -32,8 +32,8 @@ jobs:
           override: true
       - name: install Terraform
         run: |
-          wget https://releases.hashicorp.com/terraform/1.6.0/terraform_1.6.0_linux_amd64.zip
-          unzip terraform_1.6.0_linux_amd64.zip
+          wget https://releases.hashicorp.com/terraform/1.6.0/terraform_1.6.0_linux_arm64.zip
+          unzip terraform_1.6.0_linux_arm64.zip
           chmod +x terraform
           sudo mv terraform /usr/local/bin/
 
@@ -64,13 +64,13 @@ jobs:
   test-rust-wasm:
     name: Rust wasm
     timeout-minutes: 15
-    runs-on: namespace-profile-cached-arm64-grit
+    runs-on: depot-ubuntu-24.04-arm-16
     permissions:
       contents: "read"
       id-token: "write"
     steps:
       - name: clone code
-        uses: namespacelabs/nscloud-checkout-action@v5
+        uses: actions/checkout@v4
         with:
           submodules: recursive
       - name: install Rust
@@ -92,10 +92,10 @@ jobs:
     permissions:
       contents: "read"
       id-token: "write"
-    runs-on: namespace-profile-cached-arm64-grit
+    runs-on: depot-ubuntu-24.04-arm-16
     steps:
       - name: clone code
-        uses: namespacelabs/nscloud-checkout-action@v5
+        uses: actions/checkout@v4
         with:
           submodules: recursive
       - name: install Rust
