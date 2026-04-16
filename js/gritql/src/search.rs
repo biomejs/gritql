@@ -28,17 +28,10 @@ use napi::{
     tokio::{self},
 };
 
-use marzano_language::{
-    grit_parser::MarzanoGritParser,
-    target_language::{expand_paths, PatternLanguage},
-};
+use marzano_language::{grit_parser::MarzanoGritParser, target_language::expand_paths};
 use marzano_messenger::emit::{FlushableMessenger, Messager};
 use marzano_messenger::testing::TestingMessenger;
-use marzano_util::{
-    cache::NullCache,
-    rich_path::RichFile,
-    runtime::{ExecutionContext, LanguageModelAPI},
-};
+use marzano_util::{cache::NullCache, rich_path::RichFile, runtime::ExecutionContext};
 
 use crate::binding::JsResolvedBinding;
 
@@ -198,10 +191,7 @@ async fn prep_query(
 
     let (lang, _, pattern_body) = infer_pattern(&base_query_src, &grit_files);
 
-    let pattern_language = match lang {
-        Some(l) => l,
-        None => PatternLanguage::default(),
-    };
+    let pattern_language = lang.unwrap_or_default();
 
     let target_lang = pattern_language.try_into()?;
 
@@ -333,7 +323,7 @@ impl EmbeddedMessenger {
     }
 }
 
-fn get_messenger(root_address: &Path, step_id: String, silent: bool) -> EmbeddedMessenger {
+fn get_messenger(_root_address: &Path, _step_id: String, silent: bool) -> EmbeddedMessenger {
     if silent {
         return EmbeddedMessenger::Testing(TestingMessenger::new());
     }
