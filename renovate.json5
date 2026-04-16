@@ -6,7 +6,7 @@
   timezone: "Etc/GMT",
   automerge: false,
   separateMajorMinor: true,
-  separateMultipleMajorReleases: true,
+  separateMultipleMajor: true,
   separateMinorPatch: true,
   packageRules: [
     {
