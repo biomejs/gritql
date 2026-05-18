@@ -1,0 +1,504 @@
+<!DOCTYPE html><html lang="en" dir="ltr" data-theme="dark" data-has-toc data-has-sidebar class="astro-dzw4fplz"> <head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Grit CLI Reference | GritQL</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"/><link rel="shortcut icon" href="/favicon.svg" type="image/svg+xml"/><meta name="generator" content="Astro v6.3.1"/><meta name="generator" content="Starlight v0.39.2"/><meta property="og:title" content="Grit CLI Reference"/><meta property="og:type" content="article"/><meta property="og:locale" content="en"/><meta property="og:description" content="GritQL is a declarative query language for searching and modifying source code."/><meta property="og:site_name" content="GritQL"/><meta name="twitter:card" content="summary_large_image"/><meta name="description" content="GritQL is a declarative query language for searching and modifying source code."/><script>
+	window.StarlightThemeProvider = (() => {
+		const storedTheme =
+			typeof localStorage !== 'undefined' && localStorage.getItem('starlight-theme');
+		const theme =
+			storedTheme ||
+			(window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+		document.documentElement.dataset.theme = theme === 'light' ? 'light' : 'dark';
+		return {
+			updatePickers(theme = storedTheme || 'auto') {
+				document.querySelectorAll('starlight-theme-select').forEach((picker) => {
+					const select = picker.querySelector('select');
+					if (select) select.value = theme;
+					/** @type {HTMLTemplateElement | null} */
+					const tmpl = document.querySelector(`#theme-icons`);
+					const newIcon = tmpl && tmpl.content.querySelector('.' + theme);
+					if (newIcon) {
+						const oldIcon = picker.querySelector('svg.label-icon');
+						if (oldIcon) {
+							oldIcon.replaceChildren(...newIcon.cloneNode(true).childNodes);
+						}
+					}
+				});
+			},
+		};
+	})();
+</script><template id="theme-icons"><svg aria-hidden="true" class="light astro-ijsymz66" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M5 12a1 1 0 0 0-1-1H3a1 1 0 0 0 0 2h1a1 1 0 0 0 1-1Zm.64 5-.71.71a1 1 0 0 0 0 1.41 1 1 0 0 0 1.41 0l.71-.71A1 1 0 0 0 5.64 17ZM12 5a1 1 0 0 0 1-1V3a1 1 0 0 0-2 0v1a1 1 0 0 0 1 1Zm5.66 2.34a1 1 0 0 0 .7-.29l.71-.71a1 1 0 1 0-1.41-1.41l-.66.71a1 1 0 0 0 0 1.41 1 1 0 0 0 .66.29Zm-12-.29a1 1 0 0 0 1.41 0 1 1 0 0 0 0-1.41l-.71-.71a1.004 1.004 0 1 0-1.43 1.41l.73.71ZM21 11h-1a1 1 0 0 0 0 2h1a1 1 0 0 0 0-2Zm-2.64 6A1 1 0 0 0 17 18.36l.71.71a1 1 0 0 0 1.41 0 1 1 0 0 0 0-1.41l-.76-.66ZM12 6.5a5.5 5.5 0 1 0 5.5 5.5A5.51 5.51 0 0 0 12 6.5Zm0 9a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7Zm0 3.5a1 1 0 0 0-1 1v1a1 1 0 0 0 2 0v-1a1 1 0 0 0-1-1Z"/></svg><svg aria-hidden="true" class="dark astro-ijsymz66" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M21.64 13a1 1 0 0 0-1.05-.14 8.049 8.049 0 0 1-3.37.73 8.15 8.15 0 0 1-8.14-8.1 8.59 8.59 0 0 1 .25-2A1 1 0 0 0 8 2.36a10.14 10.14 0 1 0 14 11.69 1 1 0 0 0-.36-1.05Zm-9.5 6.69A8.14 8.14 0 0 1 7.08 5.22v.27a10.15 10.15 0 0 0 10.14 10.14 9.784 9.784 0 0 0 2.1-.22 8.11 8.11 0 0 1-7.18 4.32v-.04Z"/></svg><svg aria-hidden="true" class="auto astro-ijsymz66" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M21 14h-1V7a3 3 0 0 0-3-3H7a3 3 0 0 0-3 3v7H3a1 1 0 0 0-1 1v2a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-2a1 1 0 0 0-1-1ZM6 7a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v7H6V7Zm14 10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-1h16v1Z"/></svg></template><link rel="stylesheet" href="/_astro/print.DNXP8c50.css" media="print"><link rel="stylesheet" href="/_astro/middleware.CFQ98TrC.css">
+<link rel="stylesheet" href="/_astro/Code.CJIah1fY.css"><script type="module" src="/_astro/page.B_tncCx8.js"></script></head> <body class="astro-dzw4fplz"> <a href="#_top" class="astro-k6yut6h7">Skip to content</a> <div class="page sl-flex astro-yuc63s2k"> <header class="header astro-yuc63s2k"><div class="header astro-orqzlu66"> <div class="title-wrapper sl-flex astro-orqzlu66"> <a href="/" class="site-title sl-flex astro-6fjmcoid">  <img class="light:sl-hidden print:hidden astro-6fjmcoid" alt="GritQL" src="/_astro/grit-logo-dark.bRP4AoNJ.svg" width="219" height="88"> <img class="dark:sl-hidden print:block astro-6fjmcoid" alt="GritQL" src="/_astro/grit-logo-light.BL6KSQDo.svg" width="219" height="88"> <span class="sr-only astro-6fjmcoid" translate="no"> GritQL </span> </a> </div> <div class="sl-flex print:hidden astro-orqzlu66"> <site-search class="astro-orqzlu66 astro-asbxigyi" data-translations="{&#34;placeholder&#34;:&#34;Search&#34;}"> <button data-open-modal disabled aria-label="Search" aria-keyshortcuts="Control+K" class="astro-asbxigyi"> <svg aria-hidden="true" class="astro-asbxigyi astro-ijsymz66" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M21.71 20.29 18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a.999.999 0 0 0 1.42 0 1 1 0 0 0 0-1.39ZM11 18a7 7 0 1 1 0-14 7 7 0 0 1 0 14Z"/></svg> <span class="sl-hidden md:sl-block astro-asbxigyi" aria-hidden="true">Search</span> <kbd class="sl-hidden md:sl-flex astro-asbxigyi" style="display: none;"> <kbd class="astro-asbxigyi">Ctrl</kbd><kbd class="astro-asbxigyi">K</kbd> </kbd> </button> <dialog style="padding:0" aria-label="Search" class="astro-asbxigyi"> <div class="dialog-frame sl-flex astro-asbxigyi">  <button data-close-modal class="sl-flex md:sl-hidden astro-asbxigyi"> Cancel </button> <div class="search-container astro-asbxigyi"> <div id="starlight__search" class="astro-asbxigyi"></div> </div> </div> </dialog> </site-search>  <script>
+	(() => {
+		const openBtn = document.querySelector('button[data-open-modal]');
+		const shortcut = openBtn?.querySelector('kbd');
+		if (!openBtn || !(shortcut instanceof HTMLElement)) return;
+		const platformKey = shortcut.querySelector('kbd');
+		if (platformKey && /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform)) {
+			platformKey.textContent = '⌘';
+			openBtn.setAttribute('aria-keyshortcuts', 'Meta+K');
+		}
+		shortcut.style.display = '';
+	})();
+</script> <script type="module" src="/_astro/Search.astro_astro_type_script_index_0_lang.Rw77DzG6.js"></script>  </div> <div class="sl-hidden md:sl-flex print:hidden right-group astro-orqzlu66"> <div class="sl-flex social-icons astro-orqzlu66"> <a href="https://github.com/getgrit/gritql" rel="me" class="sl-flex astro-y4g7rtlc"><span class="sr-only astro-y4g7rtlc">GitHub</span><svg aria-hidden="true" class="astro-y4g7rtlc astro-ijsymz66" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M12 .3a12 12 0 0 0-3.8 23.38c.6.12.83-.26.83-.57L9 21.07c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.08-.74.09-.73.09-.73 1.2.09 1.83 1.24 1.83 1.24 1.08 1.83 2.81 1.3 3.5 1 .1-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18a4.65 4.65 0 0 1 1.23 3.22c0 4.61-2.8 5.63-5.48 5.92.42.36.81 1.1.81 2.22l-.01 3.29c0 .31.2.69.82.57A12 12 0 0 0 12 .3Z"/></svg></a><a href="https://discord.gg/ARExD4gvFB" rel="me" class="sl-flex astro-y4g7rtlc"><span class="sr-only astro-y4g7rtlc">Discord</span><svg aria-hidden="true" class="astro-y4g7rtlc astro-ijsymz66" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M20.32 4.37a19.8 19.8 0 0 0-4.93-1.51 13.78 13.78 0 0 0-.64 1.28 18.27 18.27 0 0 0-5.5 0 12.64 12.64 0 0 0-.64-1.28h-.05A19.74 19.74 0 0 0 3.64 4.4 20.26 20.26 0 0 0 .11 18.09l.02.02a19.9 19.9 0 0 0 6.04 3.03l.04-.02a14.24 14.24 0 0 0 1.23-2.03.08.08 0 0 0-.05-.07 13.1 13.1 0 0 1-1.9-.92.08.08 0 0 1 .02-.1 10.2 10.2 0 0 0 .41-.31h.04a14.2 14.2 0 0 0 12.1 0l.04.01a9.63 9.63 0 0 0 .4.32.08.08 0 0 1-.03.1 12.29 12.29 0 0 1-1.9.91.08.08 0 0 0-.02.1 15.97 15.97 0 0 0 1.27 2.01h.04a19.84 19.84 0 0 0 6.03-3.05v-.03a20.12 20.12 0 0 0-3.57-13.69ZM8.02 15.33c-1.18 0-2.16-1.08-2.16-2.42 0-1.33.96-2.42 2.16-2.42 1.21 0 2.18 1.1 2.16 2.42 0 1.34-.96 2.42-2.16 2.42Zm7.97 0c-1.18 0-2.15-1.08-2.15-2.42 0-1.33.95-2.42 2.15-2.42 1.22 0 2.18 1.1 2.16 2.42 0 1.34-.94 2.42-2.16 2.42Z"/></svg></a> </div> <div class="astro-a7dqsfr4"> <a href="/blog/" class="astro-a7dqsfr4">Blog</a> </div> <starlight-theme-select>  <label style="--sl-select-width: 6.25em" class="astro-3vreodqz"> <span class="sr-only astro-3vreodqz">Select theme</span> <svg aria-hidden="true" class="icon label-icon astro-3vreodqz astro-ijsymz66" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M21 14h-1V7a3 3 0 0 0-3-3H7a3 3 0 0 0-3 3v7H3a1 1 0 0 0-1 1v2a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-2a1 1 0 0 0-1-1ZM6 7a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v7H6V7Zm14 10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-1h16v1Z"/></svg> <select autocomplete="off" class="astro-3vreodqz"> <option value="dark" class="astro-3vreodqz">Dark</option><option value="light" class="astro-3vreodqz">Light</option><option value="auto" selected class="astro-3vreodqz">Auto</option> </select> <svg aria-hidden="true" class="icon caret astro-3vreodqz astro-ijsymz66" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M17 9.17a1 1 0 0 0-1.41 0L12 12.71 8.46 9.17a1 1 0 1 0-1.41 1.42l4.24 4.24a1.002 1.002 0 0 0 1.42 0L17 10.59a1.002 1.002 0 0 0 0-1.42Z"/></svg> </label> </starlight-theme-select>  <script>
+	StarlightThemeProvider.updatePickers();
+</script> <script type="module">const r="starlight-theme",o=e=>e==="auto"||e==="dark"||e==="light"?e:"auto",c=()=>o(typeof localStorage<"u"&&localStorage.getItem(r));function n(e){typeof localStorage<"u"&&localStorage.setItem(r,e==="light"||e==="dark"?e:"")}const l=()=>matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";function t(e){StarlightThemeProvider.updatePickers(e),document.documentElement.dataset.theme=e==="auto"?l():e,n(e)}matchMedia("(prefers-color-scheme: light)").addEventListener("change",()=>{c()==="auto"&&t("auto")});class s extends HTMLElement{constructor(){super(),t(c()),this.querySelector("select")?.addEventListener("change",a=>{a.currentTarget instanceof HTMLSelectElement&&t(o(a.currentTarget.value))})}}customElements.define("starlight-theme-select",s);</script> <script type="module">class s extends HTMLElement{constructor(){super();const e=this.querySelector("select");e&&(e.addEventListener("change",t=>{t.currentTarget instanceof HTMLSelectElement&&(window.location.pathname=t.currentTarget.value)}),window.addEventListener("pageshow",t=>{if(!t.persisted)return;const n=e.querySelector("option[selected]")?.index;n!==e.selectedIndex&&(e.selectedIndex=n??0)}))}}customElements.define("starlight-lang-select",s);</script> </div> </div></header> <nav class="sidebar print:hidden astro-yuc63s2k" aria-label="Main"> <starlight-menu-button class="print:hidden astro-iofxfric"> <button aria-expanded="false" aria-label="Menu" aria-controls="starlight__sidebar" class="sl-flex md:sl-hidden astro-iofxfric"> <svg aria-hidden="true" class="open-menu astro-iofxfric astro-ijsymz66" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M3 8h18a1 1 0 1 0 0-2H3a1 1 0 0 0 0 2Zm18 8H3a1 1 0 0 0 0 2h18a1 1 0 0 0 0-2Zm0-5H3a1 1 0 0 0 0 2h18a1 1 0 0 0 0-2Z"/></svg> <svg aria-hidden="true" class="close-menu astro-iofxfric astro-ijsymz66" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="m13.41 12 6.3-6.29a1.004 1.004 0 1 0-1.42-1.42L12 10.59l-6.29-6.3a1.004 1.004 0 0 0-1.42 1.42l6.3 6.29-6.3 6.29a1 1 0 0 0 0 1.42.998.998 0 0 0 1.42 0l6.29-6.3 6.29 6.3a.999.999 0 0 0 1.42 0 1 1 0 0 0 0-1.42L13.41 12Z"/></svg> </button> </starlight-menu-button> <script type="module">class s extends HTMLElement{constructor(){super(),this.btn=this.querySelector("button"),this.btn.addEventListener("click",()=>this.toggleExpanded());const t=this.closest("nav");t&&t.addEventListener("keyup",e=>this.closeOnEscape(e))}setExpanded(t){this.setAttribute("aria-expanded",String(t)),document.body.toggleAttribute("data-mobile-menu-expanded",t)}toggleExpanded(){this.setExpanded(this.getAttribute("aria-expanded")!=="true")}closeOnEscape(t){t.code==="Escape"&&(this.setExpanded(!1),this.btn.focus())}}customElements.define("starlight-menu-button",s);</script>  <div id="starlight__sidebar" class="sidebar-pane astro-yuc63s2k"> <div class="sidebar-content sl-flex astro-yuc63s2k"> <sl-sidebar-state-persist data-hash="1mruprc" class="astro-sobawidf"> <script aria-hidden="true">
+		(() => {
+			try {
+				if (!matchMedia('(min-width: 50em)').matches) return;
+				/** @type {HTMLElement | null} */
+				const target = document.querySelector('sl-sidebar-state-persist');
+				const state = JSON.parse(sessionStorage.getItem('sl-sidebar-state') || '0');
+				if (!target || !state || target.dataset.hash !== state.hash) return;
+				window._starlightScrollRestore = state.scroll;
+				customElements.define(
+					'sl-sidebar-restore',
+					class SidebarRestore extends HTMLElement {
+						connectedCallback() {
+							try {
+								const idx = parseInt(this.dataset.index || '');
+								const details = this.closest('details');
+								if (details && typeof state.open[idx] === 'boolean') details.open = state.open[idx];
+							} catch {}
+						}
+					}
+				);
+			} catch {}
+		})();
+	</script>  <ul class="top-level astro-nuxkhicn"> <li class="astro-nuxkhicn"> <a href="/blog/" class="large sl-blog-mobile-link astro-nuxkhicn" class="sl-blog-mobile-link"> <span class="astro-nuxkhicn">Blog</span>  </a> </li><li class="astro-nuxkhicn"> <details open class="astro-nuxkhicn"> <summary class="astro-nuxkhicn"> <span class="group-label astro-nuxkhicn"> <span class="large astro-nuxkhicn">Getting Started</span>  </span> <svg aria-hidden="true" class="caret astro-nuxkhicn astro-ijsymz66" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="0"></sl-sidebar-restore> <ul class="astro-nuxkhicn"> <li class="astro-nuxkhicn"> <a href="/" class="astro-nuxkhicn"> <span class="astro-nuxkhicn">Overview</span>  </a> </li><li class="astro-nuxkhicn"> <a href="/cli/quickstart/" class="astro-nuxkhicn"> <span class="astro-nuxkhicn">CLI Quickstart</span>  </a> </li><li class="astro-nuxkhicn"> <a href="/cli/reference/" aria-current="page" class="astro-nuxkhicn"> <span class="astro-nuxkhicn">Grit CLI Reference</span>  </a> </li><li class="astro-nuxkhicn"> <a href="/patterns" class="astro-nuxkhicn"> <span class="astro-nuxkhicn">Pattern Library</span>  </a> </li><li class="astro-nuxkhicn"> <a href="/guides/config/" class="astro-nuxkhicn"> <span class="astro-nuxkhicn">Grit Configuration</span>  </a> </li> </ul> </details> </li><li class="astro-nuxkhicn"> <details open class="astro-nuxkhicn"> <summary class="astro-nuxkhicn"> <span class="group-label astro-nuxkhicn"> <span class="large astro-nuxkhicn">Language</span>  </span> <svg aria-hidden="true" class="caret astro-nuxkhicn astro-ijsymz66" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="1"></sl-sidebar-restore> <ul class="astro-nuxkhicn"> <li class="astro-nuxkhicn"> <a href="/language/overview/" class="astro-nuxkhicn"> <span class="astro-nuxkhicn">GritQL Language Documentation</span>  </a> </li><li class="astro-nuxkhicn"> <a href="/tutorials/gritql/" class="astro-nuxkhicn"> <span class="astro-nuxkhicn">GritQL Tutorial</span>  </a> </li><li class="astro-nuxkhicn"> <a href="/language/patterns/" class="astro-nuxkhicn"> <span class="astro-nuxkhicn">Patterns</span>  </a> </li><li class="astro-nuxkhicn"> <a href="/language/conditions/" class="astro-nuxkhicn"> <span class="astro-nuxkhicn">Conditional Operators</span>  </a> </li><li class="astro-nuxkhicn"> <a href="/language/modifiers/" class="astro-nuxkhicn"> <span class="astro-nuxkhicn">Pattern Modifiers</span>  </a> </li><li class="astro-nuxkhicn"> <a href="/language/target-languages/" class="astro-nuxkhicn"> <span class="astro-nuxkhicn">Target Languages</span>  </a> </li><li class="astro-nuxkhicn"> <a href="/language/bubble/" class="astro-nuxkhicn"> <span class="astro-nuxkhicn">Variable Scoping</span>  </a> </li><li class="astro-nuxkhicn"> <a href="/guides/patterns/" class="astro-nuxkhicn"> <span class="astro-nuxkhicn">Custom Patterns</span>  </a> </li><li class="astro-nuxkhicn"> <a href="/language/functions/" class="astro-nuxkhicn"> <span class="astro-nuxkhicn">Functions</span>  </a> </li><li class="astro-nuxkhicn"> <a href="/language/idioms/" class="astro-nuxkhicn"> <span class="astro-nuxkhicn">Common Idioms</span>  </a> </li><li class="astro-nuxkhicn"> <a href="/language/syntax/" class="astro-nuxkhicn"> <span class="astro-nuxkhicn">GritQL Reference</span>  </a> </li><li class="astro-nuxkhicn"> <a href="/guides/testing/" class="astro-nuxkhicn"> <span class="astro-nuxkhicn">Testing GritQL</span>  </a> </li> </ul> </details> </li><li class="astro-nuxkhicn"> <details open class="astro-nuxkhicn"> <summary class="astro-nuxkhicn"> <span class="group-label astro-nuxkhicn"> <span class="large astro-nuxkhicn">Guides</span>  </span> <svg aria-hidden="true" class="caret astro-nuxkhicn astro-ijsymz66" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="2"></sl-sidebar-restore> <ul class="astro-nuxkhicn"> <li class="astro-nuxkhicn"> <a href="/guides/ci/" class="astro-nuxkhicn"> <span class="astro-nuxkhicn">Continuous Integration</span>  </a> </li><li class="astro-nuxkhicn"> <a href="/guides/authoring/" class="astro-nuxkhicn"> <span class="astro-nuxkhicn">Authoring custom patterns</span>  </a> </li><li class="astro-nuxkhicn"> <a href="/guides/imports/" class="astro-nuxkhicn"> <span class="astro-nuxkhicn">File Imports</span>  </a> </li><li class="astro-nuxkhicn"> <a href="/guides/sharing/" class="astro-nuxkhicn"> <span class="astro-nuxkhicn">Sharing Patterns</span>  </a> </li><li class="astro-nuxkhicn"> <a href="/guides/duplicating/" class="astro-nuxkhicn"> <span class="astro-nuxkhicn">Duplicating code with the `text()` function</span>  </a> </li> </ul> </details> </li><li class="astro-nuxkhicn"> <details open class="astro-nuxkhicn"> <summary class="astro-nuxkhicn"> <span class="group-label astro-nuxkhicn"> <span class="large astro-nuxkhicn">Resources</span>  </span> <svg aria-hidden="true" class="caret astro-nuxkhicn astro-ijsymz66" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.25rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg> </summary> <sl-sidebar-restore data-index="3"></sl-sidebar-restore> <ul class="astro-nuxkhicn"> <li class="astro-nuxkhicn"> <a href="/playground" class="astro-nuxkhicn"> <span class="astro-nuxkhicn">Playground</span>  </a> </li><li class="astro-nuxkhicn"> <a href="/blog" class="astro-nuxkhicn"> <span class="astro-nuxkhicn">Blog</span>  </a> </li> </ul> </details> </li> </ul>  <script aria-hidden="true">
+		(() => {
+			const scroller = document.getElementById('starlight__sidebar');
+			if (!window._starlightScrollRestore || !scroller) return;
+			scroller.scrollTop = window._starlightScrollRestore;
+			delete window._starlightScrollRestore;
+		})();
+	</script> </sl-sidebar-state-persist> <div class="md:sl-hidden"> <div class="mobile-preferences sl-flex astro-6ygqtq5k"> <div class="social-icons astro-6ygqtq5k"> <a href="https://github.com/getgrit/gritql" rel="me" class="sl-flex astro-y4g7rtlc"><span class="sr-only astro-y4g7rtlc">GitHub</span><svg aria-hidden="true" class="astro-y4g7rtlc astro-ijsymz66" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M12 .3a12 12 0 0 0-3.8 23.38c.6.12.83-.26.83-.57L9 21.07c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.08-.74.09-.73.09-.73 1.2.09 1.83 1.24 1.83 1.24 1.08 1.83 2.81 1.3 3.5 1 .1-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18a4.65 4.65 0 0 1 1.23 3.22c0 4.61-2.8 5.63-5.48 5.92.42.36.81 1.1.81 2.22l-.01 3.29c0 .31.2.69.82.57A12 12 0 0 0 12 .3Z"/></svg></a><a href="https://discord.gg/ARExD4gvFB" rel="me" class="sl-flex astro-y4g7rtlc"><span class="sr-only astro-y4g7rtlc">Discord</span><svg aria-hidden="true" class="astro-y4g7rtlc astro-ijsymz66" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M20.32 4.37a19.8 19.8 0 0 0-4.93-1.51 13.78 13.78 0 0 0-.64 1.28 18.27 18.27 0 0 0-5.5 0 12.64 12.64 0 0 0-.64-1.28h-.05A19.74 19.74 0 0 0 3.64 4.4 20.26 20.26 0 0 0 .11 18.09l.02.02a19.9 19.9 0 0 0 6.04 3.03l.04-.02a14.24 14.24 0 0 0 1.23-2.03.08.08 0 0 0-.05-.07 13.1 13.1 0 0 1-1.9-.92.08.08 0 0 1 .02-.1 10.2 10.2 0 0 0 .41-.31h.04a14.2 14.2 0 0 0 12.1 0l.04.01a9.63 9.63 0 0 0 .4.32.08.08 0 0 1-.03.1 12.29 12.29 0 0 1-1.9.91.08.08 0 0 0-.02.1 15.97 15.97 0 0 0 1.27 2.01h.04a19.84 19.84 0 0 0 6.03-3.05v-.03a20.12 20.12 0 0 0-3.57-13.69ZM8.02 15.33c-1.18 0-2.16-1.08-2.16-2.42 0-1.33.96-2.42 2.16-2.42 1.21 0 2.18 1.1 2.16 2.42 0 1.34-.96 2.42-2.16 2.42Zm7.97 0c-1.18 0-2.15-1.08-2.15-2.42 0-1.33.95-2.42 2.15-2.42 1.22 0 2.18 1.1 2.16 2.42 0 1.34-.94 2.42-2.16 2.42Z"/></svg></a> </div> <div class="astro-a7dqsfr4"> <a href="/blog/" class="astro-a7dqsfr4">Blog</a> </div> <starlight-theme-select>  <label style="--sl-select-width: 6.25em" class="astro-3vreodqz"> <span class="sr-only astro-3vreodqz">Select theme</span> <svg aria-hidden="true" class="icon label-icon astro-3vreodqz astro-ijsymz66" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M21 14h-1V7a3 3 0 0 0-3-3H7a3 3 0 0 0-3 3v7H3a1 1 0 0 0-1 1v2a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-2a1 1 0 0 0-1-1ZM6 7a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v7H6V7Zm14 10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-1h16v1Z"/></svg> <select autocomplete="off" class="astro-3vreodqz"> <option value="dark" class="astro-3vreodqz">Dark</option><option value="light" class="astro-3vreodqz">Light</option><option value="auto" selected class="astro-3vreodqz">Auto</option> </select> <svg aria-hidden="true" class="icon caret astro-3vreodqz astro-ijsymz66" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1em;"><path d="M17 9.17a1 1 0 0 0-1.41 0L12 12.71 8.46 9.17a1 1 0 1 0-1.41 1.42l4.24 4.24a1.002 1.002 0 0 0 1.42 0L17 10.59a1.002 1.002 0 0 0 0-1.42Z"/></svg> </label> </starlight-theme-select>  <script>
+	StarlightThemeProvider.updatePickers();
+</script>   </div> </div> </div> </div> </nav> <div class="main-frame astro-yuc63s2k">  <script type="module">const a=document.getElementById("starlight__sidebar"),n=a?.querySelector("sl-sidebar-state-persist"),o="sl-sidebar-state",i=()=>{let t=[];const e=n?.dataset.hash||"";try{const s=sessionStorage.getItem(o),r=JSON.parse(s||"{}");Array.isArray(r.open)&&r.hash===e&&(t=r.open)}catch{}return{hash:e,open:t,scroll:a?.scrollTop||0}},c=t=>{try{sessionStorage.setItem(o,JSON.stringify(t))}catch{}},d=()=>c(i()),l=(t,e)=>{const s=i();s.open[e]=t,c(s)};n?.addEventListener("click",t=>{if(!(t.target instanceof Element))return;const e=t.target.closest("summary")?.closest("details");if(!e)return;const s=e.querySelector("sl-sidebar-restore"),r=parseInt(s?.dataset.index||"");isNaN(r)||l(!e.open,r)});addEventListener("visibilitychange",()=>{document.visibilityState==="hidden"&&d()});addEventListener("pageHide",d);</script> <div class="lg:sl-flex astro-ud4ay7zo"> <aside class="right-sidebar-container print:hidden astro-ud4ay7zo"> <div class="right-sidebar astro-ud4ay7zo"> <div class="lg:sl-hidden astro-j2c66r7d"><mobile-starlight-toc data-min-h="2" data-max-h="3" class="astro-f6scndmx"><nav aria-labelledby="starlight__on-this-page--mobile" class="astro-f6scndmx"><details id="starlight__mobile-toc" class="astro-f6scndmx"><summary id="starlight__on-this-page--mobile" class="sl-flex astro-f6scndmx"><span class="toggle sl-flex astro-f6scndmx">On this page<svg aria-hidden="true" class="caret astro-f6scndmx astro-ijsymz66" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1rem;"><path d="m14.83 11.29-4.24-4.24a1 1 0 1 0-1.42 1.41L12.71 12l-3.54 3.54a1 1 0 0 0 0 1.41 1 1 0 0 0 .71.29 1 1 0 0 0 .71-.29l4.24-4.24a1.002 1.002 0 0 0 0-1.42Z"/></svg></span><span class="display-current astro-f6scndmx"></span></summary><div class="dropdown astro-f6scndmx"><ul class="isMobile astro-fdc5rjbe" style="--depth: 0;"> <li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#_top" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">Overview</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-check" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit check</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-list" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit list</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-apply" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit apply</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-doctor" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit doctor</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-blueprints" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit blueprints</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-blueprints-list" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit blueprints list</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-blueprints-pull" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit blueprints pull</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-blueprints-push" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit blueprints push</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-auth" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit auth</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-auth-login" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit auth login</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-auth-logout" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit auth logout</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-auth-get-token" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit auth get-token</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-auth-refresh" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit auth refresh</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-install" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit install</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-init" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit init</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-workflows" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit workflows</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-workflows-list" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit workflows list</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-workflows-upload" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit workflows upload</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-patterns" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit patterns</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-patterns-list" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit patterns list</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-patterns-test" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit patterns test</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-patterns-edit" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit patterns edit</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-patterns-describe" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit patterns describe</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-version" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit version</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-format" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit format</span> </a>  </li> </ul></div></details></nav></mobile-starlight-toc><script type="module" src="/_astro/MobileTableOfContents.astro_astro_type_script_index_0_lang.hwBsy0Mo.js"></script></div><div class="right-sidebar-panel sl-hidden lg:sl-block astro-j2c66r7d"><div class="sl-container astro-j2c66r7d"><starlight-toc data-min-h="2" data-max-h="3"><nav aria-labelledby="starlight__on-this-page"><h2 id="starlight__on-this-page">On this page</h2><ul class="astro-fdc5rjbe" style="--depth: 0;"> <li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#_top" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">Overview</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-check" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit check</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-list" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit list</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-apply" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit apply</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-doctor" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit doctor</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-blueprints" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit blueprints</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-blueprints-list" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit blueprints list</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-blueprints-pull" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit blueprints pull</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-blueprints-push" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit blueprints push</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-auth" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit auth</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-auth-login" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit auth login</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-auth-logout" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit auth logout</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-auth-get-token" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit auth get-token</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-auth-refresh" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit auth refresh</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-install" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit install</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-init" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit init</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-workflows" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit workflows</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-workflows-list" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit workflows list</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-workflows-upload" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit workflows upload</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-patterns" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit patterns</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-patterns-list" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit patterns list</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-patterns-test" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit patterns test</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-patterns-edit" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit patterns edit</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-patterns-describe" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit patterns describe</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-version" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit version</span> </a>  </li><li class="astro-fdc5rjbe" style="--depth: 0;"> <a href="#grit-format" class="astro-fdc5rjbe" style="--depth: 0;"> <span class="astro-fdc5rjbe" style="--depth: 0;">grit format</span> </a>  </li> </ul></nav></starlight-toc><script type="module" src="/_astro/TableOfContents.astro_astro_type_script_index_0_lang.FuRcXuRY.js"></script></div></div> </div> </aside> <div class="main-pane astro-ud4ay7zo">  <main data-pagefind-body class="astro-dzw4fplz" lang="en" dir="ltr">    <div class="content-panel astro-74cbn5yf"> <div class="sl-container astro-74cbn5yf"> <h1 id="_top" class="astro-dg5y7gj4">Grit CLI Reference</h1> </div> </div> <div class="content-panel astro-74cbn5yf"> <div class="sl-container astro-74cbn5yf"> <div class="sl-markdown-content"> <p>This document contains the help content for the <code dir="auto">grit</code> command-line program.</p>
+<p><strong>Command Overview:</strong></p>
+<ul>
+<li><a href="#grit"><code dir="auto">grit</code>↴</a></li>
+<li><a href="#grit-check"><code dir="auto">grit check</code>↴</a></li>
+<li><a href="#grit-list"><code dir="auto">grit list</code>↴</a></li>
+<li><a href="#grit-apply"><code dir="auto">grit apply</code>↴</a></li>
+<li><a href="#grit-doctor"><code dir="auto">grit doctor</code>↴</a></li>
+<li><a href="#grit-blueprints"><code dir="auto">grit blueprints</code>↴</a></li>
+<li><a href="#grit-blueprints-list"><code dir="auto">grit blueprints list</code>↴</a></li>
+<li><a href="#grit-blueprints-pull"><code dir="auto">grit blueprints pull</code>↴</a></li>
+<li><a href="#grit-blueprints-push"><code dir="auto">grit blueprints push</code>↴</a></li>
+<li><a href="#grit-auth"><code dir="auto">grit auth</code>↴</a></li>
+<li><a href="#grit-auth-login"><code dir="auto">grit auth login</code>↴</a></li>
+<li><a href="#grit-auth-logout"><code dir="auto">grit auth logout</code>↴</a></li>
+<li><a href="#grit-auth-get-token"><code dir="auto">grit auth get-token</code>↴</a></li>
+<li><a href="#grit-auth-refresh"><code dir="auto">grit auth refresh</code>↴</a></li>
+<li><a href="#grit-install"><code dir="auto">grit install</code>↴</a></li>
+<li><a href="#grit-init"><code dir="auto">grit init</code>↴</a></li>
+<li><a href="#grit-workflows"><code dir="auto">grit workflows</code>↴</a></li>
+<li><a href="#grit-workflows-list"><code dir="auto">grit workflows list</code>↴</a></li>
+<li><a href="#grit-workflows-upload"><code dir="auto">grit workflows upload</code>↴</a></li>
+<li><a href="#grit-patterns"><code dir="auto">grit patterns</code>↴</a></li>
+<li><a href="#grit-patterns-list"><code dir="auto">grit patterns list</code>↴</a></li>
+<li><a href="#grit-patterns-test"><code dir="auto">grit patterns test</code>↴</a></li>
+<li><a href="#grit-patterns-edit"><code dir="auto">grit patterns edit</code>↴</a></li>
+<li><a href="#grit-patterns-describe"><code dir="auto">grit patterns describe</code>↴</a></li>
+<li><a href="#grit-version"><code dir="auto">grit version</code>↴</a></li>
+<li><a href="#grit-format"><code dir="auto">grit format</code>↴</a></li>
+</ul>
+<div class="sl-heading-wrapper level-h2"><h2 id="grit"><code dir="auto">grit</code></h2><a class="sl-anchor-link" href="#grit"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “grit”</span></a></div>
+<p>Software maintenance on autopilot, from grit.io</p>
+<p><strong>Usage:</strong> <code dir="auto">grit [OPTIONS] &#x3C;COMMAND></code></p>
+<p>For help with a specific command, run <code dir="auto">grit help &#x3C;command></code>.</p>
+<div class="sl-heading-wrapper level-h6"><h6 id="subcommands"><strong>Subcommands:</strong></h6><a class="sl-anchor-link" href="#subcommands"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “Subcommands:”</span></a></div>
+<ul>
+<li><code dir="auto">check</code> — Check the current directory for pattern violations</li>
+<li><code dir="auto">list</code> — List everything that can be applied to the current directory</li>
+<li><code dir="auto">apply</code> — Apply a pattern or migration to a set of files</li>
+<li><code dir="auto">doctor</code> — Print diagnostic information about the current environment</li>
+<li><code dir="auto">blueprints</code> — Manage blueprints for the Grit Agent</li>
+<li><code dir="auto">auth</code> — Authentication commands, run <code dir="auto">grit auth --help</code> for more information</li>
+<li><code dir="auto">install</code> — Install supporting binaries</li>
+<li><code dir="auto">init</code> — Install grit modules</li>
+<li><code dir="auto">workflows</code> — Workflow commands, run <code dir="auto">grit workflows --help</code> for more information</li>
+<li><code dir="auto">patterns</code> — Patterns commands, run <code dir="auto">grit patterns --help</code> for more information</li>
+<li><code dir="auto">version</code> — Display version information about the CLI and agents</li>
+<li><code dir="auto">format</code> — Format grit files under current directory</li>
+</ul>
+<div class="sl-heading-wrapper level-h6"><h6 id="options"><strong>Options:</strong></h6><a class="sl-anchor-link" href="#options"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “Options:”</span></a></div>
+<ul>
+<li>
+<p><code dir="auto">--json</code> — Enable JSON output, only supported on some commands</p>
+<p>Possible values: <code dir="auto">true</code>, <code dir="auto">false</code></p>
+</li>
+<li>
+<p><code dir="auto">--jsonl</code> — Enable JSONL output, only supported on some commands</p>
+<p>Possible values: <code dir="auto">true</code>, <code dir="auto">false</code></p>
+</li>
+<li>
+<p><code dir="auto">--log-level &#x3C;LOG_LEVEL></code> — Override the default log level (info)</p>
+</li>
+<li>
+<p><code dir="auto">--grit-dir &#x3C;GRIT_DIR></code> — Override the default .grit directory location</p>
+</li>
+</ul>
+<div class="sl-heading-wrapper level-h2"><h2 id="grit-check"><code dir="auto">grit check</code></h2><a class="sl-anchor-link" href="#grit-check"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “grit check”</span></a></div>
+<p>Check the current directory for pattern violations</p>
+<p><strong>Usage:</strong> <code dir="auto">grit check [OPTIONS] [PATHS]...</code></p>
+<div class="sl-heading-wrapper level-h6"><h6 id="arguments"><strong>Arguments:</strong></h6><a class="sl-anchor-link" href="#arguments"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “Arguments:”</span></a></div>
+<ul>
+<li>
+<p><code dir="auto">&#x3C;PATHS></code> — The target paths to apply the checks to</p>
+<p>Default value: <code dir="auto">.</code></p>
+</li>
+</ul>
+<div class="sl-heading-wrapper level-h6"><h6 id="options-1"><strong>Options:</strong></h6><a class="sl-anchor-link" href="#options-1"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “Options:”</span></a></div>
+<ul>
+<li>
+<p><code dir="auto">--fix</code> — Apply fixes to all rewrites</p>
+<p>Possible values: <code dir="auto">true</code>, <code dir="auto">false</code></p>
+</li>
+<li>
+<p><code dir="auto">--verbose</code> — Show verbose output</p>
+<p>Possible values: <code dir="auto">true</code>, <code dir="auto">false</code></p>
+</li>
+<li>
+<p><code dir="auto">--level &#x3C;LEVEL></code> — Check only patterns at or above an enforcement level</p>
+</li>
+<li>
+<p><code dir="auto">--no-cache</code> — Do not use cache</p>
+<p>Possible values: <code dir="auto">true</code>, <code dir="auto">false</code></p>
+</li>
+<li>
+<p><code dir="auto">--refresh-cache</code> — Clear cache before running check</p>
+<p>Possible values: <code dir="auto">true</code>, <code dir="auto">false</code></p>
+</li>
+<li>
+<p><code dir="auto">--github-actions</code> — Output annotations for a GitHub actions workflow</p>
+<p>Possible values: <code dir="auto">true</code>, <code dir="auto">false</code></p>
+</li>
+<li>
+<p><code dir="auto">--only-in-json &#x3C;ONLY_IN_JSON></code> — Only analyze ranges inside a provided eslint-style JSON string. The JSON should be an array of objects formatted as <code dir="auto">[{"filePath": "path/to/file", "messages": [{"line": 1, "column": 1, "endLine": 1, "endColumn": 1}]}]</code>.</p>
+</li>
+</ul>
+<div class="sl-heading-wrapper level-h2"><h2 id="grit-list"><code dir="auto">grit list</code></h2><a class="sl-anchor-link" href="#grit-list"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “grit list”</span></a></div>
+<p>List everything that can be applied to the current directory</p>
+<p><strong>Usage:</strong> <code dir="auto">grit list [OPTIONS]</code></p>
+<div class="sl-heading-wrapper level-h6"><h6 id="options-2"><strong>Options:</strong></h6><a class="sl-anchor-link" href="#options-2"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “Options:”</span></a></div>
+<ul>
+<li>
+<p><code dir="auto">--level &#x3C;LEVEL></code> — List only at or above an enforcement level</p>
+</li>
+<li>
+<p><code dir="auto">--source &#x3C;SOURCE></code> — List items from a specific source</p>
+<p>Default value: <code dir="auto">all</code></p>
+<p>Possible values:</p>
+<ul>
+<li><code dir="auto">all</code>:
+All patterns</li>
+<li><code dir="auto">local</code>:
+Only patterns from the local repo</li>
+<li><code dir="auto">user</code>:
+Only patterns from the user config</li>
+</ul>
+</li>
+<li>
+<p><code dir="auto">--language &#x3C;LANGUAGE></code> — List only items targeting a specific language</p>
+<p>Possible values: <code dir="auto">js</code>, <code dir="auto">html</code>, <code dir="auto">css</code>, <code dir="auto">json</code>, <code dir="auto">java</code>, <code dir="auto">kotlin</code>, <code dir="auto">csharp</code>, <code dir="auto">python</code>, <code dir="auto">markdown</code>, <code dir="auto">go</code>, <code dir="auto">rust</code>, <code dir="auto">ruby</code>, <code dir="auto">elixir</code>, <code dir="auto">solidity</code>, <code dir="auto">hcl</code>, <code dir="auto">yaml</code>, <code dir="auto">sql</code>, <code dir="auto">vue</code>, <code dir="auto">toml</code>, <code dir="auto">php</code>, <code dir="auto">php</code></p>
+</li>
+</ul>
+<div class="sl-heading-wrapper level-h2"><h2 id="grit-apply"><code dir="auto">grit apply</code></h2><a class="sl-anchor-link" href="#grit-apply"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “grit apply”</span></a></div>
+<p>Apply a pattern or migration to a set of files</p>
+<p><strong>Usage:</strong> <code dir="auto">grit apply [OPTIONS] &#x3C;PATTERN_OR_WORKFLOW> [PATHS]...</code></p>
+<div class="sl-heading-wrapper level-h6"><h6 id="arguments-1"><strong>Arguments:</strong></h6><a class="sl-anchor-link" href="#arguments-1"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “Arguments:”</span></a></div>
+<ul>
+<li>
+<p><code dir="auto">&#x3C;PATTERN_OR_WORKFLOW></code> — The pattern to apply, in a few forms:</p>
+<ul>
+<li>A pattern name (ex. <code dir="auto">raw_no_console_log</code>)</li>
+<li>A pattern by itself (ex. <code dir="auto">'`console.log` => `console.error`'</code>)</li>
+<li>A pattern call, with arguments (ex. <code dir="auto">'openai_main(client=</code>openai<code dir="auto">)'</code>)</li>
+<li>A path to a pattern file (ex. <code dir="auto">./patterns/raw_no_console_log.grit</code>)</li>
+<li>A workflow name (ex. <code dir="auto">lint</code>)</li>
+</ul>
+</li>
+<li>
+<p><code dir="auto">&#x3C;PATHS></code></p>
+<p>Default value: <code dir="auto">.</code></p>
+</li>
+</ul>
+<div class="sl-heading-wrapper level-h6"><h6 id="options-3"><strong>Options:</strong></h6><a class="sl-anchor-link" href="#options-3"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “Options:”</span></a></div>
+<ul>
+<li>
+<p><code dir="auto">--input &#x3C;INPUT></code> — JSON input parameter to pass to the workflow</p>
+</li>
+<li>
+<p><code dir="auto">--remote</code> — Run the workflow remotely on Grit Cloud</p>
+<p>Possible values: <code dir="auto">true</code>, <code dir="auto">false</code></p>
+</li>
+<li>
+<p><code dir="auto">--workflow-id &#x3C;WORKFLOW_ID></code> — Workflow ID to set, only applicable when running remotely</p>
+</li>
+<li>
+<p><code dir="auto">--watch</code> — Watch the workflow for updates (only applicable when running remotely)</p>
+<p>Possible values: <code dir="auto">true</code>, <code dir="auto">false</code></p>
+</li>
+<li>
+<p><code dir="auto">--verbose</code> — Print verbose output</p>
+<p>Possible values: <code dir="auto">true</code>, <code dir="auto">false</code></p>
+</li>
+<li>
+<p><code dir="auto">--output &#x3C;OUTPUT></code></p>
+<p>Default value: <code dir="auto">standard</code></p>
+<p>Possible values: <code dir="auto">none</code>, <code dir="auto">standard</code>, <code dir="auto">compact</code></p>
+</li>
+<li>
+<p><code dir="auto">-m</code>, <code dir="auto">--limit &#x3C;LIMIT></code></p>
+</li>
+<li>
+<p><code dir="auto">--dry-run</code> — Show a dry-run of the changes that would be applied</p>
+<p>Default value: <code dir="auto">false</code></p>
+<p>Possible values: <code dir="auto">true</code>, <code dir="auto">false</code></p>
+</li>
+<li>
+<p><code dir="auto">--force</code> — Force apply, even if there are uncommitted changes</p>
+<p>Default value: <code dir="auto">false</code></p>
+<p>Possible values: <code dir="auto">true</code>, <code dir="auto">false</code></p>
+</li>
+<li>
+<p><code dir="auto">-i</code>, <code dir="auto">--interactive</code> — Selectively apply changes interactively</p>
+<p>Default value: <code dir="auto">false</code></p>
+<p>Possible values: <code dir="auto">true</code>, <code dir="auto">false</code></p>
+</li>
+<li>
+<p><code dir="auto">--output-file &#x3C;OUTPUT_FILE></code> — Path to a file to write the results to, defaults to stdout</p>
+</li>
+<li>
+<p><code dir="auto">--stdin</code> — Use this option when you want to transform code piped from <code dir="auto">stdin</code>, and print the output to <code dir="auto">stdout</code>.</p>
+</li>
+</ul>
+<p>If you use this option, you <em>must</em> specify a file path, to allow Grit to determine the language of the code.</p>
+<p>Example: <code dir="auto">echo 'console.log(hello)' | grit apply '</code>hello<code dir="auto">=></code>goodbye<code dir="auto">' file.js --stdin This will print </code>console.log(goodbye)` to stdout</p>
+<p>Possible values: <code dir="auto">true</code>, <code dir="auto">false</code></p>
+<ul>
+<li>
+<p><code dir="auto">--cache</code> — Use cache</p>
+<p>Possible values: <code dir="auto">true</code>, <code dir="auto">false</code></p>
+</li>
+<li>
+<p><code dir="auto">--refresh-cache</code> — Clear cache before running apply</p>
+<p>Possible values: <code dir="auto">true</code>, <code dir="auto">false</code></p>
+</li>
+<li>
+<p><code dir="auto">--ai</code> — Interpret the request as a natural language request</p>
+<p>Possible values: <code dir="auto">true</code>, <code dir="auto">false</code></p>
+</li>
+<li>
+<p><code dir="auto">--language &#x3C;LANGUAGE></code> — Change the default language to use for the pattern (if unset, JavaScript is used by default)</p>
+<p>Possible values: <code dir="auto">js</code>, <code dir="auto">html</code>, <code dir="auto">css</code>, <code dir="auto">json</code>, <code dir="auto">java</code>, <code dir="auto">kotlin</code>, <code dir="auto">csharp</code>, <code dir="auto">python</code>, <code dir="auto">markdown</code>, <code dir="auto">go</code>, <code dir="auto">rust</code>, <code dir="auto">ruby</code>, <code dir="auto">elixir</code>, <code dir="auto">solidity</code>, <code dir="auto">hcl</code>, <code dir="auto">yaml</code>, <code dir="auto">sql</code>, <code dir="auto">vue</code>, <code dir="auto">toml</code>, <code dir="auto">php</code>, <code dir="auto">php</code></p>
+</li>
+<li>
+<p><code dir="auto">--only-in-json &#x3C;ONLY_IN_JSON></code> — Only analyze ranges inside a provided eslint-style JSON string. The JSON should be an array of objects formatted as <code dir="auto">[{"filePath": "path/to/file", "messages": [{"line": 1, "column": 1, "endLine": 1, "endColumn": 1}]}]</code>.</p>
+</li>
+</ul>
+<div class="sl-heading-wrapper level-h2"><h2 id="grit-doctor"><code dir="auto">grit doctor</code></h2><a class="sl-anchor-link" href="#grit-doctor"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “grit doctor”</span></a></div>
+<p>Print diagnostic information about the current environment</p>
+<p><strong>Usage:</strong> <code dir="auto">grit doctor</code></p>
+<div class="sl-heading-wrapper level-h2"><h2 id="grit-blueprints"><code dir="auto">grit blueprints</code></h2><a class="sl-anchor-link" href="#grit-blueprints"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “grit blueprints”</span></a></div>
+<p>Manage blueprints for the Grit Agent</p>
+<p><strong>Usage:</strong> <code dir="auto">grit blueprints &#x3C;COMMAND></code></p>
+<div class="sl-heading-wrapper level-h6"><h6 id="subcommands-1"><strong>Subcommands:</strong></h6><a class="sl-anchor-link" href="#subcommands-1"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “Subcommands:”</span></a></div>
+<ul>
+<li><code dir="auto">list</code> — List available blueprints</li>
+<li><code dir="auto">pull</code> — Pull a blueprint by workflow ID</li>
+<li><code dir="auto">push</code> — Push a blueprint by workflow ID</li>
+</ul>
+<div class="sl-heading-wrapper level-h2"><h2 id="grit-blueprints-list"><code dir="auto">grit blueprints list</code></h2><a class="sl-anchor-link" href="#grit-blueprints-list"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “grit blueprints list”</span></a></div>
+<p>List available blueprints</p>
+<p><strong>Usage:</strong> <code dir="auto">grit blueprints list</code></p>
+<div class="sl-heading-wrapper level-h2"><h2 id="grit-blueprints-pull"><code dir="auto">grit blueprints pull</code></h2><a class="sl-anchor-link" href="#grit-blueprints-pull"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “grit blueprints pull”</span></a></div>
+<p>Pull a blueprint by workflow ID</p>
+<p><strong>Usage:</strong> <code dir="auto">grit blueprints pull [OPTIONS] --workflow-id &#x3C;WORKFLOW_ID></code></p>
+<div class="sl-heading-wrapper level-h6"><h6 id="options-4"><strong>Options:</strong></h6><a class="sl-anchor-link" href="#options-4"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “Options:”</span></a></div>
+<ul>
+<li>
+<p><code dir="auto">--workflow-id &#x3C;WORKFLOW_ID></code> — The workflow ID of the blueprint to pull</p>
+</li>
+<li>
+<p><code dir="auto">-f</code>, <code dir="auto">--force</code> — Force pull even if the blueprint already exists</p>
+<p>Possible values: <code dir="auto">true</code>, <code dir="auto">false</code></p>
+</li>
+<li>
+<p><code dir="auto">--file &#x3C;FILE></code> — File to save the blueprint to (defaults to blueprint.md)</p>
+<p>Default value: <code dir="auto">blueprint.md</code></p>
+</li>
+</ul>
+<div class="sl-heading-wrapper level-h2"><h2 id="grit-blueprints-push"><code dir="auto">grit blueprints push</code></h2><a class="sl-anchor-link" href="#grit-blueprints-push"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “grit blueprints push”</span></a></div>
+<p>Push a blueprint by workflow ID</p>
+<p><strong>Usage:</strong> <code dir="auto">grit blueprints push [OPTIONS] --workflow-id &#x3C;WORKFLOW_ID></code></p>
+<div class="sl-heading-wrapper level-h6"><h6 id="options-5"><strong>Options:</strong></h6><a class="sl-anchor-link" href="#options-5"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “Options:”</span></a></div>
+<ul>
+<li>
+<p><code dir="auto">--workflow-id &#x3C;WORKFLOW_ID></code> — The workflow ID of the blueprint to push</p>
+</li>
+<li>
+<p><code dir="auto">--file &#x3C;FILE></code> — File containing the blueprint (defaults to blueprint.md)</p>
+<p>Default value: <code dir="auto">blueprint.md</code></p>
+</li>
+</ul>
+<div class="sl-heading-wrapper level-h2"><h2 id="grit-auth"><code dir="auto">grit auth</code></h2><a class="sl-anchor-link" href="#grit-auth"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “grit auth”</span></a></div>
+<p>Authentication commands, run <code dir="auto">grit auth --help</code> for more information</p>
+<p><strong>Usage:</strong> <code dir="auto">grit auth &#x3C;COMMAND></code></p>
+<div class="sl-heading-wrapper level-h6"><h6 id="subcommands-2"><strong>Subcommands:</strong></h6><a class="sl-anchor-link" href="#subcommands-2"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “Subcommands:”</span></a></div>
+<ul>
+<li><code dir="auto">login</code> — Log in with grit.io</li>
+<li><code dir="auto">logout</code> — Remove your grit.io credentials</li>
+<li><code dir="auto">get-token</code> — Get your grit.io token</li>
+<li><code dir="auto">refresh</code> — Refresh your grit.io auth (this will also happen automatically when your token expires)</li>
+</ul>
+<div class="sl-heading-wrapper level-h2"><h2 id="grit-auth-login"><code dir="auto">grit auth login</code></h2><a class="sl-anchor-link" href="#grit-auth-login"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “grit auth login”</span></a></div>
+<p>Log in with grit.io</p>
+<p><strong>Usage:</strong> <code dir="auto">grit auth login</code></p>
+<div class="sl-heading-wrapper level-h2"><h2 id="grit-auth-logout"><code dir="auto">grit auth logout</code></h2><a class="sl-anchor-link" href="#grit-auth-logout"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “grit auth logout”</span></a></div>
+<p>Remove your grit.io credentials</p>
+<p><strong>Usage:</strong> <code dir="auto">grit auth logout</code></p>
+<div class="sl-heading-wrapper level-h2"><h2 id="grit-auth-get-token"><code dir="auto">grit auth get-token</code></h2><a class="sl-anchor-link" href="#grit-auth-get-token"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “grit auth get-token”</span></a></div>
+<p>Get your grit.io token</p>
+<p><strong>Usage:</strong> <code dir="auto">grit auth get-token</code></p>
+<div class="sl-heading-wrapper level-h2"><h2 id="grit-auth-refresh"><code dir="auto">grit auth refresh</code></h2><a class="sl-anchor-link" href="#grit-auth-refresh"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “grit auth refresh”</span></a></div>
+<p>Refresh your grit.io auth (this will also happen automatically when your token expires)</p>
+<p><strong>Usage:</strong> <code dir="auto">grit auth refresh</code></p>
+<div class="sl-heading-wrapper level-h2"><h2 id="grit-install"><code dir="auto">grit install</code></h2><a class="sl-anchor-link" href="#grit-install"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “grit install”</span></a></div>
+<p>Install supporting binaries</p>
+<p><strong>Usage:</strong> <code dir="auto">grit install [OPTIONS]</code></p>
+<div class="sl-heading-wrapper level-h6"><h6 id="options-6"><strong>Options:</strong></h6><a class="sl-anchor-link" href="#options-6"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “Options:”</span></a></div>
+<ul>
+<li>
+<p><code dir="auto">--update</code> — Look for updates and install them</p>
+<p>Possible values: <code dir="auto">true</code>, <code dir="auto">false</code></p>
+</li>
+<li>
+<p><code dir="auto">--app &#x3C;APP></code> — Specify a specific app to install</p>
+<p>Possible values: <code dir="auto">grit</code>, <code dir="auto">gouda</code>, <code dir="auto">workflow-runner</code></p>
+</li>
+</ul>
+<div class="sl-heading-wrapper level-h2"><h2 id="grit-init"><code dir="auto">grit init</code></h2><a class="sl-anchor-link" href="#grit-init"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “grit init”</span></a></div>
+<p>Install grit modules</p>
+<p><strong>Usage:</strong> <code dir="auto">grit init [OPTIONS]</code></p>
+<div class="sl-heading-wrapper level-h6"><h6 id="options-7"><strong>Options:</strong></h6><a class="sl-anchor-link" href="#options-7"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “Options:”</span></a></div>
+<ul>
+<li>
+<p><code dir="auto">--global</code> — Update global grit modules</p>
+<p>Default value: <code dir="auto">false</code></p>
+<p>Possible values: <code dir="auto">true</code>, <code dir="auto">false</code></p>
+</li>
+</ul>
+<div class="sl-heading-wrapper level-h2"><h2 id="grit-workflows"><code dir="auto">grit workflows</code></h2><a class="sl-anchor-link" href="#grit-workflows"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “grit workflows”</span></a></div>
+<p>Workflow commands, run <code dir="auto">grit workflows --help</code> for more information</p>
+<p><strong>Usage:</strong> <code dir="auto">grit workflows &#x3C;COMMAND></code></p>
+<div class="sl-heading-wrapper level-h6"><h6 id="subcommands-3"><strong>Subcommands:</strong></h6><a class="sl-anchor-link" href="#subcommands-3"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “Subcommands:”</span></a></div>
+<ul>
+<li><code dir="auto">list</code> — List all available workflows</li>
+<li><code dir="auto">upload</code> — Upload a workflow</li>
+</ul>
+<div class="sl-heading-wrapper level-h2"><h2 id="grit-workflows-list"><code dir="auto">grit workflows list</code></h2><a class="sl-anchor-link" href="#grit-workflows-list"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “grit workflows list”</span></a></div>
+<p>List all available workflows</p>
+<p><strong>Usage:</strong> <code dir="auto">grit workflows list</code></p>
+<div class="sl-heading-wrapper level-h2"><h2 id="grit-workflows-upload"><code dir="auto">grit workflows upload</code></h2><a class="sl-anchor-link" href="#grit-workflows-upload"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “grit workflows upload”</span></a></div>
+<p>Upload a workflow</p>
+<p><strong>Usage:</strong> <code dir="auto">grit workflows upload &#x3C;WORKFLOW_PATH> &#x3C;WORKFLOW_ID></code></p>
+<div class="sl-heading-wrapper level-h6"><h6 id="arguments-2"><strong>Arguments:</strong></h6><a class="sl-anchor-link" href="#arguments-2"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “Arguments:”</span></a></div>
+<ul>
+<li><code dir="auto">&#x3C;WORKFLOW_PATH></code></li>
+<li><code dir="auto">&#x3C;WORKFLOW_ID></code></li>
+</ul>
+<div class="sl-heading-wrapper level-h2"><h2 id="grit-patterns"><code dir="auto">grit patterns</code></h2><a class="sl-anchor-link" href="#grit-patterns"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “grit patterns”</span></a></div>
+<p>Patterns commands, run <code dir="auto">grit patterns --help</code> for more information</p>
+<p><strong>Usage:</strong> <code dir="auto">grit patterns &#x3C;COMMAND></code></p>
+<div class="sl-heading-wrapper level-h6"><h6 id="subcommands-4"><strong>Subcommands:</strong></h6><a class="sl-anchor-link" href="#subcommands-4"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “Subcommands:”</span></a></div>
+<ul>
+<li><code dir="auto">list</code> — List all available named patterns</li>
+<li><code dir="auto">test</code> — Test patterns against expected output</li>
+<li><code dir="auto">edit</code> — Open a pattern in the studio</li>
+<li><code dir="auto">describe</code> — Describe a pattern</li>
+</ul>
+<div class="sl-heading-wrapper level-h2"><h2 id="grit-patterns-list"><code dir="auto">grit patterns list</code></h2><a class="sl-anchor-link" href="#grit-patterns-list"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “grit patterns list”</span></a></div>
+<p>List all available named patterns</p>
+<p><strong>Usage:</strong> <code dir="auto">grit patterns list [OPTIONS]</code></p>
+<div class="sl-heading-wrapper level-h6"><h6 id="options-8"><strong>Options:</strong></h6><a class="sl-anchor-link" href="#options-8"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “Options:”</span></a></div>
+<ul>
+<li>
+<p><code dir="auto">--level &#x3C;LEVEL></code> — List only at or above an enforcement level</p>
+</li>
+<li>
+<p><code dir="auto">--source &#x3C;SOURCE></code> — List items from a specific source</p>
+<p>Default value: <code dir="auto">all</code></p>
+<p>Possible values:</p>
+<ul>
+<li><code dir="auto">all</code>:
+All patterns</li>
+<li><code dir="auto">local</code>:
+Only patterns from the local repo</li>
+<li><code dir="auto">user</code>:
+Only patterns from the user config</li>
+</ul>
+</li>
+<li>
+<p><code dir="auto">--language &#x3C;LANGUAGE></code> — List only items targeting a specific language</p>
+<p>Possible values: <code dir="auto">js</code>, <code dir="auto">html</code>, <code dir="auto">css</code>, <code dir="auto">json</code>, <code dir="auto">java</code>, <code dir="auto">kotlin</code>, <code dir="auto">csharp</code>, <code dir="auto">python</code>, <code dir="auto">markdown</code>, <code dir="auto">go</code>, <code dir="auto">rust</code>, <code dir="auto">ruby</code>, <code dir="auto">elixir</code>, <code dir="auto">solidity</code>, <code dir="auto">hcl</code>, <code dir="auto">yaml</code>, <code dir="auto">sql</code>, <code dir="auto">vue</code>, <code dir="auto">toml</code>, <code dir="auto">php</code>, <code dir="auto">php</code></p>
+</li>
+</ul>
+<div class="sl-heading-wrapper level-h2"><h2 id="grit-patterns-test"><code dir="auto">grit patterns test</code></h2><a class="sl-anchor-link" href="#grit-patterns-test"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “grit patterns test”</span></a></div>
+<p>Test patterns against expected output</p>
+<p><strong>Usage:</strong> <code dir="auto">grit patterns test [OPTIONS]</code></p>
+<div class="sl-heading-wrapper level-h6"><h6 id="options-9"><strong>Options:</strong></h6><a class="sl-anchor-link" href="#options-9"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “Options:”</span></a></div>
+<ul>
+<li>
+<p><code dir="auto">--filter &#x3C;FILTER></code> — Regex of a specific pattern to test</p>
+</li>
+<li>
+<p><code dir="auto">--exclude &#x3C;EXCLUDE></code> — Tags and pattern names to exclude. Only direct matches will be excluded.</p>
+</li>
+<li>
+<p><code dir="auto">--verbose</code> — Show verbose output</p>
+<p>Possible values: <code dir="auto">true</code>, <code dir="auto">false</code></p>
+</li>
+<li>
+<p><code dir="auto">--update</code> — Update expected test outputs</p>
+<p>Possible values: <code dir="auto">true</code>, <code dir="auto">false</code></p>
+</li>
+<li>
+<p><code dir="auto">--watch</code> — Enable watch mode on .grit dir</p>
+<p>Possible values: <code dir="auto">true</code>, <code dir="auto">false</code></p>
+</li>
+</ul>
+<div class="sl-heading-wrapper level-h2"><h2 id="grit-patterns-edit"><code dir="auto">grit patterns edit</code></h2><a class="sl-anchor-link" href="#grit-patterns-edit"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “grit patterns edit”</span></a></div>
+<p>Open a pattern in the studio</p>
+<p><strong>Usage:</strong> <code dir="auto">grit patterns edit &#x3C;PATH></code></p>
+<div class="sl-heading-wrapper level-h6"><h6 id="arguments-3"><strong>Arguments:</strong></h6><a class="sl-anchor-link" href="#arguments-3"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “Arguments:”</span></a></div>
+<ul>
+<li><code dir="auto">&#x3C;PATH></code> — The pattern path to edit</li>
+</ul>
+<div class="sl-heading-wrapper level-h2"><h2 id="grit-patterns-describe"><code dir="auto">grit patterns describe</code></h2><a class="sl-anchor-link" href="#grit-patterns-describe"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “grit patterns describe”</span></a></div>
+<p>Describe a pattern</p>
+<p><strong>Usage:</strong> <code dir="auto">grit patterns describe &#x3C;NAME></code></p>
+<div class="sl-heading-wrapper level-h6"><h6 id="arguments-4"><strong>Arguments:</strong></h6><a class="sl-anchor-link" href="#arguments-4"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “Arguments:”</span></a></div>
+<ul>
+<li><code dir="auto">&#x3C;NAME></code> — The pattern name to describe</li>
+</ul>
+<div class="sl-heading-wrapper level-h2"><h2 id="grit-version"><code dir="auto">grit version</code></h2><a class="sl-anchor-link" href="#grit-version"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “grit version”</span></a></div>
+<p>Display version information about the CLI and agents</p>
+<p><strong>Usage:</strong> <code dir="auto">grit version</code></p>
+<div class="sl-heading-wrapper level-h2"><h2 id="grit-format"><code dir="auto">grit format</code></h2><a class="sl-anchor-link" href="#grit-format"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “grit format”</span></a></div>
+<p>Format grit files under current directory</p>
+<p><strong>Usage:</strong> <code dir="auto">grit format [OPTIONS]</code></p>
+<div class="sl-heading-wrapper level-h6"><h6 id="options-10"><strong>Options:</strong></h6><a class="sl-anchor-link" href="#options-10"><span aria-hidden="true" class="sl-anchor-icon"><svg width="16" height="16" viewBox="0 0 24 24"><path fill="currentcolor" d="m12.11 15.39-3.88 3.88a2.52 2.52 0 0 1-3.5 0 2.47 2.47 0 0 1 0-3.5l3.88-3.88a1 1 0 0 0-1.42-1.42l-3.88 3.89a4.48 4.48 0 0 0 6.33 6.33l3.89-3.88a1 1 0 1 0-1.42-1.42Zm8.58-12.08a4.49 4.49 0 0 0-6.33 0l-3.89 3.88a1 1 0 0 0 1.42 1.42l3.88-3.88a2.52 2.52 0 0 1 3.5 0 2.47 2.47 0 0 1 0 3.5l-3.88 3.88a1 1 0 1 0 1.42 1.42l3.88-3.89a4.49 4.49 0 0 0 0-6.33ZM8.83 15.17a1 1 0 0 0 1.1.22 1 1 0 0 0 .32-.22l4.92-4.92a1 1 0 0 0-1.42-1.42l-4.92 4.92a1 1 0 0 0 0 1.42Z"></path></svg></span><span class="sr-only" data-pagefind-ignore>Section titled “Options:”</span></a></div>
+<ul>
+<li>
+<p><code dir="auto">--write</code> — Write formats to file instead of just showing them</p>
+<p>Possible values: <code dir="auto">true</code>, <code dir="auto">false</code></p>
+</li>
+<li>
+<p><code dir="auto">--output &#x3C;OUTPUT></code></p>
+<p>Default value: <code dir="auto">compact</code></p>
+<p>Possible values: <code dir="auto">none</code>, <code dir="auto">standard</code>, <code dir="auto">compact</code></p>
+</li>
+<li>
+<p><code dir="auto">--filter &#x3C;FILTER></code> — Regex of a specific pattern to test</p>
+</li>
+</ul> </div> <footer class="sl-flex astro-x3ceuchw"> <div class="meta sl-flex astro-x3ceuchw"> <a href="https://github.com/getgrit/gritql/edit/main/docs/src/content/docs/cli/reference.mdx" class="sl-flex print:hidden astro-bs3x7zlh"><svg aria-hidden="true" class="astro-bs3x7zlh astro-ijsymz66" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.2em;"><path d="M22 7.24a1 1 0 0 0-.29-.71l-4.24-4.24a1 1 0 0 0-1.1-.22 1 1 0 0 0-.32.22l-2.83 2.83L2.29 16.05a1 1 0 0 0-.29.71V21a1 1 0 0 0 1 1h4.24a1 1 0 0 0 .76-.29l10.87-10.93L21.71 8c.1-.1.17-.2.22-.33a1 1 0 0 0 0-.24v-.14l.07-.05ZM6.83 20H4v-2.83l9.93-9.93 2.83 2.83L6.83 20ZM18.17 8.66l-2.83-2.83 1.42-1.41 2.82 2.82-1.41 1.42Z"/></svg>Edit page</a>  </div> <div class="pagination-links print:hidden astro-pztbdnfs" dir="ltr"> <a href="/cli/quickstart/" rel="prev" class="astro-pztbdnfs"> <svg aria-hidden="true" class="astro-pztbdnfs astro-ijsymz66" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.5rem;"><path d="M17 11H9.41l3.3-3.29a1.004 1.004 0 1 0-1.42-1.42l-5 5a1 1 0 0 0-.21.33 1 1 0 0 0 0 .76 1 1 0 0 0 .21.33l5 5a1.002 1.002 0 0 0 1.639-.325 1 1 0 0 0-.219-1.095L9.41 13H17a1 1 0 0 0 0-2Z"/></svg> <span class="astro-pztbdnfs"> Previous <br class="astro-pztbdnfs"> <span class="link-title astro-pztbdnfs">CLI Quickstart</span> </span> </a> <a href="/patterns" rel="next" class="astro-pztbdnfs"> <svg aria-hidden="true" class="astro-pztbdnfs astro-ijsymz66" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="--sl-icon-size: 1.5rem;"><path d="M17.92 11.62a1.001 1.001 0 0 0-.21-.33l-5-5a1.003 1.003 0 1 0-1.42 1.42l3.3 3.29H7a1 1 0 0 0 0 2h7.59l-3.3 3.29a1.002 1.002 0 0 0 .325 1.639 1 1 0 0 0 1.095-.219l5-5a1 1 0 0 0 .21-.33 1 1 0 0 0 0-.76Z"/></svg> <span class="astro-pztbdnfs"> Next <br class="astro-pztbdnfs"> <span class="link-title astro-pztbdnfs">Pattern Library</span> </span> </a> </div>  </footer> </div> </div>  </main> </div> </div> </div> </div> </body></html>

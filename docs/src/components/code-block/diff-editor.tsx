@@ -1,6 +1,6 @@
 'use client';
 
-import { WithChildren } from '@/custom-types/shared';
+import type { WithChildren } from '@/custom-types/shared';
 import { MonacoDiffEditor } from '@/components/editor/monaco-diff-editor';
 
 import { cleanHlTags, SnippetEditor } from './editor';

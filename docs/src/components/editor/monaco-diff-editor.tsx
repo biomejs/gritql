@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { DiffEditor, DiffEditorProps } from '@monaco-editor/react';
+import { DiffEditor, type DiffEditorProps } from '@monaco-editor/react';
 import merge from 'lodash/merge';
 
-import { Match, Position, Range } from '@/universal/matching/types';
+import type { Match, Position, Range } from '@/universal/matching/types';
 
 import { diffEditorOptions, readOnlyOptions } from './config';
 

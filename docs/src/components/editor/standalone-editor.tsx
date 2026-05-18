@@ -3,9 +3,8 @@
 import { useCallback, useMemo } from 'react';
 
 import cx from 'classnames';
-import { editor } from 'monaco-editor';
+import type { editor } from 'monaco-editor';
 
-import { CloseButton } from '@/components/code-block/buttons';
 import { SnippetHeading } from '@/components/code-block/heading';
 import { useDelayedLoader } from '@/hooks/use-delayed-loader';
 import { useDiffEditor } from '@/hooks/use-diff-editor';
@@ -51,7 +50,6 @@ export const StandaloneEditor: React.FC = () => {
       <div className='h-1/2 rounded-md overflow-hidden monaco-pattern-editor relative'>
         <div className='flex m-0 justify-between px-3 py-2 bg-black'>
           <SnippetHeading title='Pattern Editor' />
-          <CloseButton />
         </div>
         <MonacoEditor
           noCliff

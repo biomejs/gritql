@@ -1,17 +1,18 @@
 {
-  "name": "@getgrit/gritql",
-  "version": "0.2.2",
-  "description": "Core GritQL engine and CLI",
-  "author": "",
-  "license": "MIT",
-  "private": true,
-  "dependencies": {},
-  "devDependencies": {},
-  "scripts": {
-    "test:wasm": "cd wasm-bindings && wasm-pack test --node",
-    "test:watch": "nodemon --ext rs --exec \"cargo test --exclude grit-wasm-bindings\"",
-    "lint:clippy": "cargo clippy -- -D warnings",
-    "test:python": "cd python/gritql && pytest"
-  },
-  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+	"name": "@getgrit/gritql",
+	"version": "0.2.2",
+	"description": "Core GritQL engine and CLI",
+	"author": "",
+	"license": "MIT",
+	"private": true,
+	"dependencies": {
+		"@biomejs/biome": "^2.4.15"
+	},
+	"scripts": {
+		"test:wasm": "cd wasm-bindings && wasm-pack test --node",
+		"test:watch": "nodemon --ext rs --exec \"cargo test --exclude grit-wasm-bindings\"",
+		"lint:clippy": "cargo clippy -- -D warnings",
+		"test:python": "cd python/gritql && pytest"
+	},
+	"packageManager": "pnpm@11.1.1"
 }

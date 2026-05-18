@@ -6,13 +6,13 @@ import init, { matchPattern, parseInputFiles } from 'grit-wasm-bindings';
 import { getQuickJS, getQuickJSSync, shouldInterruptAfterDeadline } from 'quickjs-emscripten';
 import TreeSitter from 'web-tree-sitter';
 
-import { AnalyzerData } from '@/components/editor/wasm-provider';
+import type { AnalyzerData } from '../components/editor/wasm-provider';
+import type { MatchResult } from '../universal';
 import {
   exhaustive,
   ImplicitFile,
   isAnalysisLog,
   makeAnalysisLog,
-  MatchResult,
 } from '../universal';
 
 // We need to prep quickJS before we can use it
@@ -165,5 +165,3 @@ addEventListener('message', (event: AnalyzerEvent) => {
     self.postMessage({ id, data: results });
   })();
 });
-
-export {};

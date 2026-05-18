@@ -2,8 +2,8 @@ import cx from 'classnames';
 import { BiCode, BiCodeBlock, BiTerminal } from 'react-icons/bi';
 import { AiFillThunderbolt } from 'react-icons/ai';
 import upperCase from 'lodash/upperCase';
-import { CSSProperties } from 'react';
-import React from 'react';
+import type { CSSProperties } from 'react';
+import type React from 'react';
 
 type HeadingProps = {
   fileName?: string;
@@ -43,7 +43,7 @@ export const Heading = ({
           </span>
         </div>
       );
-    default:
+    default: {
       const ifTitle = fileName?.split('.').at(-1) !== title && upperCase(title);
       return (
         <span className={headingClassName} style={headingStyle}>
@@ -51,6 +51,7 @@ export const Heading = ({
           {ifTitle || ''} {fileName}
         </span>
       );
+    }
   }
 };
 

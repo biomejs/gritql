@@ -1,4 +1,4 @@
-import config from '@/statics/project';
+import type config from '@/statics/project';
 
 /*
  *

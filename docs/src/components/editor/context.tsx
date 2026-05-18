@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, PropsWithChildren } from 'react';
+import { createContext, useContext, useState, type PropsWithChildren } from 'react';
 
 export interface EditorState {
 	pattern: string;

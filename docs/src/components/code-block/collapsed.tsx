@@ -1,6 +1,8 @@
-import { PropsWithChildren } from 'react';
+import type { PropsWithChildren } from 'react';
 
-import Link from 'next/link';
+const Link = ({ href, className, children }: { href: string; className?: string; children: React.ReactNode }) => (
+  <a href={href} className={className}>{children}</a>
+);
 
 import { TerminalCommandBlock } from './cli';
 import { CollapsedEditorPlaceholder } from './collapsed-client';

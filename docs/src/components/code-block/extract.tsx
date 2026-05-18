@@ -1,4 +1,4 @@
-import { FenceProps } from './monaco';
+import type { FenceProps } from './monaco';
 
 export function extractCodeString(children: FenceProps | FenceProps[] | string): string {
   if (typeof children === 'string') {

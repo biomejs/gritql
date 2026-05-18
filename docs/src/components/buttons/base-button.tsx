@@ -1,8 +1,8 @@
-import { MouseEventHandler } from 'react';
+import type { MouseEventHandler } from 'react';
 
 import cx from 'classnames';
 
-import { WithChildren } from '@/custom-types/shared';
+import type { WithChildren } from '@/custom-types/shared';
 
 export const iconClassName = 'text-neutral-400 w-3 h-3';
 const bgClass = 'bg-zinc-800';

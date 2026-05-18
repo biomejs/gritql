@@ -4,7 +4,7 @@
 
 import { FaPencilRuler, FaPlay } from 'react-icons/fa';
 
-import { WithChildren } from '@/custom-types/shared';
+import type { WithChildren } from '@/custom-types/shared';
 import { MonacoEditor } from '@/components/editor/monaco-editor';
 
 import { CopyButton, TryButton } from './buttons';

@@ -1,0 +1,41 @@
+---
+title: GritQL Reference
+_note_: This reference guide is for AI prompting. Keep it concise.
+---
+
+Grit is a query language for searching and modifying codebases.
+
+| Syntax | Explanation |
+| --- | --- |
+| `` `console.log($_)` `` | The **root** of a Grit query is a pattern. |
+| `` `console.log` `` | A **pattern** can be a code snippet surrounded in backticks. |
+| `` `console.log($message)` `` | Code snippets can contain **metavariables** prefixed with `$`. |
+| `$_` | The **anonymous metavariable** can be bound to without a name. |
+| `$...` | `$...` is a **spread metavariable** that matches 0 or more nodes. |
+| `call_expression()` | **[AST nodes](/language/patterns#syntax-tree-nodes)** can also be used as patterns. |
+| `call_expression(callee=$callee)` | AST nodes can specify **fields**, where each field value is bound to a pattern or metavariable. |
+| `` `console.log($message)` => `console.warn($message)` `` | A **[rewrite](/language/patterns#rewrite-operator)** is a pattern followed by a `=>` followed by a pattern. Rewrites are usable as patterns. |
+| `$x => .` | The `.` is an **empty/null pattern**, it replaces the matched node with nothing. |
+| `r"console\.(log\|warn)"($method)` | **Regular expressions** can be used as patterns, prefixed with `r"` and followed by capture variables. |
+| `$list = [1, 2, 3]` / `$one = $list[0]` / `$three = $list[-1]` | **Lists** can be accessed via index, where negative indices count from the end of the list. |
+| `$map = { a: 1, b: 2, c: 3 }` / `$c = $map.c` | **Maps** can be accessed via dot notation. Map keys must be strings. |
+| `` or {`console.log`, `console.warn`} `` | **Compound patterns** can be combined with `and`, `or`, and `any` clauses. |
+| `` not `console.log` `` | **`not` clauses** can be used to negate a pattern. |
+| `` maybe `console.log` `` | **`maybe` clauses** can be used to optionally match against a pattern, without failing the query. |
+| `` contains `console` `` | **`contains` clauses** can be used to match any node that contains a specific pattern by traversing downwards through the syntax tree. |
+| `` within `function() { $_ }` `` | **`within` clauses** search up the syntax tree for a matching node. |
+| `` after `console.warn($_)` `` | **`after` clauses** search for a pattern that occurs after another pattern. |
+| `` `console.log($message)` as $log `` | **`as` clauses** can assign a pattern to a metavariable. |
+| `` $statements <: some `console.log($_)` `` | **`some`** matches lists where at least one element matches a pattern. |
+| `` `console.log($message)` where { ... } `` | A **`where` clause** can be added after a pattern to introduce conditions that restrict when the pattern matches. |
+| `` `console.log($message)` where { $message <: "Hello world" } `` | Inside the `where` clause, the **`<:` operator** is used to match metavariables against a pattern. |
+| `` `console.log($_)` where { $new = "Hello world" } => `console.log($new)` `` | The where block can also **assign values** to metavariables using `=`. Variables can be lists, code snippets, or strings. |
+| `` `console.log($message)` where { $new = "Hello", $new += "world" } => $new `` | Strings and lists can be appended to using `+=`. |
+| `` `function() { $body }` where { $body <: contains bubble { `console.log($body)` => `console.warn($body)` } } `` | The default scope of a GritQL pattern is global. The **`bubble` clause** can be used to create a new scope within which all metavariables are isolated from surrounding code. |
+| `` `function $name() { $body }` where { $body <: contains bubble($name) { `console.log($message)` => `console.warn($message, $name)` } } `` | The `bubble` clause optionally accepts **arguments**, which can be used to "pierce" the bubble by allowing metavariables to preserve the values they had outside the bubble scope. |
+| `` `console.log` limit 10 `` | The [**`limit` clause**](/language/modifiers#limit-clause) can be used to limit the number of files returned by a query. |
+| `// this is a comment` | **Comments** in GritQL start with `//` and are ignored by the parser. |
+| `` sequential { `console.log` => `console.error`, `console.warn` => `console.info` } `` | `sequential` clauses can be used to contain multiple patterns that are applied to the same file in order. |
+| `` function custom_example($name) { return `name: $name` } `` | **[Custom functions](/language/functions)** can be used to define reusable right-side values. |
+| `function mod($value) js { return $value % 2 }` | Custom functions be written in **JavaScript** by adding the `js` keyword parameters. |
+| `range(start_line=1, end_line=3)` | The **`range` pattern** is used to target code by its location within the file. It takes parameters `start_line`, `end_line`, `start_column`, and `end_column` to specify the range. |

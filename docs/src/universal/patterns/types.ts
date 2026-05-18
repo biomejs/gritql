@@ -1,10 +1,10 @@
+import type { MatchResult } from "../matching/types";
 import {
 	isAnalysisLog,
 	isCreateFile,
 	isMatch,
 	isRemoveFile,
 	isRewrite,
-	MatchResult,
 } from "../matching/types";
 
 export type FilePath = string;

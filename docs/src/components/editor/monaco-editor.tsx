@@ -2,8 +2,8 @@
 
 import { useRef, useMemo, useState, useEffect } from 'react';
 import merge from 'lodash/merge';
-import Editor, { OnMount, EditorProps, useMonaco } from '@monaco-editor/react';
-import { editor } from 'monaco-editor';
+import Editor, { type OnMount, type EditorProps, useMonaco } from '@monaco-editor/react';
+import type { editor } from 'monaco-editor';
 import { gritDarkTheme } from './theme/grit-dark';
 import { editorOptions, readOnlyOptions } from './config';
 

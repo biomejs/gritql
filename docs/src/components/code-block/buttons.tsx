@@ -3,7 +3,7 @@ import { BiX } from 'react-icons/bi';
 
 import {
   BaseButton,
-  BaseButtonProps,
+  type BaseButtonProps,
   buttonClassName,
   iconClassName,
 } from '@/components/buttons/base-button';

@@ -1,0 +1,41 @@
+---
+import StarlightPage from "@astrojs/starlight/components/StarlightPage.astro";
+import PlaygroundApp from "../components/playground-app";
+---
+
+<StarlightPage
+  frontmatter={{
+    title: "Playground",
+    description: "GritQL interactive playground",
+    template: "splash",
+    editUrl: false,
+  }}
+>
+  <div id="playground-root" class="not-content">
+    <PlaygroundApp client:only="react" />
+  </div>
+</StarlightPage>
+
+<style>
+  #playground-root {
+    height: 85vh;
+    width: 100%;
+  }
+  :global(div.content-panel) {
+    padding: 0;
+  }
+  :global(.content-panel:nth-of-type(1)) {
+    display: none;
+  }
+  :global(div.sl-container) {
+    margin: 0;
+    max-width: none;
+  }
+  :global(div.sl-container footer) {
+    display: none;
+  }
+  :global(.main-pane main) {
+    padding-bottom: 0;
+    height: 100%;
+  }
+</style>

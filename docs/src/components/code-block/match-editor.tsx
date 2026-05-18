@@ -1,4 +1,4 @@
-import { WithChildren } from '@/custom-types/shared';
+import type { WithChildren } from '@/custom-types/shared';
 
 import { SnippetEditor } from './editor';
 

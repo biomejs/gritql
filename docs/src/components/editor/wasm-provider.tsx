@@ -1,11 +1,7 @@
-import { PropsWithChildren, useCallback, useState } from 'react';
+import { type PropsWithChildren, useCallback, useState } from 'react';
 
-import {
-  FileResultMessage,
-  MatchResult, RichFile, extractPath,
-  isAllDone,
-  isPatternInfo
-} from '../../universal';
+import type { FileResultMessage, MatchResult, RichFile } from '../../universal';
+import { extractPath, isAllDone, isPatternInfo } from '../../universal';
 import { AnalyzerContext } from './analyzer-context';
 
 export interface AnalyzerData {
@@ -78,7 +74,6 @@ export const WasmProvider: React.FC<PropsWithChildren<AnalyzerInput>> = ({ child
             pattern,
             result,
           });
-          continue;
         } else {
           ourResults.push({
             result,

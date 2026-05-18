@@ -1,12 +1,6 @@
 import { useAnalyzerContext } from "@/components/editor/analyzer-context";
-import {
-	AnalysisLog,
-	FileResultMessage,
-	isAnalysisLog,
-	isMatch,
-	isResult,
-	isRewrite,
-} from "@/universal/matching/types";
+import type { AnalysisLog, FileResultMessage } from "@/universal/matching/types";
+import { isAnalysisLog, isMatch, isResult, isRewrite } from "@/universal/matching/types";
 import { extractPath } from "@/universal/patterns/types";
 import { useCallback, useMemo, useEffect } from "react";
 

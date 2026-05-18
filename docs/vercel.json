@@ -1,5 +1,5 @@
 {
-  "framework": "nextjs",
+  "framework": "astro",
   "github": {
     "silent": true
   },
