@@ -47,7 +47,7 @@
     "react-icons": "^4.4.0",
     "tailwindcss": "^3.1.8",
     "tailwindcss-animate": "^1.0.7",
-    "turbo": "^1.6.3",
+    "turbo": "^2.0.0",
     "web-tree-sitter-wasm-bindgen": "0.20.8"
   },
   "devDependencies": {
