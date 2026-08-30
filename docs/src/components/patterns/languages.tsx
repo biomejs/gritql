@@ -1,6 +1,5 @@
 import { FaDatabase, FaJava } from 'react-icons/fa';
 import { HiOutlineCode } from 'react-icons/hi';
-import type { IconType } from 'react-icons/lib';
 import {
   SiCsharp,
   SiCss3,
@@ -17,9 +16,10 @@ import {
   SiToml,
   SiYaml,
 } from 'react-icons/si';
-import { DocPattern } from 'src/app/(doclike)/(default)/patterns/page';
 
 import { Language } from '@/universal/patterns/types';
+
+import { DocPattern } from '../../app/(doclike)/(default)/patterns/page';
 
 export const languageConfigs = {
   [Language.Js]: {

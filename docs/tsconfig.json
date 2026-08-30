@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2022",
     "lib": [
       "dom",
       "dom.iterable",
@@ -19,7 +19,7 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "incremental": true,
-    "baseUrl": ".",
+    "rootDir": ".",
     "paths": {
       "@/markdoc/*": [
         "./src/markdoc/*"
