@@ -1,11 +1,11 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 /* Import code highlight */
 /* NOTE[chai]: use @import "prism-atom-dark.css"; when enabling prism */
 
-@import "editor.css";
+@import "./editor.css";
+
+@config "../../tailwind.config.js";
 
 body {
   text-rendering: optimizeLegibility;
@@ -13,7 +13,7 @@ body {
 }
 
 #nprogress .bar {
-  @apply !bg-primary-200;
+  @apply bg-primary-200!;
 }
 
 .hidden-scrollbar::-webkit-scrollbar {
