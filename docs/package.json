@@ -48,21 +48,22 @@
     "tailwindcss": "^3.1.8",
     "tailwindcss-animate": "^1.0.7",
     "turbo": "^1.6.3",
+    "web-tree-sitter": "0.20.8",
     "web-tree-sitter-wasm-bindgen": "0.20.8"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.194",
     "@types/node": "18.7.13",
     "@types/react-dom": "19.2.5",
-    "@typescript-eslint/eslint-plugin": "^6.4.1",
     "broken-link-checker": "0.7.8",
-    "eslint": "8.57.0",
+    "eslint": "10.9.1",
     "eslint-config-next": "16.3.3",
-    "eslint-plugin-markdownlint": "^0.4.0",
-    "eslint-plugin-simple-import-sort": "^8.0.0",
+    "eslint-plugin-markdownlint": "0.10.1",
+    "eslint-plugin-simple-import-sort": "14.0.0",
     "markdownlint": "^0.26.2",
     "postcss": "^8.4.16",
-    "typescript": "^5.0.3"
+    "typescript": "^5.0.3",
+    "typescript-eslint": "8.68.0"
   },
   "devEngines": {
     "runtime": {
