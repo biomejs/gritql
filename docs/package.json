@@ -7,9 +7,9 @@
     "dev": "next dev -p 3200",
     "clean": "rm -rf ./node_modules && rm -rf .next",
     "build": "next build",
-    "test": "yarn test:visual",
-    "test:ci": "yarn test:visual --retries=3",
-    "test:links": "yarn run blc http://127.0.0.1:3200/ -ro --exclude http://127.0.0.1:3200/discord --exclude http://localhost:3000/* --exclude https://marketplace.visualstudio.com/* --exclude https://www.grit.io/register --exclude https://www.grit.io/careers --exclude *.png",
+    "test": "pnpm run test:visual",
+    "test:ci": "pnpm run test:visual --retries=3",
+    "test:links": "blc http://127.0.0.1:3200/ -ro --exclude http://127.0.0.1:3200/discord --exclude http://localhost:3000/* --exclude https://marketplace.visualstudio.com/* --exclude https://www.grit.io/register --exclude https://www.grit.io/careers --exclude *.png",
     "test:visual": "playwright test --config=src/__checks__/playwright.config.ts",
     "start": "next start -p 3200",
     "lint": "eslint .",
@@ -63,5 +63,17 @@
     "markdownlint": "^0.26.2",
     "postcss": "^8.4.16",
     "typescript": "^5.0.3"
+  },
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": "24.18.1",
+      "onFail": "download"
+    },
+    "packageManager": {
+      "name": "pnpm",
+      "version": "12.0.0",
+      "onFail": "download"
+    }
   }
 }
