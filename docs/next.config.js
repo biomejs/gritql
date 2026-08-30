@@ -14,9 +14,6 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   webpack: (config, {}) => {
     if (!config.resolve) config.resolve = {};
     if (!config.resolve.fallback) config.resolve.fallback = {};
