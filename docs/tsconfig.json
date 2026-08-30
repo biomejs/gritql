@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "target": "es2022",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -9,37 +13,60 @@
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "noUncheckedIndexedAccess": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "incremental": true,
-    "baseUrl": ".",
+    "rootDir": ".",
     "paths": {
-      "@/markdoc/*": ["./src/markdoc/*"],
-      "@/components/*": ["./src/components/*"],
-      "@/hooks/*": ["./src/hooks/*"],
-      "@/templates/*": ["./src/templates/*"],
-      "@/custom-types/*": ["./src/custom-types/*"],
-      "@/statics/*": ["./src/statics/*"],
-      "@/styles/*": ["./src/styles/*"],
-      "@/libs/*": ["./src/libs/*"],
-      "@/universal/*": ["./src/universal/*"]
+      "@/markdoc/*": [
+        "./src/markdoc/*"
+      ],
+      "@/components/*": [
+        "./src/components/*"
+      ],
+      "@/hooks/*": [
+        "./src/hooks/*"
+      ],
+      "@/templates/*": [
+        "./src/templates/*"
+      ],
+      "@/custom-types/*": [
+        "./src/custom-types/*"
+      ],
+      "@/statics/*": [
+        "./src/statics/*"
+      ],
+      "@/styles/*": [
+        "./src/styles/*"
+      ],
+      "@/libs/*": [
+        "./src/libs/*"
+      ],
+      "@/universal/*": [
+        "./src/universal/*"
+      ]
     },
     "plugins": [
       {
         "name": "next"
       }
     ],
-    "types": ["node"]
+    "types": [
+      "node"
+    ]
   },
   "include": [
     "next-env.d.ts",
     "src/**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "**/*.tsx"
+    "**/*.tsx",
+    ".next/dev/types/**/*.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }

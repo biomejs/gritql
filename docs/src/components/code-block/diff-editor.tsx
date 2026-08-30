@@ -27,11 +27,11 @@ export const DiffEditor = ({ children }: DiffEditorProps) => {
         <div className='flex m-0 justify-between px-3 py-2 bg-black'>
           <SnippetHeading title='Before' />
         </div>
-        <pre className='my-0'>{cleanHlTags(input.props.children).trim()}</pre>
+        <pre className='my-0!'>{cleanHlTags(input.props.children).trim()}</pre>
         <div className='flex m-0 justify-between px-3 py-2 bg-black'>
           <SnippetHeading title='After' />
         </div>
-        <pre className='my-0'>{cleanHlTags(output.props.children).trim()}</pre>
+        <pre className='my-0!'>{cleanHlTags(output.props.children).trim()}</pre>
       </div>
     </div>
   );

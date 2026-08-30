@@ -82,10 +82,9 @@ export function CodeBlock(props: MarkdocCodeFenceProps) {
         <SnippetHeading fileName={fileName} title={title} />
         <div className='flex gap-2 w-72 justify-end'>
           <CopyButton data={code} />
-
         </div>
       </div>
-      <pre className='my-0'>{code.trim()}</pre>
+      <pre className='my-0!'>{code.trim()}</pre>
     </div>
   );
 }

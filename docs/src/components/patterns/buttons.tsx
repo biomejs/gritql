@@ -1,12 +1,12 @@
-import { FiExternalLink, FiGithub } from 'react-icons/fi';
-import { DocPattern } from 'src/app/(doclike)/(default)/patterns/page';
+import { FiGithub } from 'react-icons/fi';
 
 import {
   BaseButton,
   BaseButtonProps,
   computeButtonIconSize,
 } from '@/components/buttons/base-button';
-import config from '@/statics/config';
+
+import { DocPattern } from '../../app/(doclike)/(default)/patterns/page';
 
 interface CommonButtonProps {
   size: BaseButtonProps['size'];

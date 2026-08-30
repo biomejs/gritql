@@ -2,7 +2,6 @@
 
 import { BiTerminal } from 'react-icons/bi';
 
-
 import { CopyButton } from './buttons';
 
 export function TerminalCommandBlock({
@@ -19,7 +18,7 @@ export function TerminalCommandBlock({
           <CopyButton data={command} />
         </div>
       </div>
-      <pre className='my-0'>{command}</pre>
+      <pre className='my-0!'>{command}</pre>
     </div>
   );
 }

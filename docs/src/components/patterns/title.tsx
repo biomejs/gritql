@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { DocPattern } from 'src/app/(doclike)/(default)/patterns/page';
-
+import { DocPattern } from '../../app/(doclike)/(default)/patterns/page';
 import { PatternGitHubButton } from './buttons';
 import { PatternLanguageButton } from './languages';
 

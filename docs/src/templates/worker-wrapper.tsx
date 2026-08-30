@@ -1,10 +1,11 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { WorkerAnalysisProvider } from 'src/workers/provider';
 
-import { doesPathHaveEditor } from '@/libs/dynamic';
 import { StandaloneEditorProvider } from '@/components/editor/context';
+import { doesPathHaveEditor } from '@/libs/dynamic';
+
+import { WorkerAnalysisProvider } from '../workers/provider';
 
 export const WorkerWrapper = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname() ?? '';

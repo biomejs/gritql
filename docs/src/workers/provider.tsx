@@ -1,12 +1,13 @@
 import { PropsWithChildren, useEffect, useRef } from 'react';
 
 import { WasmProvider } from '@/components/editor/wasm-provider';
+
 import { MatchResult } from '../universal';
 
 export const WorkerAnalysisProvider: React.FC<
   PropsWithChildren<{}>
 > = ({ children }) => {
-  const workerRef = useRef<Worker>();
+  const workerRef = useRef<Worker>(null);
   const messageIds = useRef(new Map());
 
   useEffect(() => {
