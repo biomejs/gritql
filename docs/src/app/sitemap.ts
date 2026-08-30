@@ -4,6 +4,8 @@ import { getPatternsList } from '@/libs/patterns';
 
 import project from '../statics/project';
 
+export const dynamic = 'force-static';
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://docs.grit.io';
   const currentDate = new Date();
