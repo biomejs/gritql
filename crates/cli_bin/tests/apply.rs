@@ -3249,17 +3249,23 @@ def cool(name):
 
 #[test]
 fn apply_remote_pattern() -> Result<()> {
-    let (_temp_dir, dir) = get_fixture("valibot", false)?;
+    let (temp_dir, dir) = get_fixture("valibot", false)?;
 
     let mut cmd = get_test_cmd()?;
 
     cmd.arg("apply")
-        .arg("github.com/fabian-hiller/valibot#migrate_to_v0_31_0")
+        .arg("github.com/open-circle/valibot#migrate_to_v0_31_0")
+        .env(GRIT_GLOBAL_DIR_ENV, temp_dir.path().join(".grit"))
         .current_dir(dir.clone());
 
     let output = cmd.output()?;
 
-    assert!(output.status.success(), "Command should have succeeded");
+    assert!(
+        output.status.success(),
+        "Command should have succeeded:\nstdout:\n{}\nstderr:\n{}",
+        String::from_utf8_lossy(&output.stdout),
+        String::from_utf8_lossy(&output.stderr),
+    );
 
     let test_file = dir.join("test.js");
     let content: String = fs_err::read_to_string(test_file)?;
