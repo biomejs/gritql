@@ -57,6 +57,35 @@ Interpolation metavariable
       (grit_metavariable))))
 
 ==================
+Universal function metavariables
+==================
+
+µname: µbody
+
+---
+
+(source_code
+  (function_expression
+    (grit_metavariable)
+    (grit_metavariable)))
+
+==================
+Formal function metavariables
+==================
+
+{ µformal ? µdefault }: µbody
+
+---
+
+(source_code
+  (function_expression
+    (formals
+      (formal
+        (grit_metavariable)
+        (grit_metavariable)))
+    (grit_metavariable)))
+
+==================
 Strings and comments remain opaque
 ==================
 

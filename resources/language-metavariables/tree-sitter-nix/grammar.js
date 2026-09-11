@@ -40,7 +40,7 @@ module.exports = grammar({
 
   word: ($) => $.keyword,
 
-  conflicts: ($) => [],
+  conflicts: ($) => [[$.formal, $.binding_set]],
 
   rules: {
     source_code: ($) => optional(field("expression", $._expression)),
@@ -95,7 +95,7 @@ module.exports = grammar({
     function_expression: ($) =>
       choice(
         seq(
-          field("universal", $.identifier),
+          field("universal", choice($.identifier, $.grit_metavariable)),
           ":",
           field("body", $._expr_function_expression),
         ),
@@ -107,12 +107,12 @@ module.exports = grammar({
         seq(
           field("formals", $.formals),
           "@",
-          field("universal", $.identifier),
+          field("universal", choice($.identifier, $.grit_metavariable)),
           ":",
           field("body", $._expr_function_expression),
         ),
         seq(
-          field("universal", $.identifier),
+          field("universal", choice($.identifier, $.grit_metavariable)),
           "@",
           field("formals", $.formals),
           ":",
@@ -135,7 +135,7 @@ module.exports = grammar({
       ),
     formal: ($) =>
       seq(
-        field("name", $.identifier),
+        field("name", choice($.identifier, $.grit_metavariable)),
         optional(seq("?", field("default", $._expression))),
       ),
     ellipses: ($) => "...",
@@ -157,7 +157,7 @@ module.exports = grammar({
     let_expression: ($) =>
       seq(
         "let",
-        optional($.binding_set),
+        optional(field("bindings", $.binding_set)),
         "in",
         field("body", $._expr_function_expression),
       ),
@@ -303,11 +303,12 @@ module.exports = grammar({
     parenthesized_expression: ($) =>
       seq("(", field("expression", $._expression), ")"),
 
-    attrset_expression: ($) => seq("{", optional($.binding_set), "}"),
+    attrset_expression: ($) =>
+      seq("{", optional(field("bindings", $.binding_set)), "}"),
     let_attrset_expression: ($) =>
-      seq("let", "{", optional($.binding_set), "}"),
+      seq("let", "{", optional(field("bindings", $.binding_set)), "}"),
     rec_attrset_expression: ($) =>
-      seq("rec", "{", optional($.binding_set), "}"),
+      seq("rec", "{", optional(field("bindings", $.binding_set)), "}"),
 
     string_expression: ($) =>
       seq(

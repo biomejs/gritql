@@ -408,16 +408,17 @@
   {
     "type": "attrset_expression",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": false,
-      "types": [
-        {
-          "type": "binding_set",
-          "named": true
-        }
-      ]
+    "fields": {
+      "bindings": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "binding_set",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -737,6 +738,10 @@
         "required": true,
         "types": [
           {
+            "type": "grit_metavariable",
+            "named": true
+          },
+          {
             "type": "identifier",
             "named": true
           }
@@ -894,6 +899,10 @@
         "multiple": false,
         "required": false,
         "types": [
+          {
+            "type": "grit_metavariable",
+            "named": true
+          },
           {
             "type": "identifier",
             "named": true
@@ -1185,22 +1194,33 @@
   {
     "type": "let_attrset_expression",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": false,
-      "types": [
-        {
-          "type": "binding_set",
-          "named": true
-        }
-      ]
+    "fields": {
+      "bindings": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "binding_set",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
     "type": "let_expression",
     "named": true,
     "fields": {
+      "bindings": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "binding_set",
+            "named": true
+          }
+        ]
+      },
       "body": {
         "multiple": false,
         "required": true,
@@ -1307,16 +1327,6 @@
           }
         ]
       }
-    },
-    "children": {
-      "multiple": false,
-      "required": false,
-      "types": [
-        {
-          "type": "binding_set",
-          "named": true
-        }
-      ]
     }
   },
   {
@@ -1433,16 +1443,17 @@
   {
     "type": "rec_attrset_expression",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": false,
-      "types": [
-        {
-          "type": "binding_set",
-          "named": true
-        }
-      ]
+    "fields": {
+      "bindings": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "binding_set",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {

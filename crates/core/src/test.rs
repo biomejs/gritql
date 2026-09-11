@@ -3646,10 +3646,30 @@ fn nix_matches_nested_attribute_paths() {
         .unwrap(),
         source: r#"
             |{
-            |  services.nginx = {
-            |    enable = true;
-            |  };
             |  services.postgresql.enable = true;
+            |}
+            |"#
+        .trim_margin()
+        .unwrap(),
+    })
+    .unwrap();
+}
+
+#[test]
+fn nix_matches_nested_attrsets() {
+    run_test_match(TestArg {
+        pattern: r#"
+            |language nix
+            |
+            |`nested = { answer = $value; };`
+            |"#
+        .trim_margin()
+        .unwrap(),
+        source: r#"
+            |{
+            |  nested = {
+            |    answer = 42;
+            |  };
             |}
             |"#
         .trim_margin()
@@ -3703,6 +3723,7 @@ fn nix_does_not_match_source_inside_comments_or_strings() {
         source: r#"
             |{
             |  # services.nginx.enable = true;
+            |  /* services.nginx.enable = true; */
             |  normal = "services.nginx.enable = true;";
             |  indented = ''
             |    services.nginx.enable = true;
@@ -3753,6 +3774,79 @@ fn nix_matches_string_interpolation() {
             |"#
         .trim_margin()
         .unwrap(),
+    })
+    .unwrap();
+}
+
+#[test]
+fn nix_matches_indented_string_interpolation() {
+    run_test_match(TestArg {
+        pattern: r#"
+            |language nix
+            |
+            |`${$value}`
+            |"#
+        .trim_margin()
+        .unwrap(),
+        source: r#"
+            |{
+            |  script = ''
+            |    package: ${pkgs.hello}
+            |  '';
+            |}
+            |"#
+        .trim_margin()
+        .unwrap(),
+    })
+    .unwrap();
+}
+
+#[test]
+fn nix_matches_function_parameters() {
+    run_test_match(TestArg {
+        pattern: r#"
+            |language nix
+            |
+            |`$name: $body`
+            |"#
+        .trim_margin()
+        .unwrap(),
+        source: "value: value + 1".to_owned(),
+    })
+    .unwrap();
+
+    run_test_match(TestArg {
+        pattern: r#"
+            |language nix
+            |
+            |`{ $name ? $default }: $body`
+            |"#
+        .trim_margin()
+        .unwrap(),
+        source: "{ value ? 1 }: value + 1".to_owned(),
+    })
+    .unwrap();
+}
+
+#[test]
+fn nix_matches_let_bindings_structurally() {
+    let pattern = r#"
+        |language nix
+        |
+        |`let package = $value; in $body`
+        |"#
+    .trim_margin()
+    .unwrap();
+
+    run_test_match(TestArg {
+        pattern: pattern.clone(),
+        source: "let package = pkgs.hello; in package".to_owned(),
+    })
+    .unwrap();
+
+    run_test_no_match(TestArg {
+        pattern,
+        source: "let application = pkgs.hello; in application".to_owned(),
     })
     .unwrap();
 }

@@ -1816,6 +1816,33 @@ fn applies_nix_rewrite_by_filename() -> Result<()> {
 }
 
 #[test]
+fn warns_on_malformed_nix() -> Result<()> {
+    let (_temp_dir, dir) = get_fixture("check_nix", true)?;
+    fs_err::write(dir.join("malformed.nix"), "{ broken =")?;
+
+    let mut apply_cmd = get_test_cmd()?;
+    apply_cmd
+        .current_dir(dir)
+        .arg("apply")
+        .arg("disable_nix_service")
+        .arg("malformed.nix")
+        .arg("--force");
+
+    let output = apply_cmd.output()?;
+    assert!(
+        output.status.success(),
+        "Command didn't finish successfully: {}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+
+    let stdout = String::from_utf8(output.stdout)?;
+    assert!(stdout.contains("Error parsing source code"));
+    assert!(stdout.contains("malformed.nix"));
+
+    Ok(())
+}
+
+#[test]
 fn handles_invalid_ffi() -> Result<()> {
     let (_temp_dir, dir) = get_fixture("foreign_js", true)?;
 

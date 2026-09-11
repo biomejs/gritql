@@ -126,6 +126,11 @@ mod tests {
     }
 
     #[test]
+    fn attrset_snippet() {
+        parses_snippet("{ answer = $value; }");
+    }
+
+    #[test]
     fn attribute_path_snippet() {
         parses_snippet("services.$name.enable");
     }

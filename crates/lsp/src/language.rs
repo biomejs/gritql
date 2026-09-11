@@ -65,3 +65,17 @@ pub fn extension_to_language_id(extension: &str) -> Option<String> {
     let language = TargetLanguage::from_extension(extension)?;
     Some(target_language_to_language_id(language).to_string())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn maps_nix_language_and_extension() {
+        assert_eq!(
+            language_id_to_pattern_language("nix"),
+            Some(PatternLanguage::Nix)
+        );
+        assert_eq!(extension_to_language_id("nix"), Some("nix".to_owned()));
+    }
+}
