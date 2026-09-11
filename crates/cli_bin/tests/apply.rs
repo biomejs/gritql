@@ -1778,6 +1778,44 @@ fn nested_dir() -> Result<()> {
 }
 
 #[test]
+fn applies_nix_rewrite_by_filename() -> Result<()> {
+    let (_temp_dir, dir) = get_fixture("check_nix", true)?;
+
+    let mut apply_cmd = get_test_cmd()?;
+    apply_cmd
+        .current_dir(dir.clone())
+        .arg("apply")
+        .arg("disable_nix_service")
+        .arg("test.nix");
+
+    let output = apply_cmd.output()?;
+    assert!(
+        output.status.success(),
+        "Command didn't finish successfully: {}",
+        String::from_utf8(output.stderr)?
+    );
+
+    let content = fs_err::read_to_string(dir.join("test.nix"))?;
+    assert_eq!(
+        content,
+        r#"{
+  # This comment and spacing must survive.
+  services.nginx.enable = false;
+
+  packages.${system} = pkgs.hello;
+  message = "package: ${pkgs.hello}";
+  nested = { answer = 42; };
+  script = ''
+    services.fake.enable = true;
+  '';
+}
+"#
+    );
+
+    Ok(())
+}
+
+#[test]
 fn handles_invalid_ffi() -> Result<()> {
     let (_temp_dir, dir) = get_fixture("foreign_js", true)?;
 

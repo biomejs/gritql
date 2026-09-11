@@ -3635,6 +3635,129 @@ fn hcl_implicit_regex() {
 }
 
 #[test]
+fn nix_matches_nested_attribute_paths() {
+    run_test_match(TestArg {
+        pattern: r#"
+            |language nix
+            |
+            |`services.$name.enable = true;`
+            |"#
+        .trim_margin()
+        .unwrap(),
+        source: r#"
+            |{
+            |  services.nginx = {
+            |    enable = true;
+            |  };
+            |  services.postgresql.enable = true;
+            |}
+            |"#
+        .trim_margin()
+        .unwrap(),
+    })
+    .unwrap();
+}
+
+#[test]
+fn nix_rewrite_preserves_comments_and_formatting() {
+    run_test_expected(TestArgExpected {
+        pattern: r#"
+            |language nix
+            |
+            |`services.$name.enable = true;` => `services.$name.enable = false;`
+            |"#
+        .trim_margin()
+        .unwrap(),
+        source: r#"
+            |{
+            |  # Keep this comment and spacing.
+            |  services.nginx.enable    = true;
+            |  unrelated = { value = "unchanged"; };
+            |}
+            |"#
+        .trim_margin()
+        .unwrap(),
+        expected: r#"
+            |{
+            |  # Keep this comment and spacing.
+            |  services.nginx.enable = false;
+            |  unrelated = { value = "unchanged"; };
+            |}
+            |"#
+        .trim_margin()
+        .unwrap(),
+    })
+    .unwrap();
+}
+
+#[test]
+fn nix_does_not_match_source_inside_comments_or_strings() {
+    run_test_no_match(TestArg {
+        pattern: r#"
+            |language nix
+            |
+            |`services.nginx.enable = true;`
+            |"#
+        .trim_margin()
+        .unwrap(),
+        source: r#"
+            |{
+            |  # services.nginx.enable = true;
+            |  normal = "services.nginx.enable = true;";
+            |  indented = ''
+            |    services.nginx.enable = true;
+            |  '';
+            |}
+            |"#
+        .trim_margin()
+        .unwrap(),
+    })
+    .unwrap();
+}
+
+#[test]
+fn nix_matches_dynamic_attributes() {
+    run_test_match(TestArg {
+        pattern: r#"
+            |language nix
+            |
+            |`${$name} = $value;`
+            |"#
+        .trim_margin()
+        .unwrap(),
+        source: r#"
+            |{
+            |  ${system} = pkgs.hello;
+            |}
+            |"#
+        .trim_margin()
+        .unwrap(),
+    })
+    .unwrap();
+}
+
+#[test]
+fn nix_matches_string_interpolation() {
+    run_test_match(TestArg {
+        pattern: r#"
+            |language nix
+            |
+            |`${$value}`
+            |"#
+        .trim_margin()
+        .unwrap(),
+        source: r#"
+            |{
+            |  message = "${pkgs.hello}";
+            |}
+            |"#
+        .trim_margin()
+        .unwrap(),
+    })
+    .unwrap();
+}
+
+#[test]
 fn includes_or() {
     run_test_expected({
         TestArgExpected {

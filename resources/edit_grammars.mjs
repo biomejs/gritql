@@ -52,6 +52,7 @@ const allLanguages = [
   "json",
   "kotlin",
   "markdown",
+  "nix",
   "php",
   "python",
   "ruby",
@@ -100,6 +101,27 @@ const copyMvGrammar = async (lang, dest) => {
   );
   await fs.copyFile(from, to);
   console.log(`Copied ${from} to ${to}`);
+};
+
+const copyMvCorpus = async (lang) => {
+  const from = path.join(
+    METAVARIABLE_GRAMMARS_DIR,
+    `${lang}-metavariable-corpus.txt`
+  );
+  const corpusDir = path.join(
+    LANGUAGE_METAVARIABLES_DIR,
+    `tree-sitter-${lang}/corpus`
+  );
+
+  try {
+    await fs.access(from);
+  } catch (error) {
+    if (error.code === "ENOENT") return;
+    throw error;
+  }
+
+  await fs.mkdir(corpusDir, { recursive: true });
+  await fs.copyFile(from, path.join(corpusDir, "grit_metavariables.txt"));
 };
 
 /**
@@ -207,6 +229,7 @@ async function rsyncGrammars(language) {
 async function buildSimpleLanguage(log, language) {
   log(`Copying files`);
   await copyMvGrammar(language);
+  await copyMvCorpus(language);
   log(`Running tree-sitter generate`);
   await treeSitterGenerate(language);
   log(`Copying output node types`);
