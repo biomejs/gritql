@@ -2,6 +2,8 @@
 edition = "2021"
 name = "gritql_napi"
 version = "0.0.0"
+# Native bindings are published to npm by the NAPI workflow.
+publish = false
 
 [lib]
 crate-type = ["cdylib"]
