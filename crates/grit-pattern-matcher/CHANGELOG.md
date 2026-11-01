@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.2](https://github.com/biomejs/gritql/compare/grit-pattern-matcher-v0.5.1...grit-pattern-matcher-v0.5.2) - 2026-11-01
+
+### Other
+
+- *(grit-pattern-matcher)* cache compiled static regexes in RegexPattern ([#715](https://github.com/biomejs/gritql/pull/715))
+- increase Rust version to 1.82.0 ([#605](https://github.com/biomejs/gritql/pull/605))
+
 ## [0.5.1](https://github.com/getgrit/gritql/compare/grit-pattern-matcher-v0.5.0...grit-pattern-matcher-v0.5.1) - 2025-01-07
 
 ### Other
