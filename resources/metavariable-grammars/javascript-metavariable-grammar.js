@@ -134,6 +134,7 @@ module.exports = grammar({
           seq(field('export', $.namespace_export), $._from_clause),
           seq(field('export', $.export_clause), $._from_clause),
           field('export', $.export_clause),
+          seq(field('export', $.grit_metavariable), $._from_clause),
         ),
         $._semicolon,
       ),
