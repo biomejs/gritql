@@ -108,6 +108,23 @@
                         "type": "SYMBOL",
                         "name": "export_clause"
                       }
+                    },
+                    {
+                      "type": "SEQ",
+                      "members": [
+                        {
+                          "type": "FIELD",
+                          "name": "export",
+                          "content": {
+                            "type": "SYMBOL",
+                            "name": "grit_metavariable"
+                          }
+                        },
+                        {
+                          "type": "SYMBOL",
+                          "name": "_from_clause"
+                        }
+                      ]
                     }
                   ]
                 },

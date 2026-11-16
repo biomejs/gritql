@@ -16967,3 +16967,34 @@ fn rewrite_pattern_remove_dangling_comma_with_utf8_content() {
     })
         .unwrap();
 }
+
+#[test]
+fn export_snippet_with_metavariable_clause() {
+    // https://github.com/biomejs/gritql/issues/653
+    // A metavariable standing for the export list, as in `export $clause from $source`,
+    // should match an export statement, just like the import equivalent does.
+    run_test_expected({
+        TestArgExpected {
+            pattern: r#"
+                |language js
+                |
+                |`export $clause from $source` => `export $clause from "rewritten"`
+                |"#
+            .trim_margin()
+            .unwrap(),
+            source: r#"
+                |import { foo } from "./foo"
+                |export { bar } from "./bar"
+                |"#
+            .trim_margin()
+            .unwrap(),
+            expected: r#"
+                |import { foo } from "./foo"
+                |export { bar } from "rewritten"
+                |"#
+            .trim_margin()
+            .unwrap(),
+        }
+    })
+    .unwrap();
+}

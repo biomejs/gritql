@@ -2387,6 +2387,10 @@
             "named": true
           },
           {
+            "type": "grit_metavariable",
+            "named": true
+          },
+          {
             "type": "namespace_export",
             "named": true
           }
